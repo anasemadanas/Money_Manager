@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(psql -U postgres -d moneymanager -f \"C:\\\\Users\\\\USER\\\\Desktop\\\\java project\\\\money-manager\\\\schema.sql\" 2>&1)",
+      "PowerShell(& \"psql\" -U postgres -d moneymanager -f \"C:\\\\Users\\\\USER\\\\Desktop\\\\java project\\\\money-manager\\\\schema.sql\" 2>&1)",
+      "PowerShell(Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression)",
+      "PowerShell($env:PATH = \"$env:USERPROFILE\\\\scoop\\\\shims;$env:USERPROFILE\\\\scoop\\\\apps\\\\maven\\\\current\\\\bin;$env:PATH\"; Set-Location \"C:\\\\Users\\\\USER\\\\Desktop\\\\java project\\\\money-manager\"; mvn clean compile -q 2>&1)",
+      "PowerShell($env:JAVA_HOME)",
+      "PowerShell($env:Path -split ';' | Where-Object { $_ -match 'maven' -or $_ -match 'mvn' })",
+      "Bash(mvn clean *)",
+      "Bash(mvn javafx:run)",
+      "Bash(mvn compile *)"
+    ]
+  }
+}
