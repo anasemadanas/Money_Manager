@@ -19,11 +19,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import com.moneymanager.config.DatabaseInitializer;
 
 public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        DatabaseInitializer.init();
         // ── Repositories ──────────────────────────────────────────────────────
         var userRepo     = new JdbcUserRepo();
         var txRepo       = new JdbcTransactionRepo();

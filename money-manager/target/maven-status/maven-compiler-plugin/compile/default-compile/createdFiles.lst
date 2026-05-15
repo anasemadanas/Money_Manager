@@ -48,6 +48,7 @@ com\moneymanager\repository\IUserSettingsRepo.class
 com\moneymanager\repository\JdbcTransactionRepo.class
 com\moneymanager\ui\controller\TransactionController$2.class
 com\moneymanager\service\BudgetService.class
+com\moneymanager\config\DatabaseInitializer.class
 com\moneymanager\model\Contribution.class
 com\moneymanager\App.class
 com\moneymanager\service\DashboardService.class
