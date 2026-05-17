@@ -1,0 +1,69 @@
+@startuml
+title Sequence - Add EXPENSE Transaction (with budget checks)
+autonumber
+
+actor User as user
+boundary "Transactions Tab\n(TransactionController)" as txCtrl
+control "TransactionService" as txSvc
+control "BudgetService" as budgetSvc
+entity "ITransactionRepo\n(JdbcTransactionRepo)" as txRepo
+entity "IBudgetRepo\n(JdbcBudgetRepo)" as budgetRepo
+entity "IMonthlyBalanceRepo\n(JdbcMonthlyBalanceRepo)" as balanceRepo
+database "SQLite DB" as db
+boundary "Budgets Tab\n(BudgetController)" as budgetCtrl
+boundary "Dashboard Tab\n(DashboardController)" as dashCtrl
+
+user -> txCtrl : click "+ Add"\nfill form\nSave
+
+txCtrl -> budgetSvc : checkCategoryLimit(userId, category,\namount, txDate, excludeTxId=0)
+budgetSvc -> budgetRepo : findWithSpending(userId, month, year)
+budgetRepo -> db : SELECT budgets + spending...
+db --> budgetRepo : rows
+budgetRepo --> budgetSvc : List<BudgetDTO>
+budgetSvc -> budgetRepo : getCategorySpending(...)
+budgetRepo -> db : SELECT SUM(amount)...
+db --> budgetRepo : sum
+budgetRepo --> budgetSvc : current
+budgetSvc --> txCtrl : ok | error message
+
+alt category over cap
+  txCtrl --> user : show validation error\n(block save)
+else ok
+  txCtrl -> budgetSvc : checkMonthlyBalanceLimit(userId,\namount, txDate, excludeTxId=0)
+  budgetSvc -> balanceRepo : findByUserMonthYear(userId, month, year)
+  balanceRepo -> db : SELECT monthly_balance...
+  db --> balanceRepo : row|empty
+  alt monthly cap set
+    budgetSvc -> budgetRepo : getTotalMonthlyExpenses(...)
+    budgetRepo -> db : SELECT SUM(expenses)...
+    db --> budgetRepo : sum
+    budgetRepo --> budgetSvc : totalSpent
+  end
+  budgetSvc --> txCtrl : ok | error message
+
+  alt monthly cap exceeded
+    txCtrl --> user : show validation error\n(block save)
+  else ok
+    txCtrl -> txSvc : add(userId, TransactionDTO)
+    txSvc -> txRepo : save(Transaction)
+    txRepo -> db : INSERT transactions...
+    db --> txRepo : ids/timestamps
+    txRepo --> txSvc : saved Transaction
+    txSvc --> txCtrl : saved TransactionDTO
+
+    txCtrl -> budgetSvc : getCategoryWarning(userId, category, txDate)
+    budgetSvc -> budgetRepo : findWithSpending(userId, month, year)
+    budgetRepo -> db : SELECT budgets + spending...
+    budgetSvc --> txCtrl : warning | null
+    opt warning returned
+      txCtrl --> user : show warning dialog
+    end
+
+    txCtrl -> budgetCtrl : refresh() [via MainController callback]
+    txCtrl -> dashCtrl : refresh()  [via MainController callback]
+    txCtrl --> user : table refreshed
+  end
+end
+
+@enduml
+

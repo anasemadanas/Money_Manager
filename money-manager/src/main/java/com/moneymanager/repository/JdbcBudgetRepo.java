@@ -73,8 +73,8 @@ public class JdbcBudgetRepo implements IBudgetRepo {
                 LEFT JOIN transactions t
                        ON t.user_id = b.user_id
                       AND t.category = b.category
-                      AND EXTRACT(MONTH FROM t.tx_date) = b.month
-                      AND EXTRACT(YEAR  FROM t.tx_date) = b.year
+                      AND CAST(strftime('%m', t.tx_date) AS INTEGER) = b.month
+                      AND CAST(strftime('%Y', t.tx_date) AS INTEGER) = b.year
                 WHERE b.user_id = ? AND b.month = ? AND b.year = ?
                 GROUP BY b.budget_id, b.category, b.amount_cap, b.month, b.year
                 ORDER BY b.category
@@ -124,7 +124,7 @@ public class JdbcBudgetRepo implements IBudgetRepo {
     public BigDecimal getCategorySpending(long userId, String category, int month, int year, long excludeTxId) {
         String sql = "SELECT COALESCE(SUM(amount), 0) FROM transactions " +
                      "WHERE user_id=? AND category=? AND tx_type='EXPENSE' " +
-                     "AND EXTRACT(MONTH FROM tx_date)=? AND EXTRACT(YEAR FROM tx_date)=?";
+                     "AND CAST(strftime('%m', tx_date) AS INTEGER)=? AND CAST(strftime('%Y', tx_date) AS INTEGER)=?";
         if (excludeTxId > 0) sql += " AND transaction_id != ?";
         try (var conn = DatabaseConfig.getConnection();
              var ps = conn.prepareStatement(sql)) {
@@ -145,7 +145,7 @@ public class JdbcBudgetRepo implements IBudgetRepo {
     public BigDecimal getTotalMonthlyExpenses(long userId, int month, int year, long excludeTxId) {
         String sql = "SELECT COALESCE(SUM(amount), 0) FROM transactions " +
                      "WHERE user_id=? AND tx_type='EXPENSE' " +
-                     "AND EXTRACT(MONTH FROM tx_date)=? AND EXTRACT(YEAR FROM tx_date)=?";
+                     "AND CAST(strftime('%m', tx_date) AS INTEGER)=? AND CAST(strftime('%Y', tx_date) AS INTEGER)=?";
         if (excludeTxId > 0) sql += " AND transaction_id != ?";
         try (var conn = DatabaseConfig.getConnection();
              var ps = conn.prepareStatement(sql)) {

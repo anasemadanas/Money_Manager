@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.moneymanager.ui.controller.MainController"
+            stylesheets="@../css/style.css"
+            prefWidth="1100" prefHeight="720">
+
+    <top>
+        <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="16">
+            <padding><Insets top="12" right="24" bottom="12" left="24"/></padding>
+            <Label text="Money Manager" styleClass="header-title" HBox.hgrow="ALWAYS"/>
+            <Label fx:id="usernameLabel" styleClass="header-user"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="main-tabs">
+            <tabs>
+
+                <Tab text="Dashboard">
+                    <fx:include fx:id="dashboard" source="dashboard.fxml"/>
+                </Tab>
+
+                <Tab text="Transactions">
+                    <fx:include fx:id="transactions" source="transactions.fxml"/>
+                </Tab>
+
+                <Tab text="Budgets">
+                    <fx:include fx:id="budgets" source="budgets.fxml"/>
+                </Tab>
+
+                <Tab text="Goals">
+                    <fx:include fx:id="goals" source="goals.fxml"/>
+                </Tab>
+
+                <Tab text="Notes">
+                    <fx:include fx:id="notes" source="notes.fxml"/>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>

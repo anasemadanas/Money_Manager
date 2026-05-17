@@ -3,7 +3,9 @@ CREATE TABLE IF NOT EXISTS users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    created_at TEXT DEFAULT (datetime('now'))
+    security_question TEXT,
+    security_answer_hash TEXT,
+    created_at TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 );
 
 -- TRANSACTIONS
@@ -15,7 +17,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     category TEXT NOT NULL,
     tx_type TEXT NOT NULL CHECK (tx_type IN ('INCOME','EXPENSE')),
     tx_date TEXT NOT NULL,
-    created_at TEXT DEFAULT (datetime('now')),
+    created_at TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
 
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -39,7 +41,7 @@ CREATE TABLE IF NOT EXISTS notes (
     user_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     content TEXT,
-    created_at TEXT DEFAULT (datetime('now')),
+    created_at TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
 
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -52,7 +54,7 @@ CREATE TABLE IF NOT EXISTS savings_goals (
     target_amount REAL NOT NULL CHECK (target_amount > 0),
     saved_amount REAL NOT NULL DEFAULT 0 CHECK (saved_amount >= 0),
     deadline TEXT,
-    created_at TEXT DEFAULT (datetime('now')),
+    created_at TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
 
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -63,7 +65,7 @@ CREATE TABLE IF NOT EXISTS goal_contributions (
     goal_id INTEGER NOT NULL,
     amount REAL NOT NULL CHECK (amount > 0),
     note TEXT,
-    contributed_at TEXT DEFAULT (datetime('now')),
+    contributed_at TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
 
     FOREIGN KEY (goal_id) REFERENCES savings_goals(goal_id) ON DELETE CASCADE
 );
@@ -74,3 +76,23 @@ CREATE INDEX IF NOT EXISTS idx_tx_user_cat  ON transactions (user_id, category);
 CREATE INDEX IF NOT EXISTS idx_bg_user_ym   ON budgets (user_id, year, month);
 CREATE INDEX IF NOT EXISTS idx_goal_user    ON savings_goals (user_id);
 CREATE INDEX IF NOT EXISTS idx_contrib_goal ON goal_contributions (goal_id);
+
+-- MONTHLY BALANCE
+CREATE TABLE IF NOT EXISTS monthly_balance (
+    balance_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    month INTEGER NOT NULL CHECK (month BETWEEN 1 AND 12),
+    year INTEGER NOT NULL CHECK (year >= 2020),
+    total_amount REAL NOT NULL CHECK (total_amount > 0),
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    UNIQUE (user_id, month, year)
+);
+
+-- USER SETTINGS
+CREATE TABLE IF NOT EXISTS user_settings (
+    user_id INTEGER PRIMARY KEY,
+    monthly_income REAL,
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);

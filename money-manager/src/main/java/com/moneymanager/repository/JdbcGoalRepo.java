@@ -7,7 +7,6 @@ import com.moneymanager.model.Goal;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class JdbcGoalRepo implements IGoalRepo {
                 if (rs.next()) {
                     goal.setGoalId(rs.getLong("goal_id"));
                     goal.setSavedAmount(rs.getBigDecimal("saved_amount"));
-                    goal.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+                    goal.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
                 }
             }
             return goal;
@@ -144,7 +143,7 @@ public class JdbcGoalRepo implements IGoalRepo {
                     c.setGoalId(rs.getLong("goal_id"));
                     c.setAmount(rs.getBigDecimal("amount"));
                     c.setNote(rs.getString("note"));
-                    c.setContributedAt(rs.getObject("contributed_at", OffsetDateTime.class));
+                    c.setContributedAt(JdbcDates.getOffsetDateTime(rs, "contributed_at"));
                     list.add(c);
                 }
                 return list;
@@ -177,7 +176,7 @@ public class JdbcGoalRepo implements IGoalRepo {
         g.setSavedAmount(rs.getBigDecimal("saved_amount"));
         Date d = rs.getDate("deadline");
         g.setDeadline(d != null ? d.toLocalDate() : null);
-        g.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+        g.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
         return g;
     }
 }

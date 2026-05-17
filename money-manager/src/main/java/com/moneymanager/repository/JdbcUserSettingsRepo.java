@@ -12,7 +12,7 @@ public class JdbcUserSettingsRepo implements IUserSettingsRepo {
     static {
         String ddl = """
                 CREATE TABLE IF NOT EXISTS user_settings (
-                    user_id        BIGINT        PRIMARY KEY
+                    user_id        INTEGER       PRIMARY KEY
                                                  REFERENCES users(user_id) ON DELETE CASCADE,
                     monthly_income NUMERIC(12,2)
                 )

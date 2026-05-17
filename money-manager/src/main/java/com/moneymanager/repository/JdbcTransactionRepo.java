@@ -5,7 +5,6 @@ import com.moneymanager.model.Transaction;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
             try (var rs = ps.executeQuery()) {
                 if (rs.next()) {
                     tx.setTransactionId(rs.getLong("transaction_id"));
-                    tx.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+                    tx.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
                 }
             }
             return tx;
@@ -132,7 +131,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
         tx.setCategory(rs.getString("category"));
         tx.setTxType(rs.getString("tx_type"));
         tx.setTxDate(rs.getDate("tx_date").toLocalDate());
-        tx.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+        tx.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
         return tx;
     }
 }

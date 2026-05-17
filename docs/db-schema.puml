@@ -1,0 +1,91 @@
+@startuml
+title Money Manager - SQLite Schema (ER)
+
+hide circle
+skinparam linetype ortho
+
+entity users {
+  * user_id : INTEGER <<PK>>
+  --
+  username : TEXT <<UQ>>
+  password_hash : TEXT
+  created_at : TEXT
+}
+
+entity transactions {
+  * transaction_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  name : TEXT
+  amount : NUMERIC
+  category : TEXT
+  tx_type : TEXT
+  tx_date : TEXT
+  created_at : TEXT
+}
+
+entity budgets {
+  * budget_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  category : TEXT
+  amount_cap : NUMERIC
+  month : INTEGER
+  year : INTEGER
+}
+
+entity monthly_balance {
+  * balance_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  month : INTEGER
+  year : INTEGER
+  total_amount : NUMERIC
+}
+
+entity user_settings {
+  * user_id : INTEGER <<PK,FK>>
+  --
+  monthly_income : NUMERIC
+}
+
+entity notes {
+  * note_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  title : TEXT
+  content : TEXT
+  created_at : TEXT
+}
+
+entity savings_goals {
+  * goal_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK>>
+  name : TEXT
+  target_amount : NUMERIC
+  saved_amount : NUMERIC
+  deadline : TEXT
+  created_at : TEXT
+}
+
+entity goal_contributions {
+  * contribution_id : INTEGER <<PK>>
+  --
+  goal_id : INTEGER <<FK>>
+  amount : NUMERIC
+  note : TEXT
+  contributed_at : TEXT
+}
+
+users ||--o{ transactions
+users ||--o{ budgets
+users ||--o{ notes
+users ||--o{ savings_goals
+users ||--o{ monthly_balance
+users ||--|| user_settings
+
+savings_goals ||--o{ goal_contributions
+
+@enduml
+

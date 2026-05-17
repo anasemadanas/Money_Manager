@@ -13,10 +13,10 @@ public class JdbcMonthlyBalanceRepo implements IMonthlyBalanceRepo {
     static {
         String ddl = """
                 CREATE TABLE IF NOT EXISTS monthly_balance (
-                    balance_id   BIGSERIAL      PRIMARY KEY,
-                    user_id      BIGINT         NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-                    month        SMALLINT       NOT NULL CHECK (month BETWEEN 1 AND 12),
-                    year         SMALLINT       NOT NULL CHECK (year >= 2020),
+                    balance_id   INTEGER        PRIMARY KEY AUTOINCREMENT,
+                    user_id      INTEGER        NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+                    month        INTEGER        NOT NULL CHECK (month BETWEEN 1 AND 12),
+                    year         INTEGER        NOT NULL CHECK (year >= 2020),
                     total_amount NUMERIC(12,2)  NOT NULL CHECK (total_amount > 0),
                     UNIQUE (user_id, month, year)
                 )

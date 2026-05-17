@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Money Manager</title>
+    <link rel="stylesheet" th:href="@{/web.css}">
+</head>
+<body class="auth-page">
+<main class="auth-shell">
+    <section class="auth-panel">
+        <h1>Money Manager</h1>
+        <p class="muted">Sign in or create an account.</p>
+
+        <div class="alert error" th:if="${error}" th:text="${error}"></div>
+
+        <div class="auth-grid">
+            <form method="post" action="/login" class="stack">
+                <h2>Login</h2>
+                <label>
+                    Username
+                    <input name="username" autocomplete="username" required>
+                </label>
+                <label>
+                    Password
+                    <input name="password" type="password" autocomplete="current-password" required>
+                </label>
+                <button type="submit">Login</button>
+            </form>
+
+            <form method="post" action="/register" class="stack">
+                <h2>Register</h2>
+                <label>
+                    Username
+                    <input name="username" autocomplete="username" required>
+                </label>
+                <label>
+                    Password
+                    <input name="password" type="password" autocomplete="new-password" minlength="4" required>
+                </label>
+                <button type="submit" class="secondary">Create Account</button>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

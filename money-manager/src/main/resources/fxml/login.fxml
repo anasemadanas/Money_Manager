@@ -34,6 +34,16 @@
             <PasswordField fx:id="confirmPasswordField" promptText="Confirm your password" styleClass="login-field"/>
         </VBox>
 
+        <VBox fx:id="securityQuestionBox" spacing="4" visible="false" managed="false">
+            <Label text="Security Question" styleClass="field-label"/>
+            <TextField fx:id="securityQuestionField" promptText="e.g. Your first pet's name?" styleClass="login-field"/>
+        </VBox>
+
+        <VBox fx:id="securityAnswerBox" spacing="4" visible="false" managed="false">
+            <Label text="Security Answer" styleClass="field-label"/>
+            <PasswordField fx:id="securityAnswerField" promptText="Answer" styleClass="login-field"/>
+        </VBox>
+
         <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" maxWidth="280"
                visible="false" managed="false"/>
 
@@ -44,5 +54,8 @@
 
         <Hyperlink fx:id="toggleLink" text="Don't have an account? Register"
                    onAction="#handleToggle" styleClass="toggle-link"/>
+
+        <Hyperlink fx:id="forgotLink" text="Forgot password?"
+                   onAction="#handleForgot" styleClass="toggle-link"/>
     </VBox>
 </StackPane>

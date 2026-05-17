@@ -5,7 +5,6 @@ import com.moneymanager.model.Note;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class JdbcNoteRepo implements INoteRepo {
             try (var rs = ps.executeQuery()) {
                 if (rs.next()) {
                     note.setNoteId(rs.getLong("note_id"));
-                    note.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+                    note.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
                 }
             }
             return note;
@@ -70,7 +69,7 @@ public class JdbcNoteRepo implements INoteRepo {
         n.setUserId(rs.getLong("user_id"));
         n.setTitle(rs.getString("title"));
         n.setContent(rs.getString("content"));
-        n.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+        n.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
         return n;
     }
 }

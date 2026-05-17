@@ -1,6 +1,7 @@
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\App.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\config\DatabaseConfig.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\config\DatabaseInitializer.java
+C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\config\LoggingConfig.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\ConnectionTest.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\dto\BudgetDTO.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\dto\ContributionDTO.java
@@ -24,6 +25,7 @@ C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneym
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\repository\IUserRepo.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\repository\IUserSettingsRepo.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\repository\JdbcBudgetRepo.java
+C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\repository\JdbcDates.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\repository\JdbcGoalRepo.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\repository\JdbcMonthlyBalanceRepo.java
 C:\Users\D4RK\Documents\Git\Money_Manager\money-manager\src\main\java\com\moneymanager\repository\JdbcNoteRepo.java

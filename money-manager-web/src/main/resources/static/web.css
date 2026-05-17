@@ -1,0 +1,294 @@
+:root {
+    color-scheme: light;
+    --bg: #f5f7fa;
+    --panel: #ffffff;
+    --text: #172033;
+    --muted: #687386;
+    --line: #dce3ec;
+    --primary: #0f766e;
+    --primary-strong: #115e59;
+    --danger: #b42318;
+    --success-bg: #ecfdf3;
+    --success-text: #027a48;
+    --error-bg: #fef3f2;
+    --error-text: #b42318;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+.button {
+    border: 0;
+    border-radius: 6px;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    padding: 10px 14px;
+}
+
+button:hover,
+.button:hover {
+    background: var(--primary-strong);
+}
+
+input,
+select {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    font: inherit;
+    margin-top: 6px;
+    padding: 10px 12px;
+}
+
+label {
+    color: var(--muted);
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+h1,
+h2,
+p {
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 30px;
+    margin-bottom: 6px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    border-bottom: 1px solid var(--line);
+    padding: 12px 8px;
+    text-align: left;
+}
+
+th {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.number,
+.actions {
+    text-align: right;
+}
+
+.auth-page {
+    align-items: center;
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    padding: 24px;
+}
+
+.auth-shell {
+    width: min(840px, 100%);
+}
+
+.auth-panel,
+.panel,
+.metric {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.auth-panel {
+    padding: 28px;
+}
+
+.auth-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stack {
+    display: grid;
+    gap: 14px;
+}
+
+.secondary {
+    background: #334155;
+}
+
+.secondary:hover {
+    background: #1e293b;
+}
+
+.topbar {
+    align-items: center;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 28px;
+}
+
+.brand {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.topbar nav {
+    align-items: center;
+    display: flex;
+    gap: 18px;
+}
+
+.topbar nav a {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.topbar nav a[aria-current="page"] {
+    color: var(--primary);
+}
+
+.topbar form {
+    margin: 0;
+}
+
+.link-button {
+    background: transparent;
+    color: var(--muted);
+    padding: 0;
+}
+
+.link-button:hover {
+    background: transparent;
+    color: var(--text);
+}
+
+.page {
+    margin: 0 auto;
+    max-width: 1120px;
+    padding: 28px;
+}
+
+.page-title {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.muted,
+.empty {
+    color: var(--muted);
+}
+
+.metric-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-bottom: 18px;
+}
+
+.metric {
+    padding: 18px;
+}
+
+.metric span {
+    color: var(--muted);
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.metric strong {
+    display: block;
+    font-size: 24px;
+    margin-top: 8px;
+}
+
+.content-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.panel {
+    margin-bottom: 18px;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.transaction-form {
+    align-items: end;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr auto;
+}
+
+.alert {
+    border-radius: 6px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+}
+
+.success {
+    background: var(--success-bg);
+    color: var(--success-text);
+}
+
+.error {
+    background: var(--error-bg);
+    color: var(--error-text);
+}
+
+.danger {
+    background: var(--danger);
+    padding: 8px 10px;
+}
+
+.danger:hover {
+    background: #7a271a;
+}
+
+@media (max-width: 860px) {
+    .auth-grid,
+    .content-grid,
+    .metric-grid,
+    .transaction-form {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar,
+    .page-title {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+}

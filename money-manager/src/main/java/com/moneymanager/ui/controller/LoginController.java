@@ -30,9 +30,14 @@ public class LoginController {
     @FXML private PasswordField passwordField;
     @FXML private VBox confirmPasswordBox;
     @FXML private PasswordField confirmPasswordField;
+    @FXML private VBox securityQuestionBox;
+    @FXML private TextField securityQuestionField;
+    @FXML private VBox securityAnswerBox;
+    @FXML private PasswordField securityAnswerField;
     @FXML private Label errorLabel;
     @FXML private Button actionButton;
     @FXML private Hyperlink toggleLink;
+    @FXML private Hyperlink forgotLink;
 
     private AuthService authService;
     private TransactionService transactionService;
@@ -42,7 +47,14 @@ public class LoginController {
     private DashboardService dashboardService;
     private MonthlyIncomeService monthlyIncomeService;
     private Stage stage;
-    private boolean loginMode = true;
+
+    private enum Mode { LOGIN, REGISTER, RESET_PASSWORD }
+    private Mode mode = Mode.LOGIN;
+
+    @FXML
+    private void initialize() {
+        render();
+    }
 
     /** Called by App.java after FXML loading. */
     public void init(AuthService authService, TransactionService txService,
@@ -61,7 +73,11 @@ public class LoginController {
 
     @FXML
     private void handleAction() {
-        if (loginMode) doLogin(); else doRegister();
+        switch (mode) {
+            case LOGIN -> doLogin();
+            case REGISTER -> doRegister();
+            case RESET_PASSWORD -> doResetPassword();
+        }
     }
 
     private void doLogin() {
@@ -86,13 +102,15 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
         String confirm  = confirmPasswordField.getText();
+        String question = securityQuestionField.getText().trim();
+        String answer   = securityAnswerField.getText();
 
         if (!password.equals(confirm)) {
             showError("Passwords do not match.");
             return;
         }
         try {
-            switchToMain(authService.register(username, password));
+            switchToMain(authService.register(username, password, question, answer));
         } catch (IllegalArgumentException e) {
             showError(e.getMessage());
         } catch (DataAccessException e) {
@@ -103,25 +121,114 @@ public class LoginController {
 
     @FXML
     private void handleToggle() {
-        loginMode = !loginMode;
+        mode = (mode == Mode.LOGIN) ? Mode.REGISTER : Mode.LOGIN;
+        clearInputs();
         clearError();
-        usernameField.clear();
+        render();
+    }
+
+    @FXML
+    private void handleForgot() {
+        mode = Mode.RESET_PASSWORD;
+        clearError();
         passwordField.clear();
         confirmPasswordField.clear();
+        securityAnswerField.clear();
+        render();
 
-        if (loginMode) {
+        String username = usernameField.getText().trim();
+        if (!username.isBlank()) {
+            try {
+                securityQuestionField.setText(authService.getSecurityQuestion(username).orElse(""));
+            } catch (DataAccessException e) {
+                showError("Database error. Check your connection.");
+                e.printStackTrace();
+            }
+        } else {
+            securityQuestionField.setText("");
+        }
+    }
+
+    private void doResetPassword() {
+        String username = usernameField.getText().trim();
+        String newPassword = passwordField.getText();
+        String confirm = confirmPasswordField.getText();
+        String answer = securityAnswerField.getText();
+
+        if (!newPassword.equals(confirm)) {
+            showError("Passwords do not match.");
+            return;
+        }
+        try {
+            authService.resetPassword(username, answer, newPassword);
+            mode = Mode.LOGIN;
+            clearInputs();
+            render();
+            showError("Password reset successful. Please login.");
+        } catch (IllegalArgumentException e) {
+            showError(e.getMessage());
+        } catch (DataAccessException e) {
+            showError("Database error. Check your connection.");
+            e.printStackTrace();
+        }
+    }
+
+    private void render() {
+        if (mode == Mode.LOGIN) {
             headerLabel.setText("Sign In");
             actionButton.setText("Login");
             toggleLink.setText("Don't have an account? Register");
+
             confirmPasswordBox.setVisible(false);
             confirmPasswordBox.setManaged(false);
-        } else {
+            securityQuestionBox.setVisible(false);
+            securityQuestionBox.setManaged(false);
+            securityAnswerBox.setVisible(false);
+            securityAnswerBox.setManaged(false);
+            forgotLink.setVisible(true);
+            forgotLink.setManaged(true);
+            return;
+        }
+
+        if (mode == Mode.REGISTER) {
             headerLabel.setText("Create Account");
             actionButton.setText("Register");
             toggleLink.setText("Already have an account? Login");
+
             confirmPasswordBox.setVisible(true);
             confirmPasswordBox.setManaged(true);
+            securityQuestionBox.setVisible(true);
+            securityQuestionBox.setManaged(true);
+            securityQuestionField.setEditable(true);
+            securityAnswerBox.setVisible(true);
+            securityAnswerBox.setManaged(true);
+            forgotLink.setVisible(false);
+            forgotLink.setManaged(false);
+            return;
         }
+
+        // RESET_PASSWORD
+        headerLabel.setText("Reset Password");
+        actionButton.setText("Reset");
+        toggleLink.setText("Back to Login");
+
+        confirmPasswordBox.setVisible(true);
+        confirmPasswordBox.setManaged(true);
+        securityQuestionBox.setVisible(true);
+        securityQuestionBox.setManaged(true);
+        securityQuestionField.setEditable(false);
+        securityAnswerBox.setVisible(true);
+        securityAnswerBox.setManaged(true);
+        forgotLink.setVisible(false);
+        forgotLink.setManaged(false);
+    }
+
+    private void clearInputs() {
+        usernameField.clear();
+        passwordField.clear();
+        confirmPasswordField.clear();
+        securityQuestionField.clear();
+        securityAnswerField.clear();
     }
 
     private void switchToMain(User user) {
