@@ -80,7 +80,7 @@ jobs:
             --name MoneyManager ^
             --input target/installer-input ^
             --main-jar money-manager.jar ^
-            --main-class com.moneymanager.MainApp ^
+            --main-class com.moneymanager.Launcher ^
             --dest output
 
           # Build EXE
@@ -89,7 +89,7 @@ jobs:
             --name MoneyManager ^
             --input target/installer-input ^
             --main-jar money-manager.jar ^
-            --main-class com.moneymanager.MainApp ^
+            --main-class com.moneymanager.Launcher ^
             --dest output ^
             --win-dir-chooser ^
             --win-menu ^
@@ -101,7 +101,7 @@ jobs:
             --name MoneyManager ^
             --input target/installer-input ^
             --main-jar money-manager.jar ^
-            --main-class com.moneymanager.MainApp ^
+            --main-class com.moneymanager.Launcher ^
             --dest output ^
             --win-dir-chooser ^
             --win-menu ^
