@@ -9,13 +9,13 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            artifact_name: Windows
+            artifact_name: windows-x64
           - os: ubuntu-latest
-            artifact_name: Linux
+            artifact_name: linux-x64
           - os: macos-14 
-            artifact_name: MacOS-ARM64
+            artifact_name: macos-arm64
           - os: macos-13
-            artifact_name: MacOS-x64
+            artifact_name: macos-x64
 
     runs-on: ${{ matrix.os }}
 
@@ -38,6 +38,13 @@ jobs:
           cp target/money-manager-*.jar target/installer-input/money-manager.jar
         shell: bash
 
+      - name: Install Linux Packaging Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot rpm
+        shell: bash
+
       - name: Build DEB (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -51,10 +58,25 @@ jobs:
             --main-jar money-manager.jar \
             --main-class com.moneymanager.Launcher \
             --dest output
+
+          # Archive the app image for non-DEB distributions
+          tar -C output -czf output/MoneyManager-linux-x64.tar.gz MoneyManager
             
           # Build DEB installer
           jpackage \
             --type deb \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest output \
+            --linux-shortcut \
+            --linux-menu-group Office \
+            --linux-app-category Office
+
+          # Build RPM installer
+          jpackage \
+            --type rpm \
             --name MoneyManager \
             --input target/installer-input \
             --main-jar money-manager.jar \
@@ -134,6 +156,10 @@ jobs:
             --dest output \
             --mac-package-name "Money Manager" \
             --mac-package-identifier com.moneymanager.app
+
+          # Rename macOS outputs so the architecture is visible in the file name
+          mv output/MoneyManager.app output/MoneyManager-${{ matrix.artifact_name }}.app
+          mv output/MoneyManager-1.0.dmg output/MoneyManager-${{ matrix.artifact_name }}.dmg
         shell: bash
 
       - name: Upload Installers
