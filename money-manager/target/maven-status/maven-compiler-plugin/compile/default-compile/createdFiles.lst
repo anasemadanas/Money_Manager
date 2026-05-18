@@ -10,6 +10,7 @@ com\moneymanager\dto\BudgetDTO.class
 com\moneymanager\dto\GoalDTO.class
 com\moneymanager\ui\controller\GoalController.class
 com\moneymanager\ui\util\Categories.class
+com\moneymanager\ui\controller\LoginController$Mode.class
 com\moneymanager\dto\DashboardSnapshot.class
 com\moneymanager\repository\JdbcUserRepo.class
 com\moneymanager\service\GoalService.class
@@ -30,6 +31,7 @@ com\moneymanager\service\NoteService.class
 com\moneymanager\dto\TransactionDTO.class
 com\moneymanager\dto\ContributionDTO.class
 com\moneymanager\dto\MonthlyTrend.class
+com\moneymanager\config\LoggingConfig.class
 com\moneymanager\ui\controller\MainController.class
 com\moneymanager\ui\controller\DashboardController.class
 com\moneymanager\repository\IGoalRepo.class
@@ -48,7 +50,10 @@ com\moneymanager\repository\IUserSettingsRepo.class
 com\moneymanager\repository\JdbcTransactionRepo.class
 com\moneymanager\ui\controller\TransactionController$2.class
 com\moneymanager\service\BudgetService.class
+com\moneymanager\config\LoggingConfig$SimpleLineFormatter.class
 com\moneymanager\config\DatabaseInitializer.class
+com\moneymanager\Launcher.class
 com\moneymanager\model\Contribution.class
 com\moneymanager\App.class
+com\moneymanager\repository\JdbcDates.class
 com\moneymanager\service\DashboardService.class

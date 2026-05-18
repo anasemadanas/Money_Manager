@@ -1,0 +1,94 @@
+name: Build JavaFX Native Installers
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: Windows
+          - os: ubuntu-latest
+            artifact_name: Linux
+          - os: macos-14 
+            artifact_name: MacOS-ARM64
+          - os: macos-13
+            artifact_name: MacOS-x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Build JAR
+        run: |
+          mvn clean package -DskipTests
+          mkdir -p target/installer-input
+          cp target/money-manager-*.jar target/installer-input/money-manager.jar
+        shell: bash
+
+      - name: Build DEB (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          jpackage \
+            --type deb \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager-1.0.0.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest output \
+            --linux-shortcut \
+            --linux-menu-group Office \
+            --linux-app-category Office
+        shell: bash
+
+      - name: Build EXE (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          jpackage \
+            --type exe \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager-1.0.0.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest output \
+            --win-dir-chooser \
+            --win-menu \
+            --win-shortcut \
+            --win-console
+        shell: bash
+
+      - name: Build DMG (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          jpackage \
+            --type dmg \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager-1.0.0.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest output \
+            --mac-package-name "Money Manager" \
+            --mac-package-identifier com.moneymanager.app
+        shell: bash
+
+      - name: Upload Installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: MoneyManager-${{ matrix.artifact_name }}
+          path: |
+            output/*.exe
+            output/*.msi
+            output/*.deb
+            output/*.dmg
+            output/*.pkg
