@@ -1,0 +1,34 @@
+name: Build JavaFX App
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build
+        run: mvn clean package
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: money-manager-${{ matrix.os }}
+          path: target/*
