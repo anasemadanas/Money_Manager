@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: money-manager
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    healthCheckPath: "/"
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod

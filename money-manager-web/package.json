@@ -1,0 +1,13 @@
+{
+  "name": "money-manager-web",
+  "version": "1.0.0",
+  "description": "> Centralized finance management. Connected, modern, and accessible anywhere.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

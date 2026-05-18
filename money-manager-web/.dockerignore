@@ -1,0 +1,10 @@
+# Exclude Maven target directory
+target/
+# Exclude IDE files
+.idea/
+*.iml
+# Exclude OS files
+.DS_Store
+# Exclude git metadata
+.git
+.gitignore
