@@ -101,7 +101,7 @@ jobs:
             --input target/installer-input ^
             --main-jar money-manager.jar ^
             --main-class com.moneymanager.Launcher ^
-            --dest output 
+            --dest output/app-image
 
           # Build EXE
           jpackage ^
@@ -111,9 +111,11 @@ jobs:
             --main-jar money-manager.jar ^
             --main-class com.moneymanager.Launcher ^
             --dest output ^
+            --win-installer ^
             --win-dir-chooser ^
+            --win-shortcut ^
             --win-menu ^
-            --win-shortcut
+            --win-menu-group "Money Manager"
 
           # Build MSI
           jpackage ^
@@ -124,8 +126,9 @@ jobs:
             --main-class com.moneymanager.Launcher ^
             --dest output ^
             --win-dir-chooser ^
+            --win-shortcut ^
             --win-menu ^
-            --win-shortcut
+            --win-menu-group "Money Manager"
         shell: cmd
         
       - name: Build DMG (macOS)
