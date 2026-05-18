@@ -101,7 +101,7 @@ jobs:
             --input target/installer-input ^
             --main-jar money-manager.jar ^
             --main-class com.moneymanager.Launcher ^
-            --dest output ^
+            --dest output 
 
           # Build EXE
           jpackage ^
