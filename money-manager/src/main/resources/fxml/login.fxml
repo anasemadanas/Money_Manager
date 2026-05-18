@@ -52,6 +52,9 @@
             <VBox.margin><Insets top="6"/></VBox.margin>
         </Button>
 
+        <Button text="Close" onAction="#handleClose"
+                styleClass="btn-secondary" maxWidth="Infinity"/>
+
         <Hyperlink fx:id="toggleLink" text="Don't have an account? Register"
                    onAction="#handleToggle" styleClass="toggle-link"/>
 

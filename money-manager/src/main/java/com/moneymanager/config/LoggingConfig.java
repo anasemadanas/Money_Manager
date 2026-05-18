@@ -24,9 +24,8 @@ public final class LoggingConfig {
                 Path dir = DatabaseConfig.getAppDataDir();
                 Files.createDirectories(dir);
 
-                // Rotate logs: ~1MB each, keep 5 files
-                String pattern = dir.resolve("money-manager-%g.log").toString();
-                FileHandler fh = new FileHandler(pattern, 1024 * 1024, 5, true);
+                String pattern = dir.resolve("activity.log").toString();
+                FileHandler fh = new FileHandler(pattern, true);
                 fh.setLevel(Level.ALL);
                 fh.setFormatter(new SimpleLineFormatter());
 
@@ -51,18 +50,12 @@ public final class LoggingConfig {
         public String format(LogRecord r) {
             String msg = r.getMessage();
             if (msg == null) msg = "";
-            String thrown = "";
-            if (r.getThrown() != null) {
-                thrown = " | " + r.getThrown().toString();
-            }
-            return String.format(
-                    "%1$tF %1$tT.%1$tLZ | %2$-7s | %3$s | %4$s%5$s%n",
+            java.time.LocalDateTime ldt = java.time.LocalDateTime.ofInstant(
                     java.time.Instant.ofEpochMilli(r.getMillis()),
-                    r.getLevel().getName(),
-                    r.getLoggerName(),
-                    msg,
-                    thrown
+                    java.time.ZoneId.systemDefault()
             );
+            java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            return String.format("[%s] %s%n", ldt.format(dtf), msg);
         }
     }
 }

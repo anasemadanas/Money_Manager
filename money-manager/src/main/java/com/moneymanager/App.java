@@ -43,7 +43,7 @@ public class App extends Application {
         var budgetService        = new BudgetService(budgetRepo, balanceRepo);
         var goalService          = new GoalService(goalRepo);
         var noteService          = new NoteService(noteRepo);
-        var dashboardService     = new DashboardService(txRepo, goalRepo);
+        var dashboardService     = new DashboardService(txRepo, goalRepo, balanceRepo, settingsRepo);
         var monthlyIncomeService = new MonthlyIncomeService(settingsRepo, txRepo, balanceRepo);
 
         // ── Login screen ──────────────────────────────────────────────────────

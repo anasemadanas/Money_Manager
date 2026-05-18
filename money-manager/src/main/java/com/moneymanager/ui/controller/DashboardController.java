@@ -52,6 +52,9 @@ public class DashboardController {
     /** Fired after monthly income is saved so other tabs (transactions, budgets) also refresh. */
     private Runnable onSettingChanged;
 
+    /** Fired when the user clicks the Logout button. */
+    private Runnable onLogout;
+
     private static final NumberFormat CF = NumberFormat.getCurrencyInstance(Locale.US);
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
@@ -89,6 +92,11 @@ public class DashboardController {
         this.onSettingChanged = callback;
     }
 
+    /** Register a callback for when the user logs out. */
+    public void setOnLogout(Runnable callback) {
+        this.onLogout = callback;
+    }
+
     // ── FXML handlers ─────────────────────────────────────────────────────────
 
     @FXML
@@ -108,6 +116,13 @@ public class DashboardController {
                 e.printStackTrace();
             }
         });
+    }
+
+    @FXML
+    private void handleLogout() {
+        if (onLogout != null) {
+            onLogout.run();
+        }
     }
 
     // ── Data loading ──────────────────────────────────────────────────────────

@@ -23,7 +23,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
             ps.setBigDecimal(3, tx.getAmount());
             ps.setString(4, tx.getCategory());
             ps.setString(5, tx.getTxType());
-            ps.setDate(6, Date.valueOf(tx.getTxDate()));
+            ps.setString(6, tx.getTxDate().toString());
             try (var rs = ps.executeQuery()) {
                 if (rs.next()) {
                     tx.setTransactionId(rs.getLong("transaction_id"));
@@ -46,11 +46,11 @@ public class JdbcTransactionRepo implements ITransactionRepo {
 
         if (from != null) {
             sql.append(" AND tx_date >= ?");
-            params.add(Date.valueOf(from));
+            params.add(from.toString());
         }
         if (to != null) {
             sql.append(" AND tx_date <= ?");
-            params.add(Date.valueOf(to));
+            params.add(to.toString());
         }
         if (category != null && !category.isBlank()) {
             sql.append(" AND category = ?");
@@ -86,7 +86,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
             ps.setBigDecimal(2, tx.getAmount());
             ps.setString(3, tx.getCategory());
             ps.setString(4, tx.getTxType());
-            ps.setDate(5, Date.valueOf(tx.getTxDate()));
+            ps.setString(5, tx.getTxDate().toString());
             ps.setLong(6, tx.getTransactionId());
             ps.setLong(7, tx.getUserId());
             ps.executeUpdate();
@@ -130,7 +130,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
         tx.setAmount(rs.getBigDecimal("amount"));
         tx.setCategory(rs.getString("category"));
         tx.setTxType(rs.getString("tx_type"));
-        tx.setTxDate(rs.getDate("tx_date").toLocalDate());
+        tx.setTxDate(LocalDate.parse(rs.getString("tx_date")));
         tx.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
         return tx;
     }

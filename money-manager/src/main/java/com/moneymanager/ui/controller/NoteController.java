@@ -72,6 +72,10 @@ public class NoteController {
             try {
                 Note saved = noteService.addNote(
                         currentUser.getUserId(), note.getTitle(), note.getContent());
+                java.util.logging.Logger.getLogger("com.moneymanager")
+                        .info("user=" + currentUser.getUsername()
+                              + " action=note_created details=title="
+                              + saved.getTitle());
                 loadNotes(saved.getNoteId()); // select the new note
             } catch (IllegalArgumentException e) {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
@@ -92,6 +96,10 @@ public class NoteController {
 
         try {
             noteService.deleteNote(selected.getNoteId());
+            java.util.logging.Logger.getLogger("com.moneymanager")
+                    .info("user=" + currentUser.getUsername()
+                          + " action=note_deleted details=title="
+                          + selected.getTitle());
             loadNotes(0); // nothing selected after delete
             clearDetail();
         } catch (DataAccessException e) {

@@ -44,7 +44,7 @@ jobs:
             --type deb \
             --name MoneyManager \
             --input target/installer-input \
-            --main-jar money-manager-1.0.0.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.Launcher \
             --dest output \
             --linux-shortcut \
@@ -52,20 +52,36 @@ jobs:
             --linux-app-category Office
         shell: bash
 
-      - name: Build EXE (Windows)
+      - name: Build MSI and EXE Installers (Windows)
         if: runner.os == 'Windows'
         run: |
+          # 1. Build standard MSI Installer to an isolated folder
+          mkdir -p target/msi-output
+          jpackage \
+            --type msi \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest target/msi-output \
+            --win-dir-chooser \
+            --win-menu \
+            --win-shortcut
+          
+          # 2. Copy MSI to primary output folder
+          cp target/msi-output/*.msi output/
+          
+          # 3. Build native EXE Installer
           jpackage \
             --type exe \
             --name MoneyManager \
             --input target/installer-input \
-            --main-jar money-manager-1.0.0.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.Launcher \
             --dest output \
             --win-dir-chooser \
             --win-menu \
-            --win-shortcut \
-            --win-console
+            --win-shortcut
         shell: bash
 
       - name: Build DMG (macOS)
@@ -75,7 +91,7 @@ jobs:
             --type dmg \
             --name MoneyManager \
             --input target/installer-input \
-            --main-jar money-manager-1.0.0.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.Launcher \
             --dest output \
             --mac-package-name "Money Manager" \

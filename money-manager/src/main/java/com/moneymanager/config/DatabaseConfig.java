@@ -84,22 +84,21 @@ public class DatabaseConfig {
     private static Path pickSharedAppDir() {
         String os = System.getProperty("os.name", "").toLowerCase();
 
-        // Windows: C:\Users\Public\MoneyManager
+        // Windows: C:\Users\<Username>\AppData\Local\MoneyManager
         if (os.contains("win")) {
-            String publicDir = System.getenv("PUBLIC");
-            if (publicDir == null || publicDir.isBlank()) publicDir = "C:\\Users\\Public";
-            return Paths.get(publicDir, "MoneyManager");
+            String localAppData = System.getenv("LOCALAPPDATA");
+            if (localAppData == null || localAppData.isBlank()) {
+                localAppData = System.getProperty("user.home") + "\\AppData\\Local";
+            }
+            return Paths.get(localAppData, "MoneyManager");
         }
 
-        // macOS: /Users/Shared/MoneyManager (shared between users)
+        // macOS: /Users/<Username>/Library/Application Support/MoneyManager
         if (os.contains("mac")) {
-            return Paths.get("/Users/Shared", "MoneyManager");
+            return Paths.get(System.getProperty("user.home"), "Library", "Application Support", "MoneyManager");
         }
 
-        // Linux: prefer a shared location if writable; otherwise fallback to per-user app data
-        Path shared = Paths.get("/var", "lib", "MoneyManager");
-        if (isCreatableDir(shared)) return shared;
-
+        // Linux: /home/<Username>/.local/share/MoneyManager
         return Paths.get(System.getProperty("user.home"), ".local", "share", "MoneyManager");
     }
 

@@ -5,6 +5,8 @@ import com.moneymanager.dto.MonthlyTrend;
 import com.moneymanager.model.Transaction;
 import com.moneymanager.repository.IGoalRepo;
 import com.moneymanager.repository.ITransactionRepo;
+import com.moneymanager.repository.IMonthlyBalanceRepo;
+import com.moneymanager.repository.IUserSettingsRepo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,10 +20,14 @@ public class DashboardService {
 
     private final ITransactionRepo txRepo;
     private final IGoalRepo goalRepo;
+    private final IMonthlyBalanceRepo balanceRepo;
+    private final IUserSettingsRepo settingsRepo;
 
-    public DashboardService(ITransactionRepo txRepo, IGoalRepo goalRepo) {
-        this.txRepo   = txRepo;
-        this.goalRepo = goalRepo;
+    public DashboardService(ITransactionRepo txRepo, IGoalRepo goalRepo, IMonthlyBalanceRepo balanceRepo, IUserSettingsRepo settingsRepo) {
+        this.txRepo       = txRepo;
+        this.goalRepo     = goalRepo;
+        this.balanceRepo  = balanceRepo;
+        this.settingsRepo = settingsRepo;
     }
 
     /**
@@ -41,7 +47,14 @@ public class DashboardService {
 
         BigDecimal income   = sumByType(monthTxs, "INCOME");
         BigDecimal expenses = sumByType(monthTxs, "EXPENSE");
-        BigDecimal net      = income.subtract(expenses);
+
+        // Determine the budget limit / monthly income to use as base income for available balance
+        java.util.Optional<com.moneymanager.model.MonthlyBalance> budgetOpt = balanceRepo.findByUserMonthYear(userId, today.getMonthValue(), today.getYear());
+        BigDecimal budgetedIncome = budgetOpt.map(com.moneymanager.model.MonthlyBalance::getTotalAmount)
+                .orElseGet(() -> settingsRepo.getMonthlyIncome(userId).orElse(BigDecimal.ZERO));
+
+        BigDecimal baseIncome = budgetedIncome.compareTo(BigDecimal.ZERO) > 0 ? budgetedIncome : income;
+        BigDecimal net      = baseIncome.subtract(expenses);
 
         // Category breakdown for pie chart (computed from same list — no extra query)
         Map<String, BigDecimal> breakdown = categoryBreakdown(monthTxs);

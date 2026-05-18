@@ -110,6 +110,13 @@ public class TransactionController {
             }
             try {
                 transactionService.add(currentUser.getUserId(), dto);
+                java.util.logging.Logger.getLogger("com.moneymanager")
+                        .info("user=" + currentUser.getUsername()
+                              + " action=transaction_added details=amount="
+                              + dto.amount().setScale(2, java.math.RoundingMode.HALF_UP)
+                              + ", category=" + dto.category()
+                              + ", month=" + dto.txDate().getMonthValue()
+                              + ", year=" + dto.txDate().getYear());
                 notifyDataChanged();
                 loadData();
                 // Post-save: warn if category is now at 80-100%
@@ -178,6 +185,13 @@ public class TransactionController {
                 "Delete \"" + selected.name() + "\"?\nThis cannot be undone.")) return;
         try {
             transactionService.delete(selected.transactionId());
+            java.util.logging.Logger.getLogger("com.moneymanager")
+                    .info("user=" + currentUser.getUsername()
+                          + " action=transaction_deleted details=amount="
+                          + selected.amount().setScale(2, java.math.RoundingMode.HALF_UP)
+                          + ", category=" + selected.category()
+                          + ", month=" + selected.txDate().getMonthValue()
+                          + ", year=" + selected.txDate().getYear());
             notifyDataChanged();
             loadData();
         } catch (DataAccessException e) {

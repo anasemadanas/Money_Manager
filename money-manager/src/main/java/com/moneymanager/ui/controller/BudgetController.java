@@ -100,6 +100,12 @@ public class BudgetController {
             try {
                 budgetService.add(currentUser.getUserId(),
                         dto.category(), dto.amountCap(), month, year);
+                java.util.logging.Logger.getLogger("com.moneymanager")
+                        .info("user=" + currentUser.getUsername()
+                              + " action=budget_created details=amount="
+                              + dto.amountCap().setScale(2, java.math.RoundingMode.HALF_UP)
+                              + ", month=" + month
+                              + ", year=" + year);
                 loadData();
             } catch (IllegalArgumentException e) {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
@@ -117,6 +123,12 @@ public class BudgetController {
         showEditCapDialog(selected).ifPresent(newCap -> {
             try {
                 budgetService.updateCap(selected.budgetId(), newCap);
+                java.util.logging.Logger.getLogger("com.moneymanager")
+                        .info("user=" + currentUser.getUsername()
+                              + " action=budget_updated details=amount="
+                              + newCap.setScale(2, java.math.RoundingMode.HALF_UP)
+                              + ", month=" + selected.month()
+                              + ", year=" + selected.year());
                 loadData();
             } catch (IllegalArgumentException e) {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
@@ -136,6 +148,12 @@ public class BudgetController {
             return;
         try {
             budgetService.delete(selected.budgetId());
+            java.util.logging.Logger.getLogger("com.moneymanager")
+                    .info("user=" + currentUser.getUsername()
+                          + " action=budget_deleted details=amount="
+                          + selected.amountCap().setScale(2, java.math.RoundingMode.HALF_UP)
+                          + ", month=" + selected.month()
+                          + ", year=" + selected.year());
             loadData();
         } catch (DataAccessException e) {
             AlertHelper.showError(getStage(), "Error", "Could not delete budget.");

@@ -112,6 +112,12 @@ public class GoalController {
             try {
                 goalService.addGoal(currentUser.getUserId(),
                         dto.name(), dto.targetAmount(), dto.deadline());
+                java.util.logging.Logger.getLogger("com.moneymanager")
+                        .info("user=" + currentUser.getUsername()
+                              + " action=goal_created details=name="
+                              + dto.name()
+                              + ", target_amount="
+                              + dto.targetAmount().setScale(2, java.math.RoundingMode.HALF_UP));
                 loadGoals();
             } catch (IllegalArgumentException e) {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
@@ -131,6 +137,12 @@ public class GoalController {
             try {
                 goalService.updateGoal(selected.goalId(),
                         dto.name(), dto.targetAmount(), dto.deadline());
+                java.util.logging.Logger.getLogger("com.moneymanager")
+                        .info("user=" + currentUser.getUsername()
+                              + " action=goal_updated details=name="
+                              + dto.name()
+                              + ", target_amount="
+                              + dto.targetAmount().setScale(2, java.math.RoundingMode.HALF_UP));
                 loadGoals();
             } catch (IllegalArgumentException e) {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
@@ -152,6 +164,12 @@ public class GoalController {
 
         try {
             goalService.deleteGoal(selected.goalId());
+            java.util.logging.Logger.getLogger("com.moneymanager")
+                    .info("user=" + currentUser.getUsername()
+                          + " action=goal_deleted details=name="
+                          + selected.name()
+                          + ", target_amount="
+                          + selected.targetAmount().setScale(2, java.math.RoundingMode.HALF_UP));
             loadGoals();
         } catch (DataAccessException e) {
             AlertHelper.showError(getStage(), "Error", "Could not delete goal.");
@@ -171,6 +189,16 @@ public class GoalController {
         showContributionDialog(goals, preSelected).ifPresent(result -> {
             try {
                 goalService.addContribution(result.goalId(), result.amount(), result.note());
+                GoalDTO matchedGoal = goals.stream()
+                        .filter(g -> g.goalId() == result.goalId())
+                        .findFirst()
+                        .orElse(null);
+                String goalName = (matchedGoal != null) ? matchedGoal.name() : "Unknown";
+                java.util.logging.Logger.getLogger("com.moneymanager")
+                        .info("user=" + currentUser.getUsername()
+                              + " action=goal_contribution_added details=amount="
+                              + result.amount().setScale(2, java.math.RoundingMode.HALF_UP)
+                              + ", goal=" + goalName);
                 loadGoals();
                 // Refresh contribution history if the affected goal is still selected
                 GoalDTO nowSelected = goalListView.getSelectionModel().getSelectedItem();

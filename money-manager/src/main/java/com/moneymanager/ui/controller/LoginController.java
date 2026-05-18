@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -53,6 +54,11 @@ public class LoginController {
 
     @FXML
     private void initialize() {
+        usernameField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (mode == Mode.RESET_PASSWORD) {
+                loadSecurityQuestion(newVal.trim());
+            }
+        });
         render();
     }
 
@@ -232,11 +238,21 @@ public class LoginController {
     }
 
     private void switchToMain(User user) {
+        // Log login action
+        java.util.logging.Logger.getLogger("com.moneymanager")
+                .info("user=" + user.getUsername() + " action=login");
+
+        // Register window exit hook
+        stage.setOnCloseRequest(event -> {
+            java.util.logging.Logger.getLogger("com.moneymanager")
+                    .info("user=" + user.getUsername() + " action=exit");
+        });
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
             Scene scene = new Scene(loader.load(), 1100, 720);
             MainController ctrl = loader.getController();
-            ctrl.init(user, transactionService, budgetService, goalService,
+            ctrl.init(user, authService, transactionService, budgetService, goalService,
                       noteService, dashboardService, monthlyIncomeService);
             stage.setScene(scene);
             stage.setResizable(true);
@@ -258,5 +274,25 @@ public class LoginController {
     private void clearError() {
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
+    }
+
+    private void loadSecurityQuestion(String username) {
+        if (authService == null) return;
+        if (username.isEmpty()) {
+            securityQuestionField.setText("");
+            return;
+        }
+        try {
+            securityQuestionField.setText(authService.getSecurityQuestion(username).orElse(""));
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleClose() {
+        java.util.logging.Logger.getLogger("com.moneymanager")
+                .info("action=exit");
+        Platform.exit();
     }
 }

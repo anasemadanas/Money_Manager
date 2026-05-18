@@ -24,6 +24,8 @@
         <Label fx:id="monthlyIncomeLabel" styleClass="income-setting-label"/>
         <Button text="Set Monthly Income" onAction="#handleSetMonthlyIncome"
                 styleClass="btn-secondary"/>
+        <Button text="Logout" onAction="#handleLogout"
+                styleClass="btn-danger"/>
     </HBox>
 
     <!-- ── 5 KPI cards ──────────────────────────────────────────────────── -->

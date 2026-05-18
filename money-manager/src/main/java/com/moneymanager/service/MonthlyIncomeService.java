@@ -35,45 +35,12 @@ public class MonthlyIncomeService {
         settingsRepo.setMonthlyIncome(userId, amount);
     }
 
-    /**
-     * Called on login and whenever the setting changes.
-     * For the current month:
-     *   1. If a "Monthly Income" INCOME transaction does not exist → create one.
-     *   2. If no monthly budget cap is set → set it to the monthly income amount.
-     * If no income is configured yet, this is a no-op.
-     */
     public void applyForCurrentMonth(long userId) {
-        LocalDate today = LocalDate.now();
-        applyForMonth(userId, today.getMonthValue(), today.getYear());
+        // Disabled: do not automatically add transaction and budget
     }
 
-    /**
-     * Same as applyForCurrentMonth but for an arbitrary month — useful for testing
-     * and for any future "backfill on month change" logic.
-     */
     public void applyForMonth(long userId, int month, int year) {
-        Optional<BigDecimal> income = settingsRepo.getMonthlyIncome(userId);
-        if (income.isEmpty()) return;
-
-        BigDecimal amount = income.get();
-        LocalDate firstOfMonth = LocalDate.of(year, month, 1);
-
-        // ── 1. Auto-create the monthly income transaction if missing ──────────
-        if (!hasMonthlyIncomeTransaction(userId, month, year)) {
-            var tx = new Transaction();
-            tx.setUserId(userId);
-            tx.setName("Monthly Income");
-            tx.setAmount(amount);
-            tx.setCategory("Other");   // generic category for auto-generated income
-            tx.setTxType("INCOME");
-            tx.setTxDate(firstOfMonth);
-            txRepo.save(tx);
-        }
-
-        // ── 2. Set monthly budget cap if not already configured ───────────────
-        if (balanceRepo.findByUserMonthYear(userId, month, year).isEmpty()) {
-            balanceRepo.saveOrUpdate(userId, amount, month, year);
-        }
+        // Disabled: do not automatically add transaction and budget
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

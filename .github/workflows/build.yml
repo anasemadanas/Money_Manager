@@ -32,6 +32,7 @@ jobs:
 
       - name: Build JAR
         run: |
+          cd money-manager
           mvn clean package -DskipTests
           mkdir -p target/installer-input
           cp target/money-manager-*.jar target/installer-input/money-manager.jar
@@ -40,11 +41,12 @@ jobs:
       - name: Build DEB (Linux)
         if: runner.os == 'Linux'
         run: |
+          cd money-manager
           jpackage \
             --type deb \
             --name MoneyManager \
             --input target/installer-input \
-            --main-jar money-manager-1.0.0.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.Launcher \
             --dest output \
             --linux-shortcut \
@@ -55,27 +57,42 @@ jobs:
       - name: Build EXE (Windows)
         if: runner.os == 'Windows'
         run: |
+          cd money-manager
           jpackage \
             --type exe \
             --name MoneyManager \
             --input target/installer-input \
-            --main-jar money-manager-1.0.0.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.Launcher \
             --dest output \
             --win-dir-chooser \
             --win-menu \
             --win-shortcut \
-            --win-console
         shell: bash
+          
 
+          cd money-manager
+          jpackage \
+            --type exe \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest output \
+            --win-dir-chooser \
+            --win-menu \
+            --win-shortcut
+        shell: bash
+        
       - name: Build DMG (macOS)
         if: runner.os == 'macOS'
         run: |
+          cd money-manager
           jpackage \
             --type dmg \
             --name MoneyManager \
             --input target/installer-input \
-            --main-jar money-manager-1.0.0.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.Launcher \
             --dest output \
             --mac-package-name "Money Manager" \
