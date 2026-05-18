@@ -7,7 +7,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        include:
+          - os: windows-latest
+            artifact_name: Windows
+          - os: ubuntu-latest
+            artifact_name: Linux
+          - os: macos-14 
+            artifact_name: MacOS-ARM64
 
     runs-on: ${{ matrix.os }}
 
@@ -26,10 +32,9 @@ jobs:
         run: |
           cd money-manager
           mvn clean package -DskipTests
-          mv target/money-manager-*.jar target/money-manager.jar
+          cp target/money-manager-*.jar target/money-manager.jar
         shell: bash
 
-      # ===================== LINUX (DEB) =====================
       - name: Build DEB (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -39,11 +44,13 @@ jobs:
             --name MoneyManager \
             --input target \
             --main-jar money-manager.jar \
-            --main-class com.moneymanager.MainApp \
-            --dest output
+            --main-class com.moneymanager.App \
+            --dest output \
+            --linux-shortcut \
+            --linux-menu-group Office \
+            --linux-app-category Office
         shell: bash
 
-      # ===================== WINDOWS (EXE) =====================
       - name: Build EXE (Windows)
         if: runner.os == 'Windows'
         run: |
@@ -53,11 +60,14 @@ jobs:
             --name MoneyManager \
             --input target \
             --main-jar money-manager.jar \
-            --main-class com.moneymanager.MainApp \
-            --dest output
+            --main-class com.moneymanager.App \
+            --dest output \
+            --win-dir-chooser \
+            --win-menu \
+            --win-shortcut \
+            --win-console
         shell: bash
 
-      # ===================== MACOS (DMG) =====================
       - name: Build DMG (macOS)
         if: runner.os == 'macOS'
         run: |
@@ -67,16 +77,19 @@ jobs:
             --name MoneyManager \
             --input target \
             --main-jar money-manager.jar \
-            --main-class com.moneymanager.MainApp \
-            --dest output
+            --main-class com.moneymanager.App \
+            --dest output \
+            --mac-package-name "Money Manager" \
+            --mac-package-identifier com.moneymanager.app
         shell: bash
 
       - name: Upload Installers
         uses: actions/upload-artifact@v4
         with:
-          name: MoneyManager-${{ runner.os }}
+          name: MoneyManager-${{ matrix.artifact_name }}
           path: |
             money-manager/output/*.exe
             money-manager/output/*.msi
             money-manager/output/*.deb
             money-manager/output/*.dmg
+            money-manager/output/*.pkg
