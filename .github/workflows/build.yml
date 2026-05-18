@@ -111,12 +111,10 @@ jobs:
             --main-jar money-manager.jar ^
             --main-class com.moneymanager.Launcher ^
             --dest output ^
-            --win-installer ^
             --win-dir-chooser ^
-            --win-shortcut ^
             --win-menu ^
-            --win-menu-group "Money Manager"
-
+            --win-shortcut
+            
           # Build MSI
           jpackage ^
             --type msi ^
