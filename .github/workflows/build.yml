@@ -42,6 +42,17 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           cd money-manager
+          
+          # Build App Image (extracted folder)
+          jpackage \
+            --type app-image \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest output
+            
+          # Build DEB installer
           jpackage \
             --type deb \
             --name MoneyManager \
@@ -54,40 +65,66 @@ jobs:
             --linux-app-category Office
         shell: bash
 
+      - name: Install WiX
+        if: runner.os == 'Windows'
+        run: choco install wixtoolset --yes
+
       - name: Build EXE and MSI (Windows)
         if: runner.os == 'Windows'
         run: |
           cd money-manager
           
-          # Build EXE Installer
-          jpackage \
-            --type exe \
-            --name MoneyManager \
-            --input target/installer-input \
-            --main-jar money-manager.jar \
-            --main-class com.moneymanager.Launcher \
-            --dest output \
-            --win-dir-chooser \
-            --win-menu \
+          # Build Windows App Image
+          jpackage ^
+            --type app-image ^
+            --name MoneyManager ^
+            --input target/installer-input ^
+            --main-jar money-manager.jar ^
+            --main-class com.moneymanager.MainApp ^
+            --dest output
+
+          # Build EXE
+          jpackage ^
+            --type exe ^
+            --name MoneyManager ^
+            --input target/installer-input ^
+            --main-jar money-manager.jar ^
+            --main-class com.moneymanager.MainApp ^
+            --dest output ^
+            --win-dir-chooser ^
+            --win-menu ^
             --win-shortcut
-          
-          # Build MSI Installer
-          jpackage \
-            --type msi \
-            --name MoneyManager \
-            --input target/installer-input \
-            --main-jar money-manager.jar \
-            --main-class com.moneymanager.Launcher \
-            --dest output \
-            --win-dir-chooser \
-            --win-menu \
+
+          # Build MSI
+          jpackage ^
+            --type msi ^
+            --name MoneyManager ^
+            --input target/installer-input ^
+            --main-jar money-manager.jar ^
+            --main-class com.moneymanager.MainApp ^
+            --dest output ^
+            --win-dir-chooser ^
+            --win-menu ^
             --win-shortcut
-        shell: bash
+        shell: cmd
         
       - name: Build DMG (macOS)
         if: runner.os == 'macOS'
         run: |
           cd money-manager
+          
+          # Build macOS App Image (.app bundle)
+          jpackage \
+            --type app-image \
+            --name MoneyManager \
+            --input target/installer-input \
+            --main-jar money-manager.jar \
+            --main-class com.moneymanager.Launcher \
+            --dest output \
+            --mac-package-name "Money Manager" \
+            --mac-package-identifier com.moneymanager.app
+            
+          # Build DMG Installer
           jpackage \
             --type dmg \
             --name MoneyManager \
@@ -103,9 +140,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MoneyManager-${{ matrix.artifact_name }}
-          path: |
-            money-manager/output/*.exe
-            money-manager/output/*.msi
-            money-manager/output/*.deb
-            money-manager/output/*.dmg
-            money-manager/output/*.pkg
+          path: money-manager/output/
