@@ -1,0 +1,149 @@
+@startuml ClassDiagram
+allowmixing
+title Money Manager - Class Diagram (Core)
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+package "UI (JavaFX Controllers)" {
+  class LoginController
+  class MainController
+  class DashboardController
+  class TransactionController
+  class BudgetController
+  class GoalController
+  class NoteController
+}
+
+package "Services" {
+  class AuthService
+  class TransactionService
+  class BudgetService
+  class GoalService
+  class NoteService
+  class DashboardService
+  class MonthlyIncomeService
+}
+
+package "Repositories (Interfaces)" {
+  interface IUserRepo
+  interface ITransactionRepo
+  interface IBudgetRepo
+  interface IMonthlyBalanceRepo
+  interface IGoalRepo
+  interface INoteRepo
+  interface IUserSettingsRepo
+}
+
+package "Repositories (JDBC)" {
+  class JdbcUserRepo
+  class JdbcTransactionRepo
+  class JdbcBudgetRepo
+  class JdbcMonthlyBalanceRepo
+  class JdbcGoalRepo
+  class JdbcNoteRepo
+  class JdbcUserSettingsRepo
+  class DataAccessException
+}
+
+package "Domain Models" {
+  class User
+  class Transaction
+  class Budget
+  class MonthlyBalance
+  class Goal
+  class Contribution
+  class Note
+}
+
+package "DTOs" {
+  class TransactionDTO
+  class BudgetDTO
+  class GoalDTO
+  class ContributionDTO
+  class DashboardSnapshot
+  class MonthlyTrend
+}
+
+package "DB Config" {
+  class DatabaseConfig
+  class DatabaseInitializer
+}
+
+database "SQLite DB" as SQLite
+
+' --- UI -> Services ---
+LoginController --> AuthService
+LoginController --> TransactionService
+LoginController --> BudgetService
+LoginController --> GoalService
+LoginController --> NoteService
+LoginController --> DashboardService
+LoginController --> MonthlyIncomeService
+
+MainController --> DashboardController
+MainController --> TransactionController
+MainController --> BudgetController
+MainController --> GoalController
+MainController --> NoteController
+
+DashboardController --> DashboardService
+DashboardController --> MonthlyIncomeService
+
+TransactionController --> TransactionService
+TransactionController --> BudgetService
+
+BudgetController --> BudgetService
+GoalController --> GoalService
+NoteController --> NoteService
+
+' --- Services -> Repos ---
+AuthService --> IUserRepo
+TransactionService --> ITransactionRepo
+BudgetService --> IBudgetRepo
+BudgetService --> IMonthlyBalanceRepo
+GoalService --> IGoalRepo
+NoteService --> INoteRepo
+DashboardService --> ITransactionRepo
+DashboardService --> IGoalRepo
+MonthlyIncomeService --> IUserSettingsRepo
+MonthlyIncomeService --> ITransactionRepo
+MonthlyIncomeService --> IMonthlyBalanceRepo
+
+' --- JDBC implementations ---
+JdbcUserRepo ..|> IUserRepo
+JdbcTransactionRepo ..|> ITransactionRepo
+JdbcBudgetRepo ..|> IBudgetRepo
+JdbcMonthlyBalanceRepo ..|> IMonthlyBalanceRepo
+JdbcGoalRepo ..|> IGoalRepo
+JdbcNoteRepo ..|> INoteRepo
+JdbcUserSettingsRepo ..|> IUserSettingsRepo
+
+JdbcUserRepo --> DatabaseConfig
+JdbcTransactionRepo --> DatabaseConfig
+JdbcBudgetRepo --> DatabaseConfig
+JdbcMonthlyBalanceRepo --> DatabaseConfig
+JdbcGoalRepo --> DatabaseConfig
+JdbcNoteRepo --> DatabaseConfig
+JdbcUserSettingsRepo --> DatabaseConfig
+
+DatabaseInitializer --> DatabaseConfig
+DatabaseConfig --> SQLite
+
+' --- Models used by repos/services ---
+IUserRepo ..> User
+ITransactionRepo ..> Transaction
+IBudgetRepo ..> Budget
+IMonthlyBalanceRepo ..> MonthlyBalance
+IGoalRepo ..> Goal
+IGoalRepo ..> Contribution
+INoteRepo ..> Note
+
+TransactionService ..> TransactionDTO
+BudgetService ..> BudgetDTO
+GoalService ..> GoalDTO
+GoalService ..> ContributionDTO
+DashboardService ..> DashboardSnapshot
+DashboardService ..> MonthlyTrend
+
+@enduml
+

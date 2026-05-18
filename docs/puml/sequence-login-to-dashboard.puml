@@ -1,0 +1,81 @@
+@startuml SequenceLoginToDashboard
+
+
+title Sequence - Login -> Main Screen -> Dashboard Snapshot
+autonumber
+
+actor User as user
+boundary "Login UI\n(LoginController)" as login
+control "AuthService" as auth
+entity "IUserRepo\n(JdbcUserRepo)" as userRepo
+database "SQLite DB" as db
+
+boundary "Main UI\n(MainController)" as main
+boundary "Dashboard Tab\n(DashboardController)" as dashCtrl
+control "MonthlyIncomeService" as incomeSvc
+entity "IUserSettingsRepo\n(JdbcUserSettingsRepo)" as settingsRepo
+entity "ITransactionRepo\n(JdbcTransactionRepo)" as txRepo
+entity "IMonthlyBalanceRepo\n(JdbcMonthlyBalanceRepo)" as balRepo
+control "DashboardService" as dashSvc
+entity "IGoalRepo\n(JdbcGoalRepo)" as goalRepo
+
+user -> login : enter username/password\nclick Login
+login -> auth : login(username,password)
+auth -> userRepo : findByUsername(username)
+userRepo -> db : SELECT user...
+db --> userRepo : row
+userRepo --> auth : Optional<User>
+auth --> login : Optional<User>
+
+alt credentials valid
+  login -> main : init(user, services...)
+  main -> incomeSvc : applyForCurrentMonth(userId)
+
+  incomeSvc -> settingsRepo : getMonthlyIncome(userId)
+  settingsRepo -> db : SELECT monthly_income...
+  db --> settingsRepo : amount|empty
+  settingsRepo --> incomeSvc : Optional<BigDecimal>
+
+  alt income configured
+    incomeSvc -> txRepo : findByUserFiltered(userId, monthRange)
+    txRepo -> db : SELECT transactions...
+    db --> txRepo : list
+    txRepo --> incomeSvc : list
+
+    alt Monthly Income tx missing
+      incomeSvc -> txRepo : save("Monthly Income", INCOME)
+      txRepo -> db : INSERT transaction...
+      db --> txRepo : ok
+    end
+
+    incomeSvc -> balRepo : findByUserMonthYear(userId, month, year)
+    balRepo -> db : SELECT monthly_balance...
+    db --> balRepo : row|empty
+
+    alt monthly cap missing
+      incomeSvc -> balRepo : saveOrUpdate(userId, amount, month, year)
+      balRepo -> db : UPSERT monthly_balance...
+    end
+  end
+
+  main -> dashCtrl : init(dashboardService, incomeSvc, user)
+  dashCtrl -> dashSvc : getSnapshot(userId)
+
+  dashSvc -> txRepo : findByUserFiltered(userId, monthRange)
+  txRepo -> db : SELECT txs...
+  db --> txRepo : list
+  txRepo --> dashSvc : list
+
+  dashSvc -> goalRepo : getTotalSavedAmount(userId)
+  goalRepo -> db : SELECT SUM(saved_amount)
+  db --> goalRepo : total
+  goalRepo --> dashSvc : total
+
+  dashSvc --> dashCtrl : DashboardSnapshot
+  dashCtrl --> user : UI updated (charts + KPIs)
+
+else credentials invalid
+  login --> user : show error
+end
+
+@enduml

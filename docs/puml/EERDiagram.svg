@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="557px" preserveAspectRatio="none" style="width:1981px;height:557px;" version="1.1" viewBox="0 0 1981 557" width="1981px" zoomAndPan="magnify"><defs><filter height="300%" id="faoiz7vjsvf3r" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="311" x="827.5" y="18.6855">Money Manager - EER (Enhanced ER)</text><!--MD5=[8413f8248b2da7966d2de021109ec289]
+class users--><rect codeLine="7" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="96.4375" id="users" style="stroke:#A80036;stroke-width:1.5;" width="184" x="842.5" y="29.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="32" x="918.5" y="47.0977">users</text><line style="stroke:#A80036;stroke-width:1.5;" x1="843.5" x2="1025.5" y1="54.7344" y2="54.7344"/><ellipse cx="853.5" cy="65.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="862.5" y="70.1533">user_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="843.5" x2="1025.5" y1="76.5703" y2="76.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="129" x="848.5" y="91.9893">username : TEXT «UQ,NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="143" x="848.5" y="105.8252">password_hash : TEXT «NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="172" x="848.5" y="119.6611">created_at : TEXT «DEFAULT now»</text><!--MD5=[7f8e26d1a6333c7a5877a54d3f917b5b]
+class transactions--><rect codeLine="15" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="151.7813" id="transactions" style="stroke:#A80036;stroke-width:1.5;" width="236" x="46.5" y="203.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="68" x="130.5" y="221.0977">transactions</text><line style="stroke:#A80036;stroke-width:1.5;" x1="47.5" x2="281.5" y1="228.7344" y2="228.7344"/><ellipse cx="57.5" cy="239.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="147" x="66.5" y="244.1533">transaction_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="47.5" x2="281.5" y1="250.5703" y2="250.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="132" x="52.5" y="265.9893">user_id : INTEGER «FK,NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="89" x="52.5" y="279.8252">name : TEXT «NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="184" x="52.5" y="293.6611">amount : NUMERIC &lt;&lt;NN,CHECK &gt; 0&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="106" x="52.5" y="307.4971">category : TEXT «NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="224" x="52.5" y="321.333">tx_type : TEXT «NN,CHECK INCOME|EXPENSE»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="99" x="52.5" y="335.1689">tx_date : TEXT «NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="172" x="52.5" y="349.0049">created_at : TEXT «DEFAULT now»</text><!--MD5=[f6d57231a496c9f2651524545f90970b]
+class budgets--><rect codeLine="27" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="145.9453" id="budgets" style="stroke:#A80036;stroke-width:1.5;" width="220" x="317.5" y="206.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45" x="405" y="224.0977">budgets</text><line style="stroke:#A80036;stroke-width:1.5;" x1="318.5" x2="536.5" y1="231.7344" y2="231.7344"/><ellipse cx="328.5" cy="242.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="126" x="337.5" y="247.1533">budget_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="318.5" x2="536.5" y1="253.5703" y2="253.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="132" x="323.5" y="268.9893">user_id : INTEGER «FK,NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="106" x="323.5" y="282.8252">category : TEXT «NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="208" x="323.5" y="296.6611">amount_cap : NUMERIC &lt;&lt;NN,CHECK &gt; 0&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="173" x="323.5" y="310.4971">month : INTEGER «NN,CHECK 1..12»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="193" x="323.5" y="324.333">year : INTEGER &lt;&lt;NN,CHECK &gt;= 2020&gt;&gt;</text><line style="stroke:#A80036;stroke-width:1.0;" x1="318.5" x2="536.5" y1="330.75" y2="330.75"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="199" x="323.5" y="346.1689">{unique} (user_id, category, month, year)</text><!--MD5=[4917fbf595ff3b6535f40c47718d0309]
+class monthly_balance--><rect codeLine="39" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="132.1094" id="monthly_balance" style="stroke:#A80036;stroke-width:1.5;" width="222" x="572.5" y="213.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="94" x="636.5" y="231.0977">monthly_balance</text><line style="stroke:#A80036;stroke-width:1.5;" x1="573.5" x2="793.5" y1="238.7344" y2="238.7344"/><ellipse cx="583.5" cy="249.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131" x="592.5" y="254.1533">balance_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="573.5" x2="793.5" y1="260.5703" y2="260.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="132" x="578.5" y="275.9893">user_id : INTEGER «FK,NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="173" x="578.5" y="289.8252">month : INTEGER «NN,CHECK 1..12»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="193" x="578.5" y="303.6611">year : INTEGER &lt;&lt;NN,CHECK &gt;= 2020&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="210" x="578.5" y="317.4971">total_amount : NUMERIC &lt;&lt;NN,CHECK &gt; 0&gt;&gt;</text><line style="stroke:#A80036;stroke-width:1.0;" x1="573.5" x2="793.5" y1="323.9141" y2="323.9141"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="150" x="578.5" y="339.333">{unique} (user_id, month, year)</text><!--MD5=[7850ae784277cc5902be8d0287bf0bca]
+class user_settings--><rect codeLine="50" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="68.7656" id="user_settings" style="stroke:#A80036;stroke-width:1.5;" width="210" x="829.5" y="245.1406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="76" x="896.5" y="262.5977">user_settings</text><line style="stroke:#A80036;stroke-width:1.5;" x1="830.5" x2="1038.5" y1="270.2344" y2="270.2344"/><ellipse cx="840.5" cy="281.2344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131" x="849.5" y="285.6533">user_id : INTEGER «PK,FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="830.5" x2="1038.5" y1="292.0703" y2="292.0703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="198" x="835.5" y="307.4893">monthly_income : NUMERIC «NULLABLE»</text><!--MD5=[b7b86b907f95f6f6d39a5d854195eb17]
+class notes--><rect codeLine="56" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="110.2734" id="notes" style="stroke:#A80036;stroke-width:1.5;" width="184" x="1074.5" y="224.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="31" x="1151" y="242.0977">notes</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1075.5" x2="1257.5" y1="249.7344" y2="249.7344"/><ellipse cx="1085.5" cy="260.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="114" x="1094.5" y="265.1533">note_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="1075.5" x2="1257.5" y1="271.5703" y2="271.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="132" x="1080.5" y="286.9893">user_id : INTEGER «FK,NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="79" x="1080.5" y="300.8252">title : TEXT «NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="138" x="1080.5" y="314.6611">content : TEXT «NULLABLE»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="172" x="1080.5" y="328.4971">created_at : TEXT «DEFAULT now»</text><!--MD5=[90b2e342de54f71d6329ad81e6b2b485]
+class savings_goals--><rect codeLine="65" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="137.9453" id="savings_goals" style="stroke:#A80036;stroke-width:1.5;" width="296" x="1293.5" y="210.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="81" x="1401" y="228.0977">savings_goals</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1294.5" x2="1588.5" y1="235.7344" y2="235.7344"/><ellipse cx="1304.5" cy="246.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="113" x="1313.5" y="251.1533">goal_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="1294.5" x2="1588.5" y1="257.5703" y2="257.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="132" x="1299.5" y="272.9893">user_id : INTEGER «FK,NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="89" x="1299.5" y="286.8252">name : TEXT «NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="218" x="1299.5" y="300.6611">target_amount : NUMERIC &lt;&lt;NN,CHECK &gt; 0&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="284" x="1299.5" y="314.4971">saved_amount : NUMERIC &lt;&lt;NN,DEFAULT 0,CHECK &gt;= 0&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="142" x="1299.5" y="328.333">deadline : TEXT «NULLABLE»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="172" x="1299.5" y="342.1689">created_at : TEXT «DEFAULT now»</text><!--MD5=[e8d6362fdc38107055be84bd72b73877]
+class goal_contributions--><rect codeLine="76" fill="#FEFECE" filter="url(#faoiz7vjsvf3r)" height="110.2734" id="goal_contributions" style="stroke:#A80036;stroke-width:1.5;" width="201" x="1341" y="433.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="102" x="1390.5" y="451.0977">goal_contributions</text><line style="stroke:#A80036;stroke-width:1.5;" x1="1342" x2="1541" y1="458.7344" y2="458.7344"/><ellipse cx="1352" cy="469.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="149" x="1361" y="474.1533">contribution_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="1342" x2="1541" y1="480.5703" y2="480.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="130" x="1347" y="495.9893">goal_id : INTEGER «FK,NN»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="184" x="1347" y="509.8252">amount : NUMERIC &lt;&lt;NN,CHECK &gt; 0&gt;&gt;</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="123" x="1347" y="523.6611">note : TEXT «NULLABLE»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="189" x="1347" y="537.4971">contributed_at : TEXT «DEFAULT now»</text><path d="M6,475.6406 L6,501.9922 A0,0 0 0 0 6,501.9922 L323,501.9922 A0,0 0 0 0 323,501.9922 L323,485.6406 L313,475.6406 L168.5,475.6406 L164.5,355.6906 L160.5,475.6406 L6,475.6406 A0,0 0 0 0 6,475.6406 " fill="#FBFB77" filter="url(#faoiz7vjsvf3r)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M313,475.6406 L313,485.6406 L323,485.6406 L313,475.6406 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="296" x="12" y="494.1357">tx_date stored as TEXT (ISO-8601 date) for SQLite.</text><path d="M1625,266.6406 L1625,292.9922 L1972,292.9922 L1972,276.6406 L1962,266.6406 L1625,266.6406 " fill="#FBFB77" filter="url(#faoiz7vjsvf3r)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M1962,266.6406 L1962,276.6406 L1972,276.6406 L1962,266.6406 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="326" x="1631" y="285.1357">created_at stored as TEXT (ISO-8601 timestamp with Z).</text><!--MD5=[2a9c393571ed33840c21dbba032d0f66]
+link users to transactions--><path codeLine="85" d="M834.38,61.6406 C834.38,61.6406 164.5,61.6406 164.5,61.6406 C164.5,61.6406 164.5,195.3906 164.5,195.3906 " fill="none" id="users-transactions" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="164.5" x2="170.5" y1="195.3906" y2="203.3906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="164.5" x2="158.5" y1="195.3906" y2="203.3906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="164.5" x2="164.5" y1="195.3906" y2="203.3906"/><ellipse cx="164.5" cy="189.3906" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="838.38" x2="838.38" y1="57.6406" y2="65.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="835.38" x2="835.38" y1="57.6406" y2="65.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="834.38" x2="842.38" y1="61.6406" y2="61.6406"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42" x="255.5" y="170.1357">user_id</text><!--MD5=[a2b89bed73d2ed385857f2a0e9976344]
+link users to budgets--><path codeLine="86" d="M834.39,93.6406 C834.39,93.6406 427.5,93.6406 427.5,93.6406 C427.5,93.6406 427.5,198.3906 427.5,198.3906 " fill="none" id="users-budgets" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="427.5" x2="433.5" y1="198.3906" y2="206.3906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="427.5" x2="421.5" y1="198.3906" y2="206.3906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="427.5" x2="427.5" y1="198.3906" y2="206.3906"/><ellipse cx="427.5" cy="192.3906" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="838.39" x2="838.39" y1="89.6406" y2="97.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="835.39" x2="835.39" y1="89.6406" y2="97.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="834.39" x2="842.39" y1="93.6406" y2="93.6406"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42" x="428.5" y="170.1357">user_id</text><!--MD5=[4363482967a758a2f4b743ce8a7f1a9a]
+link users to notes--><path codeLine="87" d="M952.9,133.9006 C952.9,133.9006 952.9,235.6406 952.9,235.6406 C952.9,235.6406 1066.36,235.6406 1066.36,235.6406 " fill="none" id="users-notes" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1066.36" x2="1074.36" y1="235.6406" y2="229.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1066.36" x2="1074.36" y1="235.6406" y2="241.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1066.36" x2="1074.36" y1="235.6406" y2="235.6406"/><ellipse cx="1060.36" cy="235.6406" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="948.9" x2="956.9" y1="129.9006" y2="129.9006"/><line style="stroke:#A80036;stroke-width:1.0;" x1="948.9" x2="956.9" y1="132.9006" y2="132.9006"/><line style="stroke:#A80036;stroke-width:1.0;" x1="952.9" x2="952.9" y1="133.9006" y2="125.9006"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42" x="1167.5" y="170.1357">user_id</text><!--MD5=[7e0a83c417d5980693501432c015b1c4]
+link users to savings_goals--><path codeLine="88" d="M989.7,133.8206 C989.7,133.8206 989.7,217.6406 989.7,217.6406 C989.7,217.6406 1285.25,217.6406 1285.25,217.6406 " fill="none" id="users-savings_goals" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1285.25" x2="1293.25" y1="217.6406" y2="211.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1285.25" x2="1293.25" y1="217.6406" y2="223.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1285.25" x2="1293.25" y1="217.6406" y2="217.6406"/><ellipse cx="1279.25" cy="217.6406" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="985.7" x2="993.7" y1="129.8206" y2="129.8206"/><line style="stroke:#A80036;stroke-width:1.0;" x1="985.7" x2="993.7" y1="132.8206" y2="132.8206"/><line style="stroke:#A80036;stroke-width:1.0;" x1="989.7" x2="989.7" y1="133.8206" y2="125.8206"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42" x="1347.5" y="170.1357">user_id</text><!--MD5=[1461dd53f10dedcacee3679132d37518]
+link users to monthly_balance--><path codeLine="89" d="M879.3,133.9906 C879.3,133.9906 879.3,221.6406 879.3,221.6406 C879.3,221.6406 802.56,221.6406 802.56,221.6406 " fill="none" id="users-monthly_balance" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="802.56" x2="794.56" y1="221.6406" y2="227.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="802.56" x2="794.56" y1="221.6406" y2="215.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="802.56" x2="794.56" y1="221.6406" y2="221.6406"/><ellipse cx="808.56" cy="221.6406" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="875.3" x2="883.3" y1="129.9906" y2="129.9906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="875.3" x2="883.3" y1="132.9906" y2="132.9906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="879.3" x2="879.3" y1="133.9906" y2="125.9906"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42" x="684.5" y="170.1357">user_id</text><!--MD5=[f24202c6e454d886e82b9901fe0b5f45]
+link users to user_settings--><path codeLine="90" d="M916.1,132.7706 C916.1,132.7706 916.1,237.8406 916.1,237.8406 " fill="none" id="users-user_settings" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="920.1" x2="912.1" y1="240.8406" y2="240.8406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="920.1" x2="912.1" y1="237.8406" y2="237.8406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="916.1" x2="916.1" y1="236.8406" y2="244.8406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="912.1" x2="920.1" y1="129.7706" y2="129.7706"/><line style="stroke:#A80036;stroke-width:1.0;" x1="912.1" x2="920.1" y1="132.7706" y2="132.7706"/><line style="stroke:#A80036;stroke-width:1.0;" x1="916.1" x2="916.1" y1="133.7706" y2="125.7706"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42" x="935.5" y="170.1357">user_id</text><!--MD5=[9f072fbe88f7db9be63b10fb756ecfd5]
+link savings_goals to goal_contributions--><path codeLine="92" d="M1441.5,356.6506 C1441.5,356.6506 1441.5,425.5806 1441.5,425.5806 " fill="none" id="savings_goals-goal_contributions" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1441.5" x2="1447.5" y1="425.5806" y2="433.5806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1441.5" x2="1435.5" y1="425.5806" y2="433.5806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1441.5" x2="1441.5" y1="425.5806" y2="433.5806"/><ellipse cx="1441.5" cy="419.5806" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1437.5" x2="1445.5" y1="352.6506" y2="352.6506"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1437.5" x2="1445.5" y1="355.6506" y2="355.6506"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1441.5" x2="1441.5" y1="356.6506" y2="348.6506"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="41" x="1442.5" y="400.1357">goal_id</text><!--MD5=[228ebef69d8890053887c09210b891f8]
+link users to GMN20--><path d="M1026.55,77.6406 C1249.18,77.6406 1798.5,77.6406 1798.5,77.6406 C1798.5,77.6406 1798.5,221.4506 1798.5,266.3906 " fill="none" id="users-GMN20" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><!--MD5=[9fece52e603d627f43449d67c4e2f5b5]
+@startuml EERDiagram
+allowmixing
+title Money Manager - EER (Enhanced ER)
+
+hide circle
+skinparam linetype ortho
+
+entity users {
+  * user_id : INTEGER <<PK>>
+  - -
+  username : TEXT <<UQ,NN>>
+  password_hash : TEXT <<NN>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity transactions {
+  * transaction_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK,NN>>
+  name : TEXT <<NN>>
+  amount : NUMERIC <<NN,CHECK > 0>>
+  category : TEXT <<NN>>
+  tx_type : TEXT <<NN,CHECK INCOME|EXPENSE>>
+  tx_date : TEXT <<NN>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity budgets {
+  * budget_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK,NN>>
+  category : TEXT <<NN>>
+  amount_cap : NUMERIC <<NN,CHECK > 0>>
+  month : INTEGER <<NN,CHECK 1..12>>
+  year : INTEGER <<NN,CHECK >= 2020>>
+  - -
+  {unique} (user_id, category, month, year)
+}
+
+entity monthly_balance {
+  * balance_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK,NN>>
+  month : INTEGER <<NN,CHECK 1..12>>
+  year : INTEGER <<NN,CHECK >= 2020>>
+  total_amount : NUMERIC <<NN,CHECK > 0>>
+  - -
+  {unique} (user_id, month, year)
+}
+
+entity user_settings {
+  * user_id : INTEGER <<PK,FK>>
+  - -
+  monthly_income : NUMERIC <<NULLABLE>>
+}
+
+entity notes {
+  * note_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK,NN>>
+  title : TEXT <<NN>>
+  content : TEXT <<NULLABLE>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity savings_goals {
+  * goal_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK,NN>>
+  name : TEXT <<NN>>
+  target_amount : NUMERIC <<NN,CHECK > 0>>
+  saved_amount : NUMERIC <<NN,DEFAULT 0,CHECK >= 0>>
+  deadline : TEXT <<NULLABLE>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity goal_contributions {
+  * contribution_id : INTEGER <<PK>>
+  - -
+  goal_id : INTEGER <<FK,NN>>
+  amount : NUMERIC <<NN,CHECK > 0>>
+  note : TEXT <<NULLABLE>>
+  contributed_at : TEXT <<DEFAULT now>>
+}
+
+users ||- -o{ transactions : "user_id"
+users ||- -o{ budgets : "user_id"
+users ||- -o{ notes : "user_id"
+users ||- -o{ savings_goals : "user_id"
+users ||- -o{ monthly_balance : "user_id"
+users ||- -|| user_settings : "user_id"
+
+savings_goals ||- -o{ goal_contributions : "goal_id"
+
+note bottom of transactions
+tx_date stored as TEXT (ISO-8601 date) for SQLite.
+end note
+
+note bottom of users
+created_at stored as TEXT (ISO-8601 timestamp with Z).
+end note
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 12:25:05 EET 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 32-Bit Client VM
+Default Encoding: Cp1256
+Language: en
+Country: US
+--></g></svg>

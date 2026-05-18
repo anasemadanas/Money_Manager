@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="521px" preserveAspectRatio="none" style="width:1134px;height:521px;" version="1.1" viewBox="0 0 1134 521" width="1134px" zoomAndPan="magnify"><defs><filter height="300%" id="f1jrpb58g0xzc1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="313" x="404" y="18.6855">Money Manager - SQLite Schema (ER)</text><!--MD5=[8413f8248b2da7966d2de021109ec289]
+class users--><rect codeLine="7" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="96.4375" id="users" style="stroke:#A80036;stroke-width:1.5;" width="141" x="507" y="29.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="32" x="561.5" y="47.0977">users</text><line style="stroke:#A80036;stroke-width:1.5;" x1="508" x2="647" y1="54.7344" y2="54.7344"/><ellipse cx="518" cy="65.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="527" y="70.1533">user_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="508" x2="647" y1="76.5703" y2="76.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="112" x="513" y="91.9893">username : TEXT «UQ»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="114" x="513" y="105.8252">password_hash : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="86" x="513" y="119.6611">created_at : TEXT</text><!--MD5=[7f8e26d1a6333c7a5877a54d3f917b5b]
+class transactions--><rect codeLine="15" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="151.7813" id="transactions" style="stroke:#A80036;stroke-width:1.5;" width="173" x="7" y="185.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="68" x="59.5" y="203.0977">transactions</text><line style="stroke:#A80036;stroke-width:1.5;" x1="8" x2="179" y1="210.7344" y2="210.7344"/><ellipse cx="18" cy="221.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="147" x="27" y="226.1533">transaction_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="8" x2="179" y1="232.5703" y2="232.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="13" y="247.9893">user_id : INTEGER «FK»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="60" x="13" y="261.8252">name : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="88" x="13" y="275.6611">amount : NUMERIC</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="77" x="13" y="289.4971">category : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="70" x="13" y="303.333">tx_type : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="70" x="13" y="317.1689">tx_date : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="86" x="13" y="331.0049">created_at : TEXT</text><!--MD5=[f6d57231a496c9f2651524545f90970b]
+class budgets--><rect codeLine="27" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="124.1094" id="budgets" style="stroke:#A80036;stroke-width:1.5;" width="152" x="215.5" y="199.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45" x="269" y="217.0977">budgets</text><line style="stroke:#A80036;stroke-width:1.5;" x1="216.5" x2="366.5" y1="224.7344" y2="224.7344"/><ellipse cx="226.5" cy="235.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="126" x="235.5" y="240.1533">budget_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="216.5" x2="366.5" y1="246.5703" y2="246.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="221.5" y="261.9893">user_id : INTEGER «FK»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="77" x="221.5" y="275.8252">category : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="112" x="221.5" y="289.6611">amount_cap : NUMERIC</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="80" x="221.5" y="303.4971">month : INTEGER</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="73" x="221.5" y="317.333">year : INTEGER</text><!--MD5=[4917fbf595ff3b6535f40c47718d0309]
+class monthly_balance--><rect codeLine="37" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="110.2734" id="monthly_balance" style="stroke:#A80036;stroke-width:1.5;" width="157" x="403" y="206.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="94" x="434.5" y="224.0977">monthly_balance</text><line style="stroke:#A80036;stroke-width:1.5;" x1="404" x2="559" y1="231.7344" y2="231.7344"/><ellipse cx="414" cy="242.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131" x="423" y="247.1533">balance_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="404" x2="559" y1="253.5703" y2="253.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="409" y="268.9893">user_id : INTEGER «FK»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="80" x="409" y="282.8252">month : INTEGER</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="73" x="409" y="296.6611">year : INTEGER</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="114" x="409" y="310.4971">total_amount : NUMERIC</text><!--MD5=[7850ae784277cc5902be8d0287bf0bca]
+class user_settings--><rect codeLine="46" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="68.7656" id="user_settings" style="stroke:#A80036;stroke-width:1.5;" width="157" x="595" y="227.1406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="76" x="635.5" y="244.5977">user_settings</text><line style="stroke:#A80036;stroke-width:1.5;" x1="596" x2="751" y1="252.2344" y2="252.2344"/><ellipse cx="606" cy="263.2344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131" x="615" y="267.6533">user_id : INTEGER «PK,FK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="596" x2="751" y1="274.0703" y2="274.0703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="130" x="601" y="289.4893">monthly_income : NUMERIC</text><!--MD5=[b7b86b907f95f6f6d39a5d854195eb17]
+class notes--><rect codeLine="52" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="110.2734" id="notes" style="stroke:#A80036;stroke-width:1.5;" width="140" x="787.5" y="206.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="31" x="842" y="224.0977">notes</text><line style="stroke:#A80036;stroke-width:1.5;" x1="788.5" x2="926.5" y1="231.7344" y2="231.7344"/><ellipse cx="798.5" cy="242.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="114" x="807.5" y="247.1533">note_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="788.5" x2="926.5" y1="253.5703" y2="253.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="793.5" y="268.9893">user_id : INTEGER «FK»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="50" x="793.5" y="282.8252">title : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="70" x="793.5" y="296.6611">content : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="86" x="793.5" y="310.4971">created_at : TEXT</text><!--MD5=[90b2e342de54f71d6329ad81e6b2b485]
+class savings_goals--><rect codeLine="61" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="137.9453" id="savings_goals" style="stroke:#A80036;stroke-width:1.5;" width="139" x="963" y="192.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="81" x="992" y="210.0977">savings_goals</text><line style="stroke:#A80036;stroke-width:1.5;" x1="964" x2="1101" y1="217.7344" y2="217.7344"/><ellipse cx="974" cy="228.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="113" x="983" y="233.1533">goal_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="964" x2="1101" y1="239.5703" y2="239.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="969" y="254.9893">user_id : INTEGER «FK»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="60" x="969" y="268.8252">name : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="122" x="969" y="282.6611">target_amount : NUMERIC</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="124" x="969" y="296.4971">saved_amount : NUMERIC</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="74" x="969" y="310.333">deadline : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="86" x="969" y="324.1689">created_at : TEXT</text><!--MD5=[e8d6362fdc38107055be84bd72b73877]
+class goal_contributions--><rect codeLine="72" fill="#FEFECE" filter="url(#f1jrpb58g0xzc1)" height="110.2734" id="goal_contributions" style="stroke:#A80036;stroke-width:1.5;" width="175" x="945" y="397.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="102" x="981.5" y="415.0977">goal_contributions</text><line style="stroke:#A80036;stroke-width:1.5;" x1="946" x2="1119" y1="422.7344" y2="422.7344"/><ellipse cx="956" cy="433.7344" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="149" x="965" y="438.1533">contribution_id : INTEGER «PK»</text><line style="stroke:#A80036;stroke-width:1.0;" x1="946" x2="1119" y1="444.5703" y2="444.5703"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="113" x="951" y="459.9893">goal_id : INTEGER «FK»</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="88" x="951" y="473.8252">amount : NUMERIC</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="55" x="951" y="487.6611">note : TEXT</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="103" x="951" y="501.4971">contributed_at : TEXT</text><!--MD5=[2a9c393571ed33840c21dbba032d0f66]
+link users to transactions--><path codeLine="81" d="M520.25,133.7906 C520.25,133.7906 520.25,189.6406 520.25,189.6406 C520.25,189.6406 188.12,189.6406 188.12,189.6406 " fill="none" id="users-transactions" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="188.12" x2="180.12" y1="189.6406" y2="195.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="188.12" x2="180.12" y1="189.6406" y2="183.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="188.12" x2="180.12" y1="189.6406" y2="189.6406"/><ellipse cx="194.12" cy="189.6406" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="516.25" x2="524.25" y1="129.7906" y2="129.7906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="516.25" x2="524.25" y1="132.7906" y2="132.7906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="520.25" x2="520.25" y1="133.7906" y2="125.7906"/><!--MD5=[a2b89bed73d2ed385857f2a0e9976344]
+link users to budgets--><path codeLine="82" d="M533.5,133.9906 C533.5,133.9906 533.5,203.6406 533.5,203.6406 C533.5,203.6406 375.74,203.6406 375.74,203.6406 " fill="none" id="users-budgets" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="375.74" x2="367.74" y1="203.6406" y2="209.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="375.74" x2="367.74" y1="203.6406" y2="197.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="375.74" x2="367.74" y1="203.6406" y2="203.6406"/><ellipse cx="381.74" cy="203.6406" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="529.5" x2="537.5" y1="129.9906" y2="129.9906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="529.5" x2="537.5" y1="132.9906" y2="132.9906"/><line style="stroke:#A80036;stroke-width:1.0;" x1="533.5" x2="533.5" y1="133.9906" y2="125.9906"/><!--MD5=[4363482967a758a2f4b743ce8a7f1a9a]
+link users to notes--><path codeLine="83" d="M621.5,133.8206 C621.5,133.8206 621.5,217.6406 621.5,217.6406 C621.5,217.6406 779.33,217.6406 779.33,217.6406 " fill="none" id="users-notes" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="779.33" x2="787.33" y1="217.6406" y2="211.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="779.33" x2="787.33" y1="217.6406" y2="223.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="779.33" x2="787.33" y1="217.6406" y2="217.6406"/><ellipse cx="773.33" cy="217.6406" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="617.5" x2="625.5" y1="129.8206" y2="129.8206"/><line style="stroke:#A80036;stroke-width:1.0;" x1="617.5" x2="625.5" y1="132.8206" y2="132.8206"/><line style="stroke:#A80036;stroke-width:1.0;" x1="621.5" x2="621.5" y1="133.8206" y2="125.8206"/><!--MD5=[7e0a83c417d5980693501432c015b1c4]
+link users to savings_goals--><path codeLine="84" d="M634.75,133.7006 C634.75,133.7006 634.75,196.6406 634.75,196.6406 C634.75,196.6406 954.76,196.6406 954.76,196.6406 " fill="none" id="users-savings_goals" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="954.76" x2="962.76" y1="196.6406" y2="190.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="954.76" x2="962.76" y1="196.6406" y2="202.6406"/><line style="stroke:#A80036;stroke-width:1.0;" x1="954.76" x2="962.76" y1="196.6406" y2="196.6406"/><ellipse cx="948.76" cy="196.6406" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="630.75" x2="638.75" y1="129.7006" y2="129.7006"/><line style="stroke:#A80036;stroke-width:1.0;" x1="630.75" x2="638.75" y1="132.7006" y2="132.7006"/><line style="stroke:#A80036;stroke-width:1.0;" x1="634.75" x2="634.75" y1="133.7006" y2="125.7006"/><!--MD5=[1461dd53f10dedcacee3679132d37518]
+link users to monthly_balance--><path codeLine="85" d="M546.75,133.9806 C546.75,133.9806 546.75,198.4706 546.75,198.4706 " fill="none" id="users-monthly_balance" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="546.75" x2="552.75" y1="198.4706" y2="206.4706"/><line style="stroke:#A80036;stroke-width:1.0;" x1="546.75" x2="540.75" y1="198.4706" y2="206.4706"/><line style="stroke:#A80036;stroke-width:1.0;" x1="546.75" x2="546.75" y1="198.4706" y2="206.4706"/><ellipse cx="546.75" cy="192.4706" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="542.75" x2="550.75" y1="129.9806" y2="129.9806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="542.75" x2="550.75" y1="132.9806" y2="132.9806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="546.75" x2="546.75" y1="133.9806" y2="125.9806"/><!--MD5=[f24202c6e454d886e82b9901fe0b5f45]
+link users to user_settings--><path codeLine="86" d="M608.25,132.9806 C608.25,132.9806 608.25,219.9806 608.25,219.9806 " fill="none" id="users-user_settings" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="612.25" x2="604.25" y1="222.9806" y2="222.9806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="612.25" x2="604.25" y1="219.9806" y2="219.9806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="608.25" x2="608.25" y1="218.9806" y2="226.9806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="604.25" x2="612.25" y1="129.9806" y2="129.9806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="604.25" x2="612.25" y1="132.9806" y2="132.9806"/><line style="stroke:#A80036;stroke-width:1.0;" x1="608.25" x2="608.25" y1="133.9806" y2="125.9806"/><!--MD5=[9f072fbe88f7db9be63b10fb756ecfd5]
+link savings_goals to goal_contributions--><path codeLine="88" d="M1032.5,338.8706 C1032.5,338.8706 1032.5,389.4006 1032.5,389.4006 " fill="none" id="savings_goals-goal_contributions" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1032.5" x2="1038.5" y1="389.4006" y2="397.4006"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1032.5" x2="1026.5" y1="389.4006" y2="397.4006"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1032.5" x2="1032.5" y1="389.4006" y2="397.4006"/><ellipse cx="1032.5" cy="383.4006" fill="none" rx="4" ry="4" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1028.5" x2="1036.5" y1="334.8706" y2="334.8706"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1028.5" x2="1036.5" y1="337.8706" y2="337.8706"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1032.5" x2="1032.5" y1="338.8706" y2="330.8706"/><!--MD5=[34d763446054feec50a9b416598ff555]
+@startuml DatabaseSchema
+allowmixing
+title Money Manager - SQLite Schema (ER)
+
+hide circle
+skinparam linetype ortho
+
+entity users {
+  * user_id : INTEGER <<PK>>
+  - -
+  username : TEXT <<UQ>>
+  password_hash : TEXT
+  created_at : TEXT
+}
+
+entity transactions {
+  * transaction_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK>>
+  name : TEXT
+  amount : NUMERIC
+  category : TEXT
+  tx_type : TEXT
+  tx_date : TEXT
+  created_at : TEXT
+}
+
+entity budgets {
+  * budget_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK>>
+  category : TEXT
+  amount_cap : NUMERIC
+  month : INTEGER
+  year : INTEGER
+}
+
+entity monthly_balance {
+  * balance_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK>>
+  month : INTEGER
+  year : INTEGER
+  total_amount : NUMERIC
+}
+
+entity user_settings {
+  * user_id : INTEGER <<PK,FK>>
+  - -
+  monthly_income : NUMERIC
+}
+
+entity notes {
+  * note_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK>>
+  title : TEXT
+  content : TEXT
+  created_at : TEXT
+}
+
+entity savings_goals {
+  * goal_id : INTEGER <<PK>>
+  - -
+  user_id : INTEGER <<FK>>
+  name : TEXT
+  target_amount : NUMERIC
+  saved_amount : NUMERIC
+  deadline : TEXT
+  created_at : TEXT
+}
+
+entity goal_contributions {
+  * contribution_id : INTEGER <<PK>>
+  - -
+  goal_id : INTEGER <<FK>>
+  amount : NUMERIC
+  note : TEXT
+  contributed_at : TEXT
+}
+
+users ||- -o{ transactions
+users ||- -o{ budgets
+users ||- -o{ notes
+users ||- -o{ savings_goals
+users ||- -o{ monthly_balance
+users ||- -|| user_settings
+
+savings_goals ||- -o{ goal_contributions
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 12:25:05 EET 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 32-Bit Client VM
+Default Encoding: Cp1256
+Language: en
+Country: US
+--></g></svg>

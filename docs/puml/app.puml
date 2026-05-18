@@ -1,0 +1,88 @@
+@startuml MoneyManager
+allowmixing
+title Money Manager - High Level Architecture
+
+skinparam backgroundColor white
+
+package "UI (JavaFX)" {
+  class LoginController
+  class TransactionController
+  class BudgetController
+  class GoalController
+  class NoteController
+  class DashboardController
+}
+
+package "Services" {
+  class AuthService
+  class TransactionService
+  class BudgetService
+  class GoalService
+  class NoteService
+  class DashboardService
+  class MonthlyIncomeService
+}
+
+package "Repositories (JDBC)" {
+  interface IUserRepo
+  class JdbcUserRepo
+  interface ITransactionRepo
+  class JdbcTransactionRepo
+  interface IBudgetRepo
+  class JdbcBudgetRepo
+  interface IMonthlyBalanceRepo
+  class JdbcMonthlyBalanceRepo
+  interface IGoalRepo
+  class JdbcGoalRepo
+  interface INoteRepo
+  class JdbcNoteRepo
+  interface IUserSettingsRepo
+  class JdbcUserSettingsRepo
+}
+
+package "DB Config" {
+  class DatabaseConfig
+  class DatabaseInitializer
+}
+
+database "SQLite DB\nmoney-manager.db" as SQLite
+
+LoginController --> AuthService
+TransactionController --> TransactionService
+BudgetController --> BudgetService
+GoalController --> GoalService
+NoteController --> NoteService
+DashboardController --> DashboardService
+
+AuthService --> IUserRepo
+TransactionService --> ITransactionRepo
+BudgetService --> IBudgetRepo
+BudgetService --> IMonthlyBalanceRepo
+GoalService --> IGoalRepo
+NoteService --> INoteRepo
+DashboardService --> ITransactionRepo
+DashboardService --> IGoalRepo
+MonthlyIncomeService --> IUserSettingsRepo
+MonthlyIncomeService --> ITransactionRepo
+MonthlyIncomeService --> IMonthlyBalanceRepo
+
+JdbcUserRepo ..|> IUserRepo
+JdbcTransactionRepo ..|> ITransactionRepo
+JdbcBudgetRepo ..|> IBudgetRepo
+JdbcMonthlyBalanceRepo ..|> IMonthlyBalanceRepo
+JdbcGoalRepo ..|> IGoalRepo
+JdbcNoteRepo ..|> INoteRepo
+JdbcUserSettingsRepo ..|> IUserSettingsRepo
+
+DatabaseInitializer --> DatabaseConfig
+JdbcUserRepo --> DatabaseConfig
+JdbcTransactionRepo --> DatabaseConfig
+JdbcBudgetRepo --> DatabaseConfig
+JdbcMonthlyBalanceRepo --> DatabaseConfig
+JdbcGoalRepo --> DatabaseConfig
+JdbcNoteRepo --> DatabaseConfig
+JdbcUserSettingsRepo --> DatabaseConfig
+
+DatabaseConfig --> SQLite
+
+@enduml

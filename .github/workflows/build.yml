@@ -54,10 +54,12 @@ jobs:
             --linux-app-category Office
         shell: bash
 
-      - name: Build EXE (Windows)
+      - name: Build EXE and MSI (Windows)
         if: runner.os == 'Windows'
         run: |
           cd money-manager
+          
+          # Build EXE Installer
           jpackage \
             --type exe \
             --name MoneyManager \
@@ -67,13 +69,11 @@ jobs:
             --dest output \
             --win-dir-chooser \
             --win-menu \
-            --win-shortcut \
-        shell: bash
+            --win-shortcut
           
-
-          cd money-manager
+          # Build MSI Installer
           jpackage \
-            --type exe \
+            --type msi \
             --name MoneyManager \
             --input target/installer-input \
             --main-jar money-manager.jar \
@@ -104,8 +104,8 @@ jobs:
         with:
           name: MoneyManager-${{ matrix.artifact_name }}
           path: |
-            output/*.exe
-            output/*.msi
-            output/*.deb
-            output/*.dmg
-            output/*.pkg
+            money-manager/output/*.exe
+            money-manager/output/*.msi
+            money-manager/output/*.deb
+            money-manager/output/*.dmg
+            money-manager/output/*.pkg

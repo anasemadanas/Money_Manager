@@ -1,0 +1,104 @@
+@startuml EERDiagram
+allowmixing
+title Money Manager - EER (Enhanced ER)
+
+hide circle
+skinparam linetype ortho
+
+entity users {
+  * user_id : INTEGER <<PK>>
+  --
+  username : TEXT <<UQ,NN>>
+  password_hash : TEXT <<NN>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity transactions {
+  * transaction_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK,NN>>
+  name : TEXT <<NN>>
+  amount : NUMERIC <<NN,CHECK > 0>>
+  category : TEXT <<NN>>
+  tx_type : TEXT <<NN,CHECK INCOME|EXPENSE>>
+  tx_date : TEXT <<NN>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity budgets {
+  * budget_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK,NN>>
+  category : TEXT <<NN>>
+  amount_cap : NUMERIC <<NN,CHECK > 0>>
+  month : INTEGER <<NN,CHECK 1..12>>
+  year : INTEGER <<NN,CHECK >= 2020>>
+  --
+  {unique} (user_id, category, month, year)
+}
+
+entity monthly_balance {
+  * balance_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK,NN>>
+  month : INTEGER <<NN,CHECK 1..12>>
+  year : INTEGER <<NN,CHECK >= 2020>>
+  total_amount : NUMERIC <<NN,CHECK > 0>>
+  --
+  {unique} (user_id, month, year)
+}
+
+entity user_settings {
+  * user_id : INTEGER <<PK,FK>>
+  --
+  monthly_income : NUMERIC <<NULLABLE>>
+}
+
+entity notes {
+  * note_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK,NN>>
+  title : TEXT <<NN>>
+  content : TEXT <<NULLABLE>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity savings_goals {
+  * goal_id : INTEGER <<PK>>
+  --
+  user_id : INTEGER <<FK,NN>>
+  name : TEXT <<NN>>
+  target_amount : NUMERIC <<NN,CHECK > 0>>
+  saved_amount : NUMERIC <<NN,DEFAULT 0,CHECK >= 0>>
+  deadline : TEXT <<NULLABLE>>
+  created_at : TEXT <<DEFAULT now>>
+}
+
+entity goal_contributions {
+  * contribution_id : INTEGER <<PK>>
+  --
+  goal_id : INTEGER <<FK,NN>>
+  amount : NUMERIC <<NN,CHECK > 0>>
+  note : TEXT <<NULLABLE>>
+  contributed_at : TEXT <<DEFAULT now>>
+}
+
+users ||--o{ transactions : "user_id"
+users ||--o{ budgets : "user_id"
+users ||--o{ notes : "user_id"
+users ||--o{ savings_goals : "user_id"
+users ||--o{ monthly_balance : "user_id"
+users ||--|| user_settings : "user_id"
+
+savings_goals ||--o{ goal_contributions : "goal_id"
+
+note bottom of transactions
+tx_date stored as TEXT (ISO-8601 date) for SQLite.
+end note
+
+note bottom of users
+created_at stored as TEXT (ISO-8601 timestamp with Z).
+end note
+
+@enduml
+

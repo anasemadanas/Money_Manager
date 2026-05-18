@@ -1,0 +1,33 @@
+@startuml
+title Activity - Add EXPENSE Transaction
+
+start
+:Open Transactions tab;
+:Click "+ Add";
+:Fill transaction form;
+
+if (Type == EXPENSE?) then (yes)
+  :Check category budget limit;
+  if (Over category cap?) then (yes)
+    :Show error + block save;
+    stop
+  endif
+
+  :Check monthly budget cap (if set);
+  if (Over monthly cap?) then (yes)
+    :Show error + block save;
+    stop
+  endif
+endif
+
+:Persist transaction;
+:Compute budget warning (>= 80%?);
+if (Warning?) then (yes)
+  :Show warning dialog;
+endif
+
+:Refresh Dashboard + Budgets;
+stop
+
+@enduml
+
