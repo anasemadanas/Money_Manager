@@ -1,4 +1,5 @@
-@startuml
+@startuml EERDiagram
+allowmixing
 title Money Manager - EER (Enhanced ER)
 
 hide circle

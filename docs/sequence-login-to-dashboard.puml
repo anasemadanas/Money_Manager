@@ -1,4 +1,6 @@
-@startuml
+@startuml SequenceLoginToDashboard
+
+
 title Sequence - Login -> Main Screen -> Dashboard Snapshot
 autonumber
 
@@ -28,6 +30,7 @@ auth --> login : Optional<User>
 alt credentials valid
   login -> main : init(user, services...)
   main -> incomeSvc : applyForCurrentMonth(userId)
+
   incomeSvc -> settingsRepo : getMonthlyIncome(userId)
   settingsRepo -> db : SELECT monthly_income...
   db --> settingsRepo : amount|empty
@@ -38,43 +41,41 @@ alt credentials valid
     txRepo -> db : SELECT transactions...
     db --> txRepo : list
     txRepo --> incomeSvc : list
+
     alt Monthly Income tx missing
       incomeSvc -> txRepo : save("Monthly Income", INCOME)
       txRepo -> db : INSERT transaction...
-      db --> txRepo : ids/timestamps
-      txRepo --> incomeSvc : saved tx
+      db --> txRepo : ok
     end
 
     incomeSvc -> balRepo : findByUserMonthYear(userId, month, year)
     balRepo -> db : SELECT monthly_balance...
     db --> balRepo : row|empty
+
     alt monthly cap missing
       incomeSvc -> balRepo : saveOrUpdate(userId, amount, month, year)
       balRepo -> db : UPSERT monthly_balance...
     end
   end
 
-  main -> dashCtrl : init(dashboardService,\nmonthlyIncomeService,user)
+  main -> dashCtrl : init(dashboardService, incomeSvc, user)
   dashCtrl -> dashSvc : getSnapshot(userId)
+
   dashSvc -> txRepo : findByUserFiltered(userId, monthRange)
-  txRepo -> db : SELECT month txs...
+  txRepo -> db : SELECT txs...
   db --> txRepo : list
   txRepo --> dashSvc : list
 
   dashSvc -> goalRepo : getTotalSavedAmount(userId)
-  goalRepo -> db : SELECT SUM(saved_amount)...
+  goalRepo -> db : SELECT SUM(saved_amount)
   db --> goalRepo : total
   goalRepo --> dashSvc : total
 
-  dashSvc -> txRepo : findByUserFiltered(userId, last6MonthsRange)
-  txRepo -> db : SELECT tx window...
-  db --> txRepo : list
-  txRepo --> dashSvc : list
   dashSvc --> dashCtrl : DashboardSnapshot
-  dashCtrl --> user : dashboard updated (charts + KPIs)
+  dashCtrl --> user : UI updated (charts + KPIs)
+
 else credentials invalid
   login --> user : show error
 end
 
 @enduml
-

@@ -1,4 +1,5 @@
-@startuml
+@startuml SequenceAddExpense
+allowmixing
 title Sequence - Add EXPENSE Transaction (with budget checks)
 autonumber
 

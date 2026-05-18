@@ -1,5 +1,8 @@
-@startuml
+@startuml MoneyManager
+allowmixing
 title Money Manager - High Level Architecture
+
+skinparam backgroundColor white
 
 package "UI (JavaFX)" {
   class LoginController
@@ -83,4 +86,3 @@ JdbcUserSettingsRepo --> DatabaseConfig
 DatabaseConfig --> SQLite
 
 @enduml
-

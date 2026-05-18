@@ -1,4 +1,5 @@
-@startuml
+@startuml ERDiagram
+allowmixing
 title Money Manager - ERD (Logical)
 
 hide circle

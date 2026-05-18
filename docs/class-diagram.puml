@@ -1,4 +1,5 @@
-@startuml
+@startuml ClassDiagram
+allowmixing
 title Money Manager - Class Diagram (Core)
 skinparam packageStyle rectangle
 skinparam linetype ortho

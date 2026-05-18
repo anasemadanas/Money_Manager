@@ -1,4 +1,5 @@
-@startuml
+@startuml DatabaseSchema
+allowmixing
 title Money Manager - SQLite Schema (ER)
 
 hide circle
