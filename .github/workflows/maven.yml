@@ -1,15 +1,10 @@
-# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
-
 name: Build JavaFX Native Installers
 
 on:
   workflow_dispatch:
 
 jobs:
-
   build:
-
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
@@ -17,7 +12,6 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -31,7 +25,8 @@ jobs:
       - name: Build JAR
         run: |
           cd money-manager
-          mvn clean package
+          mvn clean package -DskipTests
+          mv target/money-manager-*.jar target/money-manager.jar
         shell: bash
 
       # ===================== LINUX (DEB) =====================
@@ -43,22 +38,24 @@ jobs:
             --type deb \
             --name MoneyManager \
             --input target \
-            --main-jar *.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.MainApp \
             --dest output
+        shell: bash
 
       # ===================== WINDOWS (EXE) =====================
       - name: Build EXE (Windows)
         if: runner.os == 'Windows'
         run: |
           cd money-manager
-          jpackage ^
-            --type exe ^
-            --name MoneyManager ^
-            --input target ^
-            --main-jar *.jar ^
-            --main-class com.moneymanager.MainApp ^
+          jpackage \
+            --type exe \
+            --name MoneyManager \
+            --input target \
+            --main-jar money-manager.jar \
+            --main-class com.moneymanager.MainApp \
             --dest output
+        shell: bash
 
       # ===================== MACOS (DMG) =====================
       - name: Build DMG (macOS)
@@ -69,12 +66,17 @@ jobs:
             --type dmg \
             --name MoneyManager \
             --input target \
-            --main-jar *.jar \
+            --main-jar money-manager.jar \
             --main-class com.moneymanager.MainApp \
             --dest output
+        shell: bash
 
       - name: Upload Installers
         uses: actions/upload-artifact@v4
         with:
           name: MoneyManager-${{ runner.os }}
-          path: money-manager/output/*
+          path: |
+            money-manager/output/*.exe
+            money-manager/output/*.msi
+            money-manager/output/*.deb
+            money-manager/output/*.dmg
