@@ -1,4 +1,4 @@
-name: Build JavaFX Native Installers
+name: Build JavaFX App (All Platforms)
 
 on:
   workflow_dispatch:
@@ -6,19 +6,22 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
-            artifact_name: Windows
+            artifact_name: Windows-EXE
           - os: ubuntu-latest
-            artifact_name: Linux
-          - os: macos-14 
+            artifact_name: Linux-DEB
+          - os: macos-latest # Apple Silicon
             artifact_name: MacOS-ARM64
+          - os: macos-13 # Intel x64
+            artifact_name: MacOS-x64
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout
+      - name: Checkout Project
         uses: actions/checkout@v4
 
       - name: Setup Java 21
@@ -28,30 +31,16 @@ jobs:
           java-version: 21
           cache: maven
 
-      - name: Build JAR
+      - name: Build Fat JAR
         run: |
           cd money-manager
           mvn clean package -DskipTests
-          cp target/money-manager-*.jar target/money-manager.jar
+          # ننسخ ملف الـ JAR ليكون ثابتاً
+          cp target/money-manager-*.jar target/app.jar
         shell: bash
 
-      - name: Build DEB (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          cd money-manager
-          jpackage \
-            --type deb \
-            --name MoneyManager \
-            --input target \
-            --main-jar money-manager.jar \
-            --main-class com.moneymanager.App \
-            --dest output \
-            --linux-shortcut \
-            --linux-menu-group Office \
-            --linux-app-category Office
-        shell: bash
-
-      - name: Build EXE (Windows)
+      # ---------------- WINDOWS (EXE) ----------------
+      - name: Build Windows EXE
         if: runner.os == 'Windows'
         run: |
           cd money-manager
@@ -59,37 +48,51 @@ jobs:
             --type exe \
             --name MoneyManager \
             --input target \
-            --main-jar money-manager.jar \
+            --main-jar app.jar \
             --main-class com.moneymanager.App \
             --dest output \
             --win-dir-chooser \
-            --win-menu \
             --win-shortcut \
             --win-console
         shell: bash
 
-      - name: Build DMG (macOS)
+      # ---------------- LINUX (DEB) ----------------
+      - name: Build Linux DEB
+        if: runner.os == 'Linux'
+        run: |
+          cd money-manager
+          jpackage \
+            --type deb \
+            --name MoneyManager \
+            --input target \
+            --main-jar app.jar \
+            --main-class com.moneymanager.App \
+            --dest output
+        shell: bash
+
+      # ---------------- MACOS (DMG) ----------------
+      - name: Build macOS DMG
         if: runner.os == 'macOS'
         run: |
           cd money-manager
           jpackage \
             --type dmg \
-            --name MoneyManager \
+            --name "MoneyManager-${{ matrix.artifact_name }}" \
             --input target \
-            --main-jar money-manager.jar \
+            --main-jar app.jar \
             --main-class com.moneymanager.App \
             --dest output \
-            --mac-package-name "Money Manager" \
-            --mac-package-identifier com.moneymanager.app
+            --mac-package-identifier com.moneymanager.app \
+            --mac-package-name "Money Manager"
         shell: bash
 
-      - name: Upload Installers
+      # ---------------- UPLOAD ----------------
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: MoneyManager-${{ matrix.artifact_name }}
+          name: ${{ matrix.artifact_name }}
           path: |
             money-manager/output/*.exe
             money-manager/output/*.msi
             money-manager/output/*.deb
             money-manager/output/*.dmg
-            money-manager/output/*.pkg
