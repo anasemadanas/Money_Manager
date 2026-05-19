@@ -61,7 +61,7 @@ Built using the finest software engineering practices:
 
 | Login | Dashboard | Transaction | Budget | Goal | ListTransaction |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![login](../docs/screenshots/Login.png) | ![dashboard](../docs/screenshots/Dashboard.png) | ![Transaction](../docs/screenshots/transaction.png) | ![Budget](../docs/screenshots/budget.png) | ![Goal](../docs/screenshots/goal.png) | ![listTransaction](../docs/screenshots/listTransaction.png) |
+| ![Login](../docs/screenshots/login.png) | ![Dashboard](../docs/screenshots/dashboard.png) | ![Transaction](../docs/screenshots/transaction.png) | ![Budget](../docs/screenshots/budget.png) | ![Goal](../docs/screenshots/goal.png) | ![Notes](../docs/screenshots/note.png) |
 
 > 💡 *Note: If screenshots are not showing, verify they are stored inside the `docs/screenshots/` workspace folder.*
 
