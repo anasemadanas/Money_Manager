@@ -6,7 +6,7 @@ services:
 
     dockerfilePath: Dockerfile
 
-    healthCheckPath: /actuator/health
+    healthCheckPath: /
 
     envVars:
       - key: SPRING_PROFILES_ACTIVE
