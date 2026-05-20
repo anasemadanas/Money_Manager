@@ -38,14 +38,14 @@ public class DatabaseConfig {
         String user = firstNonBlank(
                 System.getenv("DATABASE_USERNAME"),
                 System.getenv("DB_USERNAME"),
-                props.getProperty("db.username"),
-                extractUsernameFromUrl(rawUrl)
+                extractUsernameFromUrl(rawUrl),
+                props.getProperty("db.username")
         );
         String password = firstNonBlank(
                 System.getenv("DATABASE_PASSWORD"),
                 System.getenv("DB_PASSWORD"),
-                props.getProperty("db.password"),
-                extractPasswordFromUrl(rawUrl)
+                extractPasswordFromUrl(rawUrl),
+                props.getProperty("db.password")
         );
 
         if (url == null || url.isBlank()) {
