@@ -138,6 +138,18 @@ db.username=postgres
 db.password=your_db_password
 ```
 
+For Supabase deployment, set the database URL in the environment. The app supports Supabase-style URLs and will convert them to JDBC automatically.
+
+```powershell
+set DATABASE_URL=postgres://postgres:[YOUR-PASSWORD]@db.sygsiukwcfwlydpheypd.supabase.co:5432/postgres
+set DATABASE_USERNAME=postgres
+set DATABASE_PASSWORD=[YOUR-PASSWORD]
+```
+
+If the URL already contains the username and password, only `DATABASE_URL` is required.
+
+> Note: If your network is IPv4-only, Supabase may require the Session Pooler or an IPv4 add-on. This is a Supabase networking requirement, not a change in the application code.
+
 ---
 
 ## ▶️ Run the App

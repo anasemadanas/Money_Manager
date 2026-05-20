@@ -3,6 +3,7 @@ setlocal
 
 cd /d "%~dp0"
 
+:: Use Supabase or any PostgreSQL URL here. If DATABASE_URL includes user/password, DATABASE_USERNAME and DATABASE_PASSWORD are optional.
 if not defined DATABASE_URL (
     set "DATABASE_URL=jdbc:postgresql://localhost:5432/moneymanager"
 )
