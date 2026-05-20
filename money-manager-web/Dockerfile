@@ -1,15 +1,17 @@
-# Stage 1: Build the application using Maven
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-# Build the jar without running tests
-RUN mvn -B clean package -DskipTests
+# Build stage
+FROM maven:3.9-eclipse-temurin-26 AS builder
 
-# Stage 2: Run the jar with a lightweight JRE
-FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY . .
+
+RUN mvn clean package -DskipTests
+
+# Run stage
+FROM eclipse-temurin:26-jdk
+
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
-# Render expects the container to listen on the port indicated by $PORT (exposed as 8080 here)
+
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+
+ENTRYPOINT ["java","-jar","app.jar"]

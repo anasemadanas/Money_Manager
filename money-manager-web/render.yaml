@@ -3,8 +3,14 @@ services:
     name: money-manager
     env: docker
     plan: free
+
     dockerfilePath: Dockerfile
-    healthCheckPath: "/"
+
+    healthCheckPath: /actuator/health
+
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
+
+      - key: PORT
+        value: 8080
