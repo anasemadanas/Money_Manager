@@ -11,7 +11,7 @@ public class Goal {
     private String name;
     private BigDecimal targetAmount;
     private BigDecimal savedAmount;
-    private LocalDate deadline;          // null = no deadline
+    private LocalDate deadline;
     private OffsetDateTime createdAt;
 
     public Goal() {}

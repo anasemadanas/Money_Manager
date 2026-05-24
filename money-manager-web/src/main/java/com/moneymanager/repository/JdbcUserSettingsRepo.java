@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class JdbcUserSettingsRepo implements IUserSettingsRepo {
-
-    // Auto-create the settings table — no need to re-run schema.sql
     static {
         String ddl = """
                 CREATE TABLE IF NOT EXISTS user_settings (

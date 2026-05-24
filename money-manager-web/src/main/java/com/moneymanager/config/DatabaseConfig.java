@@ -142,7 +142,6 @@ public class DatabaseConfig {
                 return jdbcUrl + (query == null ? "?" : "&") + "sslmode=require";
             }
         } catch (Exception ignored) {
-            // The PostgreSQL driver reports malformed JDBC URLs with a useful error.
         }
 
         return jdbcUrl;

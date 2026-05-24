@@ -138,3 +138,26 @@ This repo includes a `Dockerfile` and `render.yaml` for Render deployment.
 5. Deploy and open the generated Render URL.
 
 The app uses `PORT` when provided by the host, falling back to `8080` locally.
+
+## Android App
+
+The `android-app` directory contains an Android WebView application that opens the deployed Money Manager website at:
+
+```text
+https://money-manager-t4ed.onrender.com
+```
+
+It keeps account and finance data on the Spring Boot server, handles Android back navigation within the site, opens external URLs outside the app, and displays a retry screen when the deployment cannot be reached.
+
+Build a debug APK after installing Android SDK API 35 and JDK 17:
+
+```powershell
+cd android-app
+.\gradlew.bat assembleDebug
+```
+
+The generated APK is placed at:
+
+```text
+android-app\app\build\outputs\apk\debug\app-debug.apk
+```

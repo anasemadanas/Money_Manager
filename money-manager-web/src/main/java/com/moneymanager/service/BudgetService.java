@@ -24,8 +24,6 @@ public class BudgetService {
         this.balanceRepo = balanceRepo;
     }
 
-    // ── Category budgets ──────────────────────────────────────────────────────
-
     public List<BudgetDTO> getBudgets(long userId, int month, int year) {
         return budgetRepo.findWithSpending(userId, month, year);
     }
@@ -52,8 +50,6 @@ public class BudgetService {
         budgetRepo.delete(budgetId);
     }
 
-    // ── Monthly total balance ─────────────────────────────────────────────────
-
     public Optional<BigDecimal> getMonthlyBalance(long userId, int month, int year) {
         return balanceRepo.findByUserMonthYear(userId, month, year)
                 .map(MonthlyBalance::getTotalAmount);
@@ -68,15 +64,6 @@ public class BudgetService {
     public BigDecimal getTotalMonthlyExpenses(long userId, int month, int year) {
         return budgetRepo.getTotalMonthlyExpenses(userId, month, year, 0L);
     }
-
-    // ── Pre-save limit checks (called from TransactionController) ─────────────
-
-    /**
-     * Check whether adding 'amount' as an EXPENSE for 'category' on 'txDate'
-     * would exceed an existing category budget cap.
-     * excludeTxId: transaction being replaced in edit mode (0 for new).
-     * Returns an error message to display and block the save, or null if OK.
-     */
     public String checkCategoryLimit(long userId, String category, BigDecimal amount,
                                       LocalDate txDate, long excludeTxId) {
         int month = txDate.getMonthValue();
@@ -104,13 +91,6 @@ public class BudgetService {
                 .findFirst()
                 .orElse(null);
     }
-
-    /**
-     * Check whether adding 'amount' as an EXPENSE on 'txDate' would exceed
-     * the total monthly balance (if one is set).
-     * excludeTxId: transaction being replaced in edit mode (0 for new).
-     * Returns an error message to block the save, or null if OK.
-     */
     public String checkMonthlyBalanceLimit(long userId, BigDecimal amount,
                                             LocalDate txDate, long excludeTxId) {
         int month = txDate.getMonthValue();
@@ -130,14 +110,6 @@ public class BudgetService {
             return null;
         }).orElse(null);
     }
-
-    // ── Post-save warning (called AFTER a successful save) ────────────────────
-
-    /**
-     * Returns a warning message if the category budget is now between 80% and 100%,
-     * or null if everything is still below the threshold.
-     * Called after a transaction is saved, not before.
-     */
     public String getCategoryWarning(long userId, String category, LocalDate txDate) {
         int month = txDate.getMonthValue();
         int year  = txDate.getYear();
@@ -166,8 +138,6 @@ public class BudgetService {
                 .findFirst()
                 .orElse(null);
     }
-
-    // ── Private helpers ───────────────────────────────────────────────────────
 
     private static void validateCategory(String c) {
         if (c == null || c.isBlank()) throw new IllegalArgumentException("Category is required.");

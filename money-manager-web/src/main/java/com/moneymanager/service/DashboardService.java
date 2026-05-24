@@ -23,49 +23,30 @@ public class DashboardService {
         this.txRepo   = txRepo;
         this.goalRepo = goalRepo;
     }
-
-    /**
-     * Compute the full dashboard in 3 DB calls:
-     *  1. Current-month transactions (feeds KPIs + pie chart)
-     *  2. All-time goal savings total
-     *  3. Six-month transaction window (feeds bar chart)
-     */
     public DashboardSnapshot getSnapshot(long userId) {
         LocalDate today = LocalDate.now();
         LocalDate monthStart = today.withDayOfMonth(1);
         LocalDate monthEnd   = today.withDayOfMonth(today.lengthOfMonth());
-
-        // ── Call 1: current month ─────────────────────────────────────────────
         List<Transaction> monthTxs =
                 txRepo.findByUserFiltered(userId, monthStart, monthEnd, null);
 
         BigDecimal income   = sumByType(monthTxs, "INCOME");
         BigDecimal expenses = sumByType(monthTxs, "EXPENSE");
         BigDecimal net      = income.subtract(expenses);
-
-        // Category breakdown for pie chart (computed from same list — no extra query)
         Map<String, BigDecimal> breakdown = categoryBreakdown(monthTxs);
-
-        // ── Call 2: all-time goal savings ─────────────────────────────────────
         BigDecimal goalSavings = goalRepo.getTotalSavedAmount(userId);
         BigDecimal available   = net.subtract(goalSavings);
-
-        // ── Call 3: last 6 months for bar chart ───────────────────────────────
         List<MonthlyTrend> trend = buildTrend(userId, today);
 
         return new DashboardSnapshot(today, income, expenses, net,
                 goalSavings, available, breakdown, trend);
     }
 
-    // ── Private helpers ───────────────────────────────────────────────────────
-
     private List<MonthlyTrend> buildTrend(long userId, LocalDate today) {
         LocalDate start = today.minusMonths(5).withDayOfMonth(1);
         LocalDate end   = today.withDayOfMonth(today.lengthOfMonth());
 
         List<Transaction> txs = txRepo.findByUserFiltered(userId, start, end, null);
-
-        // Seed all 6 months so empty months still appear in the chart
         LinkedHashMap<YearMonth, BigDecimal[]> map = new LinkedHashMap<>();
         for (int i = 5; i >= 0; i--) {
             map.put(YearMonth.now().minusMonths(i),
@@ -95,8 +76,6 @@ public class DashboardService {
                 .map(Transaction::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
-    /** Group current-month EXPENSE transactions by category, descending by total. */
     private static Map<String, BigDecimal> categoryBreakdown(List<Transaction> txs) {
         return txs.stream()
                 .filter(t -> "EXPENSE".equals(t.getTxType()))

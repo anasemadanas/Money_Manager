@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class JdbcMonthlyBalanceRepo implements IMonthlyBalanceRepo {
-
-    // Auto-create the table if it doesn't exist so users don't need to re-run schema.sql
     static {
         String ddl = """
                 CREATE TABLE IF NOT EXISTS monthly_balance (
@@ -55,7 +53,6 @@ public class JdbcMonthlyBalanceRepo implements IMonthlyBalanceRepo {
 
     @Override
     public void saveOrUpdate(long userId, BigDecimal totalAmount, int month, int year) {
-        // PostgreSQL upsert: insert or update on conflict
         var sql = """
                 INSERT INTO monthly_balance (user_id, month, year, total_amount)
                 VALUES (?, ?, ?, ?)

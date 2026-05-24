@@ -6,22 +6,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ITransactionRepo {
-
-    /** Persist a new transaction and return it with the generated ID. */
     Transaction save(Transaction tx);
-
-    /**
-     * Return all transactions for a user, with optional filters.
-     * Pass null for any filter to skip it.
-     */
     List<Transaction> findByUserFiltered(long userId, LocalDate from, LocalDate to, String category);
-
-    /** Update all mutable fields of an existing transaction. */
     void update(Transaction tx);
-
-    /** Delete a transaction only when it belongs to the authenticated user. */
     void delete(long transactionId, long userId);
-
-    /** Return all distinct category strings for a user, sorted alphabetically. */
     List<String> findDistinctCategories(long userId);
 }
