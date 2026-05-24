@@ -45,7 +45,6 @@ public class DatabaseConfig {
         return conn;
     }
 
-    /** Directory where the app stores SQLite DB + logs (cross-platform). */
     public static Path getAppDataDir() {
         return getDefaultSqliteDbDir();
     }
@@ -84,7 +83,6 @@ public class DatabaseConfig {
     private static Path pickSharedAppDir() {
         String os = System.getProperty("os.name", "").toLowerCase();
 
-        // Windows: C:\Users\<Username>\AppData\Local\MoneyManager
         if (os.contains("win")) {
             String localAppData = System.getenv("LOCALAPPDATA");
             if (localAppData == null || localAppData.isBlank()) {
@@ -93,12 +91,10 @@ public class DatabaseConfig {
             return Paths.get(localAppData, "MoneyManager");
         }
 
-        // macOS: /Users/<Username>/Library/Application Support/MoneyManager
         if (os.contains("mac")) {
             return Paths.get(System.getProperty("user.home"), "Library", "Application Support", "MoneyManager");
         }
 
-        // Linux: /home/<Username>/.local/share/MoneyManager
         return Paths.get(System.getProperty("user.home"), ".local", "share", "MoneyManager");
     }
 

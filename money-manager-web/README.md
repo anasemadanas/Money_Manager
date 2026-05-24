@@ -23,6 +23,8 @@ money-manager-web
 |-- Dockerfile
 |-- render.yaml
 |-- run.bat
+|-- run-local.bat
+|-- run-web.bat
 |-- start.bat
 |-- src
 |   |-- main
@@ -61,28 +63,44 @@ db.username=postgres
 db.password=123456
 ```
 
-For hosted databases such as Supabase, set environment variables on the hosting platform:
+For Supabase, copy the **Session pooler** connection details from the project's Connect panel. Session mode on port `5432` is suitable for this long-running Spring Boot server and also works on IPv4 hosts such as Render.
+
+Set these environment variables locally for testing, or on the hosting platform for deployment:
 
 ```text
-DATABASE_URL=postgres://user:password@host:5432/database
-DATABASE_USERNAME=user
-DATABASE_PASSWORD=password
+DATABASE_URL=postgres://postgres.PROJECT_REF@aws-0-REGION.pooler.supabase.com:5432/postgres
+DATABASE_USERNAME=postgres.PROJECT_REF
+DATABASE_PASSWORD=your_database_password
 ```
 
-If `DATABASE_URL` already includes the username and password, the separate username and password variables are optional.
+The app adds `sslmode=require` automatically for Supabase hosts unless an explicit SSL mode is already in the URL. The username and password can instead be embedded in `DATABASE_URL`, but keep secrets in environment variables and URL-encode special characters if you do that.
+
+This application connects to Supabase through server-side PostgreSQL/JDBC. It does not expose a Supabase public client key in the browser or use the Data API.
 
 ## Run Locally
 
-On Windows:
+Use a local PostgreSQL database on Windows:
 
 ```bat
-run.bat
+run-local.bat
 ```
 
-Or run the Maven Wrapper directly:
+`run.bat` remains an alias for `run-local.bat`. Override the local defaults when needed:
 
-```bat
-mvnw.cmd spring-boot:run
+```powershell
+$env:LOCAL_DATABASE_URL='jdbc:postgresql://localhost:5432/moneymanager'
+$env:LOCAL_DATABASE_USERNAME='postgres'
+$env:LOCAL_DATABASE_PASSWORD='your_local_password'
+.\run-local.bat
+```
+
+To run the web app locally while connected to online Supabase:
+
+```powershell
+$env:DATABASE_URL='postgres://postgres.PROJECT_REF@aws-0-REGION.pooler.supabase.com:5432/postgres'
+$env:DATABASE_USERNAME='postgres.PROJECT_REF'
+$env:DATABASE_PASSWORD='your_database_password'
+.\run-web.bat
 ```
 
 After startup, open:
@@ -116,7 +134,7 @@ This repo includes a `Dockerfile` and `render.yaml` for Render deployment.
 1. Push this repository to GitHub.
 2. Create a new Render Blueprint or Web Service.
 3. Use the included Dockerfile.
-4. Set `DATABASE_URL`, `DATABASE_USERNAME`, and `DATABASE_PASSWORD` in Render environment variables.
+4. Set `DATABASE_URL`, `DATABASE_USERNAME`, and `DATABASE_PASSWORD` in Render environment variables using the Supabase Session pooler details shown above.
 5. Deploy and open the generated Render URL.
 
 The app uses `PORT` when provided by the host, falling back to `8080` locally.

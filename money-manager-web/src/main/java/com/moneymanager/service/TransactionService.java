@@ -54,9 +54,9 @@ public class TransactionService {
         txRepo.update(tx);
     }
 
-    /** Delete a transaction by its ID. */
-    public void delete(long transactionId) {
-        txRepo.delete(transactionId);
+    /** Delete a transaction only for its owning user. */
+    public void delete(long transactionId, long userId) {
+        txRepo.delete(transactionId, userId);
     }
 
     /** Return all distinct category names for a user. */

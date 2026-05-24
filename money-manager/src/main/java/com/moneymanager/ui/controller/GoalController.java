@@ -34,7 +34,6 @@ import java.util.Optional;
 
 public class GoalController {
 
-    // ── FXML fields ─────────────────────────────────────────────────────────
     @FXML private Button editGoalButton;
     @FXML private Button deleteGoalButton;
     @FXML private ListView<GoalDTO> goalListView;
@@ -45,7 +44,6 @@ public class GoalController {
     @FXML private TableColumn<ContributionDTO, String> contribNoteCol;
     @FXML private Label summaryLabel;
 
-    // ── State ────────────────────────────────────────────────────────────────
     private GoalService goalService;
     private User currentUser;
 
@@ -53,11 +51,8 @@ public class GoalController {
             DateTimeFormatter.ofPattern("dd MMM yyyy  HH:mm");
     private static final NumberFormat CF = NumberFormat.getCurrencyInstance(Locale.US);
 
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
-
     @FXML
     public void initialize() {
-        // Contribution table columns
         contribDateCol.setCellValueFactory(c -> {
             OffsetDateTime ts = c.getValue().contributedAt();
             return new SimpleStringProperty(ts != null ? ts.format(CONTRIB_FMT) : "");
@@ -73,18 +68,15 @@ public class GoalController {
         contributionTable.setPlaceholder(
                 new Label("No contributions yet for this goal."));
 
-        // Goal ListView setup
         goalListView.setCellFactory(lv -> new GoalCell());
         goalListView.setPlaceholder(
                 new Label("No goals yet. Click '+ New Goal' to create one."));
 
-        // Button state tied to selection
         editGoalButton.disableProperty().bind(
                 goalListView.getSelectionModel().selectedItemProperty().isNull());
         deleteGoalButton.disableProperty().bind(
                 goalListView.getSelectionModel().selectedItemProperty().isNull());
 
-        // When a goal is selected, load its contributions
         goalListView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, old, selected) -> {
                     if (selected != null) {
@@ -97,14 +89,11 @@ public class GoalController {
                 });
     }
 
-    /** Called by MainController after FXML load. */
     public void init(GoalService goalService, User user) {
         this.goalService = goalService;
         this.currentUser = user;
         loadGoals();
     }
-
-    // ── FXML handlers ─────────────────────────────────────────────────────────
 
     @FXML
     private void handleNewGoal() {
@@ -200,10 +189,8 @@ public class GoalController {
                               + result.amount().setScale(2, java.math.RoundingMode.HALF_UP)
                               + ", goal=" + goalName);
                 loadGoals();
-                // Refresh contribution history if the affected goal is still selected
                 GoalDTO nowSelected = goalListView.getSelectionModel().getSelectedItem();
                 if (nowSelected != null && nowSelected.goalId() == result.goalId()) {
-                    // Re-select to trigger listener refresh
                     loadContributions(goalListView.getSelectionModel().getSelectedItem());
                 }
             } catch (IllegalArgumentException e) {
@@ -215,8 +202,6 @@ public class GoalController {
         });
     }
 
-    // ── Data loading ──────────────────────────────────────────────────────────
-
     private void loadGoals() {
         if (goalService == null) return;
 
@@ -225,7 +210,6 @@ public class GoalController {
         goalListView.setItems(FXCollections.observableArrayList(goals));
         updateSummary(goals);
 
-        // Restore selection by goalId so the contribution panel stays visible
         if (previousSelection != null) {
             goals.stream()
                     .filter(g -> g.goalId() == previousSelection.goalId())
@@ -262,9 +246,6 @@ public class GoalController {
                 goals.size(), CF.format(totalTarget), CF.format(totalSaved), completed));
     }
 
-    // ── Dialogs ───────────────────────────────────────────────────────────────
-
-    /** New / Edit goal dialog. Pass null prefill for new. */
     private Optional<GoalDTO> showGoalDialog(String title, GoalDTO prefill) {
         Dialog<GoalDTO> dialog = new Dialog<>();
         dialog.setTitle(title);
@@ -341,11 +322,6 @@ public class GoalController {
         return dialog.showAndWait().filter(d -> d != null);
     }
 
-    /**
-     * Add Contribution dialog. Shows a goal dropdown (pre-selects the given goal),
-     * an amount field, and an optional memo.
-     * Returns a ContributionDTO with only goalId, amount, note populated.
-     */
     private Optional<ContributionDTO> showContributionDialog(List<GoalDTO> goals,
                                                               GoalDTO preSelected) {
         Dialog<ContributionDTO> dialog = new Dialog<>();
@@ -363,7 +339,6 @@ public class GoalController {
         grid.setPadding(new Insets(20, 28, 10, 28));
         grid.setMinWidth(420);
 
-        // Goal selector
         ComboBox<GoalDTO> goalCombo = new ComboBox<>();
         goalCombo.getItems().addAll(goals);
         goalCombo.setConverter(new StringConverter<>() {
@@ -414,8 +389,6 @@ public class GoalController {
         return dialog.showAndWait().filter(d -> d != null);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
     private Stage getStage() { return (Stage) goalListView.getScene().getWindow(); }
 
     private static Label makeLabel(String text) {
@@ -429,8 +402,6 @@ public class GoalController {
         try { return new BigDecimal(s).compareTo(BigDecimal.ZERO) > 0; }
         catch (NumberFormatException e) { return false; }
     }
-
-    // ── Custom goal card cell ─────────────────────────────────────────────────
 
     private static final class GoalCell extends ListCell<GoalDTO> {
 
@@ -449,7 +420,6 @@ public class GoalController {
             double progress = Math.min(pct / 100.0, 1.0);
             String color = determineColor(item, pct);
 
-            // ── Goal name (top-left) + deadline (top-right) ─────────────────
             Label nameLabel = new Label(item.name());
             nameLabel.getStyleClass().add("goal-name");
 
@@ -463,14 +433,12 @@ public class GoalController {
             HBox nameRow = new HBox(nameLabel, spacer, deadlineLabel);
             nameRow.setAlignment(Pos.CENTER_LEFT);
 
-            // ── Progress bar ─────────────────────────────────────────────────
             ProgressBar bar = new ProgressBar(progress);
             bar.setMaxWidth(Double.MAX_VALUE);
             bar.setPrefHeight(12);
             if ("red".equals(color))        bar.getStyleClass().add("red");
             else if ("amber".equals(color)) bar.getStyleClass().add("amber");
 
-            // ── Percentage label ─────────────────────────────────────────────
             Label pctLabel = new Label(String.format("%.0f%%  —  %s / %s",
                     pct, CF.format(item.savedAmount()), CF.format(item.targetAmount())));
             pctLabel.getStyleClass().add("goal-pct");
@@ -478,7 +446,6 @@ public class GoalController {
             else if ("amber".equals(color)) pctLabel.getStyleClass().add("pct-amber");
             else                            pctLabel.getStyleClass().add("pct-green");
 
-            // ── Card container ────────────────────────────────────────────────
             VBox card = new VBox(6, nameRow, bar, pctLabel);
             card.setPadding(new Insets(14, 16, 14, 16));
             card.getStyleClass().add("goal-card");
@@ -488,15 +455,15 @@ public class GoalController {
         }
 
         private static String determineColor(GoalDTO goal, double pct) {
-            if (pct >= 100) return "green"; // completed
+            if (pct >= 100) return "green";
 
-            if (goal.deadline() == null) return "green"; // no deadline = always on track
+            if (goal.deadline() == null) return "green";
 
             LocalDate today = LocalDate.now();
-            if (goal.deadline().isBefore(today)) return "red"; // past deadline, incomplete
+            if (goal.deadline().isBefore(today)) return "red";
 
             long daysLeft = ChronoUnit.DAYS.between(today, goal.deadline());
-            if (daysLeft <= 30 && pct < 80) return "amber"; // within 30 days and < 80%
+            if (daysLeft <= 30 && pct < 80) return "amber";
 
             return "green";
         }

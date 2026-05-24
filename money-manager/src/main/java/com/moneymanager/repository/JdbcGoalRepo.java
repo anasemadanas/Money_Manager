@@ -92,10 +92,6 @@ public class JdbcGoalRepo implements IGoalRepo {
         }
     }
 
-    /**
-     * Atomically inserts a contribution row and increments the goal's saved_amount.
-     * Both changes are committed together or rolled back on failure.
-     */
     @Override
     public void addContribution(long goalId, BigDecimal amount, String note) {
         var insertSql = "INSERT INTO goal_contributions (goal_id, amount, note) VALUES (?, ?, ?)";

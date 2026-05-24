@@ -15,7 +15,7 @@
       fx:controller="com.moneymanager.ui.controller.TransactionController"
       maxHeight="Infinity" maxWidth="Infinity">
 
-    <!-- Action + filter toolbar -->
+
     <HBox styleClass="toolbar" spacing="10" alignment="CENTER_LEFT">
         <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
 
@@ -36,7 +36,7 @@
 
     <Separator/>
 
-    <!-- Transaction table -->
+
     <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS"
                style="-fx-background-color: white;">
         <columns>
@@ -48,7 +48,7 @@
         </columns>
     </TableView>
 
-    <!-- Summary footer -->
+
     <HBox styleClass="summary-bar" alignment="CENTER_LEFT">
         <padding><Insets top="7" right="16" bottom="7" left="16"/></padding>
         <Label fx:id="summaryLabel" styleClass="summary-text" text=""/>

@@ -19,8 +19,8 @@ public interface ITransactionRepo {
     /** Update all mutable fields of an existing transaction. */
     void update(Transaction tx);
 
-    /** Delete a transaction by its primary key. */
-    void delete(long transactionId);
+    /** Delete a transaction only when it belongs to the authenticated user. */
+    void delete(long transactionId, long userId);
 
     /** Return all distinct category strings for a user, sorted alphabetically. */
     List<String> findDistinctCategories(long userId);

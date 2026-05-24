@@ -26,7 +26,6 @@ import java.util.Optional;
 
 public class TransactionController {
 
-    // ── FXML fields ─────────────────────────────────────────────────────────
     @FXML private Button editButton;
     @FXML private Button deleteButton;
     @FXML private DatePicker fromDatePicker;
@@ -40,16 +39,13 @@ public class TransactionController {
     @FXML private TableColumn<TransactionDTO, String> amountCol;
     @FXML private Label summaryLabel;
 
-    // ── State ────────────────────────────────────────────────────────────────
     private TransactionService transactionService;
     private BudgetService budgetService;
     private User currentUser;
     private boolean suppressFilter = false;
-    private Runnable onDataChanged;  // notifies BudgetController to refresh
+    private Runnable onDataChanged;
 
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     @FXML
     public void initialize() {
@@ -70,7 +66,6 @@ public class TransactionController {
         categoryFilter.valueProperty().addListener((obs, o, n) -> applyFilter());
     }
 
-    /** Called by MainController after FXML load. */
     public void init(TransactionService txService, BudgetService budgetService, User user) {
         this.transactionService = txService;
         this.budgetService      = budgetService;
@@ -78,22 +73,17 @@ public class TransactionController {
         loadData();
     }
 
-    /** MainController registers BudgetController.refresh() here so budget bars stay live. */
     public void setOnDataChanged(Runnable callback) {
         this.onDataChanged = callback;
     }
 
-    /** Reload the transaction list from the database (used by MainController after auto-income). */
     public void refresh() {
         loadData();
     }
 
-    // ── FXML handlers ─────────────────────────────────────────────────────────
-
     @FXML
     private void handleAdd() {
         showFormDialog("New Transaction", null).ifPresent(dto -> {
-            // Pre-save limit checks for expenses
             if ("EXPENSE".equals(dto.txType())) {
                 String catErr = budgetService.checkCategoryLimit(
                         currentUser.getUserId(), dto.category(), dto.amount(), dto.txDate(), 0L);
@@ -119,7 +109,6 @@ public class TransactionController {
                               + ", year=" + dto.txDate().getYear());
                 notifyDataChanged();
                 loadData();
-                // Post-save: warn if category is now at 80-100%
                 if ("EXPENSE".equals(dto.txType())) {
                     String warning = budgetService.getCategoryWarning(
                             currentUser.getUserId(), dto.category(), dto.txDate());
@@ -141,7 +130,6 @@ public class TransactionController {
         if (selected == null) return;
 
         showFormDialog("Edit Transaction", selected).ifPresent(dto -> {
-            // Pre-save limit checks for expenses (exclude the old transaction from counts)
             if ("EXPENSE".equals(dto.txType())) {
                 String catErr = budgetService.checkCategoryLimit(
                         currentUser.getUserId(), dto.category(), dto.amount(),
@@ -208,8 +196,6 @@ public class TransactionController {
         suppressFilter = false;
         categoryFilter.setValue("All");
     }
-
-    // ── Internal helpers ──────────────────────────────────────────────────────
 
     private void loadData() { applyFilter(); }
 
@@ -298,8 +284,6 @@ public class TransactionController {
                 net.compareTo(BigDecimal.ZERO) >= 0 ? "+" : "",
                 net.setScale(2, RoundingMode.HALF_UP).toPlainString()));
     }
-
-    // ── Add / Edit dialog ─────────────────────────────────────────────────────
 
     private Optional<TransactionDTO> showFormDialog(String title, TransactionDTO prefill) {
         Dialog<TransactionDTO> dialog = new Dialog<>();

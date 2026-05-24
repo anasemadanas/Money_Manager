@@ -34,7 +34,6 @@ public class MainController {
     private DashboardService dashboardService;
     private MonthlyIncomeService monthlyIncomeService;
 
-    /** Called by LoginController after loading main.fxml. */
     public void init(User user, AuthService authService, TransactionService txService,
                      BudgetService budgetService, GoalService goalService,
                      NoteService noteService, DashboardService dashboardService,
@@ -51,10 +50,8 @@ public class MainController {
 
         usernameLabel.setText("Logged in as: " + user.getUsername());
 
-        // Apply saved monthly income for the current month (idempotent)
         monthlyIncomeService.applyForCurrentMonth(user.getUserId());
 
-        // Initialise all tab controllers
         dashboardController.init(dashboardService, monthlyIncomeService, user);
         dashboardController.setOnLogout(this::logout);
 
@@ -63,7 +60,6 @@ public class MainController {
         goalsController.init(goalService, user);
         notesController.init(noteService, user);
 
-        // Cross-tab refresh wiring
         transactionsController.setOnDataChanged(() -> {
             dashboardController.refresh();
             budgetsController.refresh();
@@ -74,7 +70,6 @@ public class MainController {
             budgetsController.refresh();
         });
 
-        // Tab-switch refresh
         mainTabPane.getSelectionModel().selectedIndexProperty().addListener(
                 (obs, oldIdx, newIdx) -> {
                     switch (newIdx.intValue()) {
@@ -85,7 +80,6 @@ public class MainController {
     }
 
     private void logout() {
-        // Log logout/exit action
         java.util.logging.Logger.getLogger("com.moneymanager")
                 .info("user=" + currentUser.getUsername() + " action=exit");
 

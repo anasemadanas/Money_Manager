@@ -11,7 +11,7 @@ public class Transaction {
     private String name;
     private BigDecimal amount;
     private String category;
-    private String txType;      // "INCOME" | "EXPENSE"
+    private String txType;
     private LocalDate txDate;
     private OffsetDateTime createdAt;
 

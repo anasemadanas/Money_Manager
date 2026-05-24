@@ -20,26 +20,21 @@ import java.util.Optional;
 
 public class NoteController {
 
-    // ── FXML fields ─────────────────────────────────────────────────────────
     @FXML private Button deleteButton;
     @FXML private Label noteCountLabel;
     @FXML private ListView<Note> noteListView;
 
-    // Detail pane
     @FXML private Label detailPlaceholder;
     @FXML private VBox  detailContent;
     @FXML private Label noteTitleLabel;
     @FXML private Label noteCreatedLabel;
     @FXML private TextArea noteContentArea;
 
-    // ── State ────────────────────────────────────────────────────────────────
     private NoteService noteService;
     private User currentUser;
 
     private static final DateTimeFormatter DT_FMT =
             DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
-
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     @FXML
     public void initialize() {
@@ -57,14 +52,11 @@ public class NoteController {
                 });
     }
 
-    /** Called by MainController after FXML load. */
     public void init(NoteService noteService, User user) {
         this.noteService  = noteService;
         this.currentUser  = user;
         loadNotes(0);
     }
-
-    // ── FXML handlers ─────────────────────────────────────────────────────────
 
     @FXML
     private void handleAdd() {
@@ -76,7 +68,7 @@ public class NoteController {
                         .info("user=" + currentUser.getUsername()
                               + " action=note_created details=title="
                               + saved.getTitle());
-                loadNotes(saved.getNoteId()); // select the new note
+                loadNotes(saved.getNoteId());
             } catch (IllegalArgumentException e) {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
@@ -100,7 +92,7 @@ public class NoteController {
                     .info("user=" + currentUser.getUsername()
                           + " action=note_deleted details=title="
                           + selected.getTitle());
-            loadNotes(0); // nothing selected after delete
+            loadNotes(0);
             clearDetail();
         } catch (DataAccessException e) {
             AlertHelper.showError(getStage(), "Error", "Could not delete note.");
@@ -108,13 +100,6 @@ public class NoteController {
         }
     }
 
-    // ── Internal helpers ──────────────────────────────────────────────────────
-
-    /**
-     * Reload the note list from the DB.
-     * If selectId > 0, select that note by ID (used after add).
-     * If selectId == 0, keep whatever is currently selected if still present.
-     */
     private void loadNotes(long selectId) {
         if (noteService == null) return;
 
@@ -129,13 +114,11 @@ public class NoteController {
         noteCountLabel.setText(count + " note" + (count == 1 ? "" : "s"));
 
         if (selectId > 0) {
-            // Select newly created note
             notes.stream()
                     .filter(n -> n.getNoteId() == selectId)
                     .findFirst()
                     .ifPresent(n -> noteListView.getSelectionModel().select(n));
         } else if (previousSelection != null) {
-            // Restore previous selection
             notes.stream()
                     .filter(n -> n.getNoteId() == previousSelection.getNoteId())
                     .findFirst()
@@ -169,8 +152,6 @@ public class NoteController {
     private Stage getStage() {
         return (Stage) noteListView.getScene().getWindow();
     }
-
-    // ── Add Note dialog ───────────────────────────────────────────────────────
 
     private Optional<Note> showAddDialog() {
         Dialog<Note> dialog = new Dialog<>();
@@ -222,13 +203,10 @@ public class NoteController {
             return n;
         });
 
-        // Auto-focus the title field
         dialog.setOnShown(e -> titleField.requestFocus());
 
         return dialog.showAndWait().filter(n -> n != null);
     }
-
-    // ── Custom list cell ──────────────────────────────────────────────────────
 
     private static final class NoteCell extends ListCell<Note> {
 
@@ -250,7 +228,6 @@ public class NoteController {
             Label dateLabel = new Label(date);
             dateLabel.getStyleClass().add("note-cell-date");
 
-            // Preview: first non-empty line of content
             String preview = "";
             if (item.getContent() != null && !item.getContent().isBlank()) {
                 preview = item.getContent().lines()

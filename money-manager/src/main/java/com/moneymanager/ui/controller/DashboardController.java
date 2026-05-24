@@ -32,7 +32,6 @@ import java.util.Optional;
 
 public class DashboardController {
 
-    // ── FXML fields ─────────────────────────────────────────────────────────
     @FXML private Label monthLabel;
     @FXML private Label monthlyIncomeLabel;
     @FXML private Label incomeLabel;
@@ -44,32 +43,25 @@ public class DashboardController {
     @FXML private Label pieNoDataLabel;
     @FXML private BarChart<String, Number> monthlyBarChart;
 
-    // ── State ────────────────────────────────────────────────────────────────
     private DashboardService dashboardService;
     private MonthlyIncomeService monthlyIncomeService;
     private User currentUser;
 
-    /** Fired after monthly income is saved so other tabs (transactions, budgets) also refresh. */
     private Runnable onSettingChanged;
 
-    /** Fired when the user clicks the Logout button. */
     private Runnable onLogout;
 
     private static final NumberFormat CF = NumberFormat.getCurrencyInstance(Locale.US);
-
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     @FXML
     public void initialize() {
         monthlyBarChart.setAnimated(false);
         categoryPieChart.setAnimated(false);
-        // Slice labels disabled — legend below the chart carries all the info
         categoryPieChart.setLabelsVisible(false);
         categoryPieChart.setLegendSide(Side.BOTTOM);
         categoryPieChart.setLegendVisible(true);
     }
 
-    /** Called by MainController after FXML load. */
     public void init(DashboardService dashboardService,
                      MonthlyIncomeService monthlyIncomeService,
                      User user) {
@@ -79,25 +71,17 @@ public class DashboardController {
         load();
     }
 
-    /** Refresh all data (called after transactions change or on tab switch). */
     public void refresh() {
         if (dashboardService != null) load();
     }
 
-    /**
-     * Register a callback that is fired after the user saves a new monthly income.
-     * MainController uses this to refresh the transactions list and budgets.
-     */
     public void setOnSettingChanged(Runnable callback) {
         this.onSettingChanged = callback;
     }
 
-    /** Register a callback for when the user logs out. */
     public void setOnLogout(Runnable callback) {
         this.onLogout = callback;
     }
-
-    // ── FXML handlers ─────────────────────────────────────────────────────────
 
     @FXML
     private void handleSetMonthlyIncome() {
@@ -107,8 +91,8 @@ public class DashboardController {
             try {
                 monthlyIncomeService.setMonthlyIncome(currentUser.getUserId(), amount);
                 monthlyIncomeService.applyForCurrentMonth(currentUser.getUserId());
-                load(); // refresh this dashboard immediately
-                if (onSettingChanged != null) onSettingChanged.run(); // refresh other tabs
+                load();
+                if (onSettingChanged != null) onSettingChanged.run();
             } catch (IllegalArgumentException e) {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
@@ -125,31 +109,25 @@ public class DashboardController {
         }
     }
 
-    // ── Data loading ──────────────────────────────────────────────────────────
-
     private void load() {
         try {
             DashboardSnapshot snap = dashboardService.getSnapshot(currentUser.getUserId());
 
-            // Month heading
             String monthName = snap.month().getMonth()
                     .getDisplayName(TextStyle.FULL, Locale.ENGLISH);
             monthLabel.setText(monthName + " " + snap.month().getYear());
 
-            // Monthly income setting label
             monthlyIncomeService.getMonthlyIncome(currentUser.getUserId())
                     .ifPresentOrElse(
                             amt -> monthlyIncomeLabel.setText("Monthly Income: " + CF.format(amt)),
                             () -> monthlyIncomeLabel.setText("Monthly Income: not set"));
 
-            // KPI labels
             incomeLabel.setText(CF.format(snap.monthIncome()));
             expensesLabel.setText(CF.format(snap.monthExpenses()));
             goalSavingsLabel.setText(CF.format(snap.goalSavings()));
             applySignedLabel(netBalanceLabel, snap.netBalance());
             applySignedLabel(availableLabel,  snap.availableBalance());
 
-            // Charts
             updatePieChart(snap.categoryBreakdown());
             updateBarChart(snap.monthlyTrend());
 
@@ -167,8 +145,6 @@ public class DashboardController {
                 : "-fx-text-fill: #16a34a; -fx-font-size: 26px; -fx-font-weight: bold;");
     }
 
-    // ── Pie chart ─────────────────────────────────────────────────────────────
-
     private void updatePieChart(Map<String, BigDecimal> breakdown) {
         if (breakdown.isEmpty()) {
             categoryPieChart.setVisible(false);
@@ -184,13 +160,11 @@ public class DashboardController {
 
         ObservableList<PieChart.Data> slices = FXCollections.observableArrayList();
         for (var entry : breakdown.entrySet()) {
-            // Legend label: single line "Food  ($120.00)" — no \n, no overlap
             String label = entry.getKey() + "  (" + CF.format(entry.getValue()) + ")";
             slices.add(new PieChart.Data(label, entry.getValue().doubleValue()));
         }
         categoryPieChart.setData(slices);
 
-        // Install tooltips so users can hover each slice to see category + amount
         Platform.runLater(() -> {
             for (PieChart.Data d : categoryPieChart.getData()) {
                 Tooltip tip = new Tooltip(d.getName());
@@ -201,10 +175,6 @@ public class DashboardController {
         });
     }
 
-    /**
-     * Space out the legend FlowPane that JavaFX places below the chart.
-     * Must run after CSS and layout have been applied (called from Platform.runLater).
-     */
     private void fixLegendLayout() {
         categoryPieChart.applyCss();
         categoryPieChart.layout();
@@ -214,12 +184,9 @@ public class DashboardController {
             fp.setVgap(8);
             fp.setStyle("-fx-padding: 8 4 4 4;");
         } else if (legendNode != null) {
-            // Fallback: apply via inline style if not a FlowPane (shouldn't happen in JFX 21)
             legendNode.setStyle("-fx-padding: 8 4 4 4;");
         }
     }
-
-    // ── Bar chart ─────────────────────────────────────────────────────────────
 
     private void updateBarChart(List<MonthlyTrend> trend) {
         XYChart.Series<String, Number> incomeSeries  = new XYChart.Series<>();
@@ -234,8 +201,6 @@ public class DashboardController {
         monthlyBarChart.getData().clear();
         monthlyBarChart.getData().addAll(incomeSeries, expenseSeries);
     }
-
-    // ── Dialog ────────────────────────────────────────────────────────────────
 
     private Optional<BigDecimal> showIncomeDialog(BigDecimal current) {
         Dialog<BigDecimal> dialog = new Dialog<>();
@@ -282,8 +247,6 @@ public class DashboardController {
         });
         return dialog.showAndWait().filter(d -> d != null);
     }
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private static boolean isPositive(String s) {
         if (s == null || s.isBlank()) return false;

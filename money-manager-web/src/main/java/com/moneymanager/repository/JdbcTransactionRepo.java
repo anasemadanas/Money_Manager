@@ -97,10 +97,12 @@ public class JdbcTransactionRepo implements ITransactionRepo {
     }
 
     @Override
-    public void delete(long transactionId) {
+    public void delete(long transactionId, long userId) {
         try (var conn = DatabaseConfig.getConnection();
-             var ps = conn.prepareStatement("DELETE FROM transactions WHERE transaction_id = ?")) {
+             var ps = conn.prepareStatement(
+                     "DELETE FROM transactions WHERE transaction_id = ? AND user_id = ?")) {
             ps.setLong(1, transactionId);
+            ps.setLong(2, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to delete transaction", e);

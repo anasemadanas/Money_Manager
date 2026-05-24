@@ -62,7 +62,6 @@ public class LoginController {
         render();
     }
 
-    /** Called by App.java after FXML loading. */
     public void init(AuthService authService, TransactionService txService,
                      BudgetService budgetService, GoalService goalService,
                      NoteService noteService, DashboardService dashboardService,
@@ -213,7 +212,6 @@ public class LoginController {
             return;
         }
 
-        // RESET_PASSWORD
         headerLabel.setText("Reset Password");
         actionButton.setText("Reset");
         toggleLink.setText("Back to Login");
@@ -238,11 +236,9 @@ public class LoginController {
     }
 
     private void switchToMain(User user) {
-        // Log login action
         java.util.logging.Logger.getLogger("com.moneymanager")
                 .info("user=" + user.getUsername() + " action=login");
 
-        // Register window exit hook
         stage.setOnCloseRequest(event -> {
             java.util.logging.Logger.getLogger("com.moneymanager")
                     .info("user=" + user.getUsername() + " action=exit");

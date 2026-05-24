@@ -17,7 +17,7 @@
       maxHeight="Infinity" maxWidth="Infinity">
     <padding><Insets top="20" right="20" bottom="16" left="20"/></padding>
 
-    <!-- Month heading + monthly income setting -->
+
     <HBox alignment="CENTER_LEFT" spacing="14">
         <Label fx:id="monthLabel" styleClass="dashboard-month"/>
         <Region HBox.hgrow="ALWAYS"/>
@@ -28,7 +28,7 @@
                 styleClass="btn-danger"/>
     </HBox>
 
-    <!-- ── 5 KPI cards ──────────────────────────────────────────────────── -->
+
     <HBox spacing="12">
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS" spacing="6">
             <Label text="Total Income" styleClass="kpi-title"/>
@@ -52,10 +52,10 @@
         </VBox>
     </HBox>
 
-    <!-- ── Charts row ───────────────────────────────────────────────────── -->
+
     <HBox spacing="16" VBox.vgrow="ALWAYS">
 
-        <!-- Pie chart: spending by category -->
+
         <VBox styleClass="chart-card" HBox.hgrow="ALWAYS" spacing="4">
             <Label text="Spending by Category" styleClass="chart-title"/>
             <StackPane VBox.vgrow="ALWAYS">
@@ -66,7 +66,7 @@
             </StackPane>
         </VBox>
 
-        <!-- Bar chart: last 6 months income vs expenses -->
+
         <VBox styleClass="chart-card" HBox.hgrow="ALWAYS" spacing="4">
             <Label text="Income vs Expenses — Last 6 Months" styleClass="chart-title"/>
             <BarChart fx:id="monthlyBarChart" VBox.vgrow="ALWAYS">

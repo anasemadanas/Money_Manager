@@ -13,12 +13,10 @@ public class NoteService {
         this.noteRepo = noteRepo;
     }
 
-    /** Return all notes for a user, newest first. */
     public List<Note> getNotes(long userId) {
         return noteRepo.findByUser(userId);
     }
 
-    /** Create and persist a new note. */
     public Note addNote(long userId, String title, String content) {
         if (title == null || title.isBlank())
             throw new IllegalArgumentException("Title is required.");
@@ -29,7 +27,6 @@ public class NoteService {
         return noteRepo.save(note);
     }
 
-    /** Delete a note by its primary key. */
     public void deleteNote(long noteId) {
         noteRepo.delete(noteId);
     }

@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BudgetServiceTest {
 
-    // ── Configurable stub state ───────────────────────────────────────────────
     private boolean existsByCategory = false;
     private List<BudgetDTO> budgetDtos = new ArrayList<>();
     private BigDecimal categorySpending = BigDecimal.ZERO;
@@ -68,8 +67,6 @@ class BudgetServiceTest {
         balanceSaved = false;
     }
 
-    // ── add() happy path ──────────────────────────────────────────────────────
-
     @Test
     void add_valid_savesbudget() {
         service.add(1L, "Food", new BigDecimal("200"), 5, 2025);
@@ -77,8 +74,6 @@ class BudgetServiceTest {
         assertEquals("Food", lastSaved.getCategory());
         assertEquals(new BigDecimal("200"), lastSaved.getAmountCap());
     }
-
-    // ── add() validation: category ────────────────────────────────────────────
 
     @Test
     void add_blankCategory_throws() {
@@ -92,8 +87,6 @@ class BudgetServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.add(1L, null, new BigDecimal("100"), 5, 2025));
     }
-
-    // ── add() validation: cap ─────────────────────────────────────────────────
 
     @Test
     void add_zeroCap_throws() {
@@ -113,8 +106,6 @@ class BudgetServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.add(1L, "Food", null, 5, 2025));
     }
-
-    // ── add() validation: period ──────────────────────────────────────────────
 
     @Test
     void add_invalidMonth_throws() {
@@ -136,8 +127,6 @@ class BudgetServiceTest {
         assertTrue(ex.getMessage().contains("2020"));
     }
 
-    // ── add() duplicate check ─────────────────────────────────────────────────
-
     @Test
     void add_duplicateBudget_throws() {
         existsByCategory = true;
@@ -145,8 +134,6 @@ class BudgetServiceTest {
                 () -> service.add(1L, "Food", new BigDecimal("100"), 5, 2025));
         assertTrue(ex.getMessage().contains("already exists"));
     }
-
-    // ── updateCap() ───────────────────────────────────────────────────────────
 
     @Test
     void updateCap_valid_doesNotThrow() {
@@ -158,15 +145,11 @@ class BudgetServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.updateCap(1L, BigDecimal.ZERO));
     }
 
-    // ── delete() ─────────────────────────────────────────────────────────────
-
     @Test
     void delete_callsRepo() {
         service.delete(7L);
         assertEquals(7L, lastDeletedBudget);
     }
-
-    // ── setMonthlyBalance() ───────────────────────────────────────────────────
 
     @Test
     void setMonthlyBalance_valid_savesBalance() {
@@ -185,8 +168,6 @@ class BudgetServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.setMonthlyBalance(1L, null, 5, 2025));
     }
-
-    // ── checkCategoryLimit() ─────────────────────────────────────────────────
 
     @Test
     void checkCategoryLimit_noBudget_returnsNull() {
@@ -228,8 +209,6 @@ class BudgetServiceTest {
         assertNull(result);
     }
 
-    // ── checkMonthlyBalanceLimit() ────────────────────────────────────────────
-
     @Test
     void checkMonthlyBalanceLimit_noBalance_returnsNull() {
         monthlyBalance = Optional.empty();
@@ -258,8 +237,6 @@ class BudgetServiceTest {
         assertNotNull(result);
         assertTrue(result.contains("monthly budget"));
     }
-
-    // ── getCategoryWarning() ──────────────────────────────────────────────────
 
     @Test
     void getCategoryWarning_below80Percent_returnsNull() {

@@ -14,7 +14,7 @@
       fx:controller="com.moneymanager.ui.controller.NoteController"
       maxHeight="Infinity" maxWidth="Infinity">
 
-    <!-- Toolbar -->
+
     <HBox styleClass="toolbar" spacing="10" alignment="CENTER_LEFT">
         <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
         <Button text="+ New Note"  onAction="#handleAdd"    styleClass="btn-primary"/>
@@ -25,15 +25,15 @@
 
     <Separator/>
 
-    <!-- Split: list (left) | detail (right) -->
+
     <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.32">
 
-        <!-- Left: note titles -->
+
         <VBox styleClass="notes-list-panel" minWidth="180">
             <ListView fx:id="noteListView" VBox.vgrow="ALWAYS" styleClass="note-list-view"/>
         </VBox>
 
-        <!-- Right: detail pane -->
+
         <VBox styleClass="note-detail-pane" spacing="6" minWidth="300">
             <padding><Insets top="20" right="20" bottom="16" left="20"/></padding>
 

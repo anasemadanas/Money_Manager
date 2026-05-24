@@ -22,7 +22,7 @@
 
     <dependencies>
 
-        <!-- JavaFX -->
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -37,21 +37,21 @@
             <classifier>${javafx.platform}</classifier>
         </dependency>
 
-        <!-- BCrypt -->
+
         <dependency>
             <groupId>at.favre.lib</groupId>
             <artifactId>bcrypt</artifactId>
             <version>0.10.2</version>
         </dependency>
 
-        <!-- SQLite -->
+
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.45.3.0</version>
         </dependency>
 
-        <!-- JUnit -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -64,7 +64,7 @@
     <build>
         <plugins>
 
-            <!-- JavaFX Plugin -->
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -74,7 +74,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Shade Plugin (Jar fat executable) -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

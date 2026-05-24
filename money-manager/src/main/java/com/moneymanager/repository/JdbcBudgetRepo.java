@@ -57,10 +57,6 @@ public class JdbcBudgetRepo implements IBudgetRepo {
         }
     }
 
-    /**
-     * Single LEFT JOIN query that returns each budget together with the sum of
-     * EXPENSE transactions for the same user/category/month/year.
-     */
     @Override
     public List<BudgetDTO> findWithSpending(long userId, int month, int year) {
         var sql = """

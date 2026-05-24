@@ -17,6 +17,7 @@ class TransactionServiceTest {
     private Transaction lastSaved;
     private Transaction lastUpdated;
     private long lastDeleted;
+    private long lastDeleteUserId;
 
     private final ITransactionRepo stub = new ITransactionRepo() {
         @Override
@@ -32,7 +33,10 @@ class TransactionServiceTest {
         @Override
         public void update(Transaction tx) { lastUpdated = tx; }
         @Override
-        public void delete(long transactionId) { lastDeleted = transactionId; }
+        public void delete(long transactionId, long userId) {
+            lastDeleted = transactionId;
+            lastDeleteUserId = userId;
+        }
         @Override
         public List<String> findDistinctCategories(long userId) { return List.of(); }
     };
@@ -46,6 +50,7 @@ class TransactionServiceTest {
         lastSaved = null;
         lastUpdated = null;
         lastDeleted = -1;
+        lastDeleteUserId = -1;
     }
 
     private TransactionDTO validDto() {
@@ -174,7 +179,8 @@ class TransactionServiceTest {
 
     @Test
     void delete_callsRepo() {
-        service.delete(42L);
+        service.delete(42L, 7L);
         assertEquals(42L, lastDeleted);
+        assertEquals(7L, lastDeleteUserId);
     }
 }

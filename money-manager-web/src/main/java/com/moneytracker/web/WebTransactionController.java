@@ -86,7 +86,7 @@ public class WebTransactionController {
             return "redirect:/login";
         }
 
-        transactionService.delete(transactionId);
+        transactionService.delete(transactionId, userId);
         return "redirect:/transactions";
     }
 }

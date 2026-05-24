@@ -52,8 +52,6 @@ class TransactionServiceTest {
         return new TransactionDTO(0, "Coffee", new BigDecimal("4.50"), "Food", "EXPENSE", today);
     }
 
-    // ── add() happy path ──────────────────────────────────────────────────────
-
     @Test
     void add_validExpense_savesAndReturnsDto() {
         TransactionDTO result = service.add(1L, validDto());
@@ -70,8 +68,6 @@ class TransactionServiceTest {
         assertEquals("INCOME", lastSaved.getTxType());
     }
 
-    // ── add() validation: name ────────────────────────────────────────────────
-
     @Test
     void add_nullName_throws() {
         TransactionDTO dto = new TransactionDTO(0, null, new BigDecimal("10"), "Food", "EXPENSE", today);
@@ -84,8 +80,6 @@ class TransactionServiceTest {
         TransactionDTO dto = new TransactionDTO(0, "   ", new BigDecimal("10"), "Food", "EXPENSE", today);
         assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
     }
-
-    // ── add() validation: amount ──────────────────────────────────────────────
 
     @Test
     void add_zeroAmount_throws() {
@@ -106,16 +100,12 @@ class TransactionServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
     }
 
-    // ── add() validation: category ────────────────────────────────────────────
-
     @Test
     void add_blankCategory_throws() {
         TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "", "EXPENSE", today);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
         assertTrue(ex.getMessage().contains("Category is required"));
     }
-
-    // ── add() validation: txType ──────────────────────────────────────────────
 
     @Test
     void add_invalidTxType_throws() {
@@ -129,8 +119,6 @@ class TransactionServiceTest {
         TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", null, today);
         assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
     }
-
-    // ── add() validation: date ────────────────────────────────────────────────
 
     @Test
     void add_nullDate_throws() {
@@ -153,8 +141,6 @@ class TransactionServiceTest {
         assertDoesNotThrow(() -> service.add(1L, dto));
     }
 
-    // ── update() ─────────────────────────────────────────────────────────────
-
     @Test
     void update_valid_delegatesToRepo() {
         assertDoesNotThrow(() -> service.update(5L, 1L, validDto()));
@@ -169,8 +155,6 @@ class TransactionServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.update(5L, 1L, bad));
         assertNull(lastUpdated);
     }
-
-    // ── delete() ─────────────────────────────────────────────────────────────
 
     @Test
     void delete_callsRepo() {

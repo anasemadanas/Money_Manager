@@ -14,7 +14,7 @@
       fx:controller="com.moneymanager.ui.controller.BudgetController"
       maxHeight="Infinity" maxWidth="Infinity">
 
-    <!-- Action + period toolbar -->
+
     <HBox styleClass="toolbar" spacing="10" alignment="CENTER_LEFT">
         <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
         <Button text="+ Add Budget" onAction="#handleAdd"    styleClass="btn-primary"/>
@@ -29,7 +29,7 @@
 
     <Separator/>
 
-    <!-- Monthly Balance Card -->
+
     <VBox styleClass="monthly-balance-section" spacing="8">
         <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
 
@@ -40,12 +40,12 @@
                     onAction="#handleSetBalance" styleClass="btn-secondary"/>
         </HBox>
 
-        <!-- Shown when no balance is set -->
+
         <Label fx:id="balancePlaceholderLabel"
                text="No monthly budget set. Click 'Set Monthly Budget' to set a total spending limit for this month."
                styleClass="budget-amount" wrapText="true"/>
 
-        <!-- Shown when balance is set -->
+
         <VBox fx:id="balanceProgressPane" visible="false" managed="false" spacing="6">
             <HBox alignment="CENTER_LEFT" spacing="8">
                 <Label fx:id="balanceSpentLabel" styleClass="budget-amount"/>
@@ -58,13 +58,13 @@
 
     <Separator/>
 
-    <!-- Category budget rows -->
+
     <Label text="Category Budgets" styleClass="section-label">
         <padding><Insets top="8" right="16" bottom="2" left="16"/></padding>
     </Label>
     <ListView fx:id="budgetListView" VBox.vgrow="ALWAYS" styleClass="budget-list-view"/>
 
-    <!-- Summary footer -->
+
     <HBox styleClass="summary-bar" alignment="CENTER_LEFT">
         <padding><Insets top="7" right="16" bottom="7" left="16"/></padding>
         <Label fx:id="summaryLabel" styleClass="summary-text" text=""/>

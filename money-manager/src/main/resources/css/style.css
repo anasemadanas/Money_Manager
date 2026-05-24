@@ -1,19 +1,16 @@
-/* ═══════════════════════════════════════════════════════════════
-   Money Manager — style.css
-   Palette: dark #1e293b  |  white  |  green #16a34a  |  red #dc2626  |  amber #f59e0b
-   ═══════════════════════════════════════════════════════════════ */
 
-/* ── Global ───────────────────────────────────────────────────── */
+
+
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
     -fx-font-size: 14px;
     -fx-background-color: #f8fafc;
-    /* Remove the blue focus glow app-wide; use border colour instead */
+
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
 
-/* ── Login ────────────────────────────────────────────────────── */
+
 .login-root {
     -fx-background-color: #1e293b;
 }
@@ -75,7 +72,7 @@
     -fx-underline: true;
 }
 
-/* ── Buttons ──────────────────────────────────────────────────── */
+
 .btn-primary {
     -fx-background-color: #16a34a;
     -fx-text-fill: white;
@@ -137,7 +134,7 @@
     -fx-opacity: 1;
 }
 
-/* ── Header bar ───────────────────────────────────────────────── */
+
 .header-bar {
     -fx-background-color: #1e293b;
     -fx-min-height: 56;
@@ -156,7 +153,7 @@
     -fx-font-size: 13px;
 }
 
-/* ── Tab pane ─────────────────────────────────────────────────── */
+
 .main-tabs {
     -fx-tab-min-height: 46;
     -fx-tab-max-height: 46;
@@ -197,7 +194,7 @@
 .main-tabs .tab:selected .tab-label { -fx-text-fill: #16a34a; }
 .main-tabs .tab:hover .tab-label    { -fx-text-fill: #1e293b; }
 
-/* ── Toolbars ─────────────────────────────────────────────────── */
+
 .toolbar {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #e2e8f0 transparent;
@@ -211,7 +208,7 @@
     -fx-font-weight: bold;
 }
 
-/* ── Summary footer ───────────────────────────────────────────── */
+
 .summary-bar {
     -fx-background-color: #f8fafc;
     -fx-border-color: #e2e8f0 transparent transparent transparent;
@@ -224,7 +221,7 @@
     -fx-font-size: 13px;
 }
 
-/* ── Form inputs — applied to all text fields globally ─────────── */
+
 .text-field {
     -fx-background-color: white;
     -fx-border-color: #cbd5e1;
@@ -242,7 +239,7 @@
     -fx-border-width: 1.5;
 }
 
-/* TextArea */
+
 .text-area {
     -fx-background-color: white;
     -fx-border-color: #cbd5e1;
@@ -264,7 +261,7 @@
     -fx-padding: 8 12;
 }
 
-/* ComboBox and DatePicker share ComboBoxBase structure */
+
 .combo-box, .date-picker {
     -fx-background-color: white;
     -fx-border-color: #cbd5e1;
@@ -294,7 +291,7 @@
     -fx-background-color: #64748b;
 }
 
-/* ComboBox popup list */
+
 .combo-box-popup .list-view {
     -fx-background-color: white;
     -fx-border-color: #e2e8f0;
@@ -313,7 +310,7 @@
 .combo-box-popup .list-cell:hover    { -fx-background-color: #f0fdf4; }
 .combo-box-popup .list-cell:selected { -fx-background-color: #dcfce7; -fx-text-fill: #166534; }
 
-/* DatePicker inline text field */
+
 .date-picker .text-field {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -326,7 +323,7 @@
     -fx-border-width: 0;
 }
 
-/* Form-field alias used in dialog grids */
+
 .form-field {
     -fx-background-color: white;
     -fx-border-color: #cbd5e1;
@@ -343,7 +340,7 @@
     -fx-border-width: 1.5;
 }
 
-/* ── TableView ────────────────────────────────────────────────── */
+
 .table-view {
     -fx-background-color: white;
     -fx-border-color: transparent;
@@ -381,7 +378,7 @@
     -fx-alignment: center-left;
 }
 
-/* Zebra striping */
+
 .table-row-cell {
     -fx-cell-size: 40px;
     -fx-border-color: transparent transparent #f1f5f9 transparent;
@@ -409,7 +406,7 @@
     -fx-faint-focus-color: transparent;
 }
 
-/* ── Progress bars ────────────────────────────────────────────── */
+
 .progress-bar > .track {
     -fx-background-color: #e2e8f0;
     -fx-background-radius: 6;
@@ -425,12 +422,12 @@
 .progress-bar.amber > .bar { -fx-background-color: #f59e0b; }
 .progress-bar.red   > .bar { -fx-background-color: #dc2626; }
 
-/* ── Placeholder / no-data ────────────────────────────────────── */
+
 .tab-placeholder  { -fx-background-color: #f8fafc; }
 .placeholder-text { -fx-text-fill: #94a3b8; -fx-font-size: 16px; }
 .no-data-label    { -fx-text-fill: #94a3b8; -fx-font-size: 14px; }
 
-/* ── KPI cards ────────────────────────────────────────────────── */
+
 .kpi-card {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -458,7 +455,7 @@
 .kpi-expense { -fx-text-fill: #dc2626; }
 .kpi-savings { -fx-text-fill: #7c3aed; }
 
-/* ── Content sections ─────────────────────────────────────────── */
+
 .section-label {
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -466,14 +463,14 @@
     -fx-text-transform: uppercase;
 }
 
-/* ── Monthly balance card ─────────────────────────────────────── */
+
 .monthly-balance-section {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #e2e8f0 transparent;
     -fx-border-width: 0 0 1 0;
 }
 
-/* ── Budget list ──────────────────────────────────────────────── */
+
 .budget-list-view {
     -fx-background-color: #f1f5f9;
     -fx-border-color: transparent;
@@ -516,12 +513,12 @@
     -fx-text-fill: #64748b;
 }
 
-/* Percentage labels — shared by budgets and goals */
+
 .pct-green { -fx-text-fill: #16a34a; -fx-font-weight: bold; -fx-font-size: 14px; }
 .pct-amber { -fx-text-fill: #d97706; -fx-font-weight: bold; -fx-font-size: 14px; }
 .pct-red   { -fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-font-size: 14px; }
 
-/* ── Goal list ────────────────────────────────────────────────── */
+
 .goals-panel {
     -fx-background-color: #f1f5f9;
 }
@@ -571,11 +568,11 @@
 .contributions-panel { -fx-background-color: white; }
 .contributions-panel .section-label { -fx-padding: 0 0 6 0; }
 
-/* Contribution table inside goals */
+
 .contributions-panel .table-view .table-row-cell:odd  { -fx-background-color: #f8fafc; }
 .contributions-panel .table-view .table-row-cell:even { -fx-background-color: white; }
 
-/* ── Dashboard ────────────────────────────────────────────────── */
+
 .dashboard-root {
     -fx-background-color: #f1f5f9;
 }
@@ -592,7 +589,7 @@
     -fx-font-style: italic;
 }
 
-/* Chart cards */
+
 .chart-card {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -611,7 +608,7 @@
     -fx-padding: 0 0 6 0;
 }
 
-/* Pie chart legend */
+
 .chart-legend {
     -fx-padding: 10 4 4 4;
     -fx-hgap: 16;
@@ -620,20 +617,20 @@
 
 .chart-legend-item { -fx-font-size: 12px; -fx-text-fill: #374151; }
 
-/* Bar chart colours: income = green, expenses = red */
+
 .default-color0.chart-bar { -fx-bar-fill: #16a34a; }
 .default-color1.chart-bar { -fx-bar-fill: #dc2626; }
 .default-color0.chart-legend-item-symbol { -fx-background-color: #16a34a; }
 .default-color1.chart-legend-item-symbol { -fx-background-color: #dc2626; }
 
-/* Chart plot area */
+
 .chart-plot-background   { -fx-background-color: white; }
 .chart-vertical-grid-lines   { -fx-stroke: transparent; }
 .chart-horizontal-grid-lines { -fx-stroke: #f1f5f9; }
 .chart-alternative-column-fill { -fx-fill: transparent; }
 .chart-alternative-row-fill    { -fx-fill: transparent; }
 
-/* Axis labels */
+
 .axis {
     -fx-font-size: 11px;
 }
@@ -646,7 +643,7 @@
 .axis .axis-tick-mark { -fx-stroke: #e2e8f0; }
 .axis .axis-minor-tick-mark { -fx-stroke: transparent; }
 
-/* ── Notes ────────────────────────────────────────────────────── */
+
 .notes-list-panel {
     -fx-background-color: #f8fafc;
     -fx-border-color: transparent #e2e8f0 transparent transparent;
@@ -701,7 +698,7 @@
 
 .note-content-area:focused { -fx-border-color: transparent; }
 
-/* ── Dialog pane ──────────────────────────────────────────────── */
+
 .dialog-pane {
     -fx-background-color: white;
     -fx-border-color: transparent;
@@ -720,7 +717,7 @@
     -fx-font-size: 13px;
 }
 
-/* ── ScrollBar — slim, unobtrusive ────────────────────────────── */
+
 .scroll-bar {
     -fx-background-color: transparent;
     -fx-padding: 1;
@@ -739,7 +736,7 @@
 .scroll-bar .thumb:hover  { -fx-background-color: #94a3b8; }
 .scroll-bar .thumb:pressed { -fx-background-color: #64748b; }
 
-/* Hide scroll arrows */
+
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
     -fx-opacity: 0;
@@ -751,7 +748,7 @@
 .scroll-bar:vertical   { -fx-pref-width: 8; }
 .scroll-bar:horizontal { -fx-pref-height: 8; }
 
-/* ── SplitPane — thin 1 px divider ────────────────────────────── */
+
 .split-pane {
     -fx-background-color: #f8fafc;
     -fx-padding: 0;
@@ -762,7 +759,7 @@
     -fx-padding: 0 1;
 }
 
-/* ── Separator ────────────────────────────────────────────────── */
+
 .separator .line {
     -fx-border-color: #e2e8f0;
     -fx-border-width: 1 0 0 0;

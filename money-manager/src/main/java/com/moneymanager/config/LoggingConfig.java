@@ -32,13 +32,10 @@ public final class LoggingConfig {
                 Logger root = Logger.getLogger("");
                 root.setLevel(Level.INFO);
 
-                // Avoid duplicate logs to console in some environments
                 for (Handler h : root.getHandlers()) {
-                    // keep existing handlers; file handler just adds persistence
                 }
                 root.addHandler(fh);
             } catch (Exception e) {
-                // If logging cannot be configured (permissions, etc.), continue without failing the app.
             } finally {
                 initialized = true;
             }

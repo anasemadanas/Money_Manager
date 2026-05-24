@@ -22,7 +22,6 @@ public class AlertHelper {
         alert.showAndWait();
     }
 
-    /** Returns true if the user clicked OK/Yes. */
     public static boolean showConfirm(Stage owner, String title, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.OK, ButtonType.CANCEL);
         alert.setTitle(title);

@@ -14,11 +14,6 @@ public class AuthService {
         this.userRepo = userRepo;
     }
 
-    /**
-     * Register a new user. Returns the saved user on success.
-     *
-     * @throws IllegalArgumentException if username/password is blank or username is taken
-     */
     public User register(String username, String password, String securityQuestion, String securityAnswer) {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username must not be blank");
@@ -46,11 +41,6 @@ public class AuthService {
         return userRepo.save(user);
     }
 
-    /**
-     * Authenticate a user by username and password.
-     *
-     * @return the User if credentials are valid, or empty if not
-     */
     public Optional<User> login(String username, String password) {
         if (username == null || username.isBlank() || password == null || password.isBlank()) {
             return Optional.empty();
@@ -62,16 +52,11 @@ public class AuthService {
                 });
     }
 
-    /** Return the security question for a username (for password reset). */
     public Optional<String> getSecurityQuestion(String username) {
         if (username == null || username.isBlank()) return Optional.empty();
         return userRepo.findByUsername(username).map(User::getSecurityQuestion);
     }
 
-    /**
-     * Reset password using the stored security answer hash.
-     * @throws IllegalArgumentException if username not found, answer invalid, or new password invalid
-     */
     public void resetPassword(String username, String securityAnswer, String newPassword) {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username is required.");

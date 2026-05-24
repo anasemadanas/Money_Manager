@@ -6,6 +6,7 @@ import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Properties;
 
 public class DatabaseConfig {
@@ -27,49 +28,45 @@ public class DatabaseConfig {
     }
 
     public static Connection getConnection() throws SQLException {
+        DatabaseSettings settings = resolveSettings(props, System.getenv());
 
-        String rawUrl = System.getenv("DATABASE_URL");
-
-   
-        if (rawUrl == null || rawUrl.isBlank()) {
-            rawUrl = props.getProperty(
-                    "db.url",
-                    "jdbc:postgresql://localhost:5432/postgres"
-            );
-        }
-
-        String url = normalizeDatabaseUrl(rawUrl);
-
-        String user = extractUsernameFromUrl(rawUrl);
-        String password = extractPasswordFromUrl(rawUrl);
-
- 
-        if (user == null || user.isBlank()) {
-            user = props.getProperty("db.username", "postgres");
-        }
-
-        if (password == null) {
-            password = props.getProperty("db.password", "");
-        }
-
-        System.out.println("Connecting to DB:");
-        System.out.println(url);
-        System.out.println(user);
-
-        return DriverManager.getConnection(url, user, password);
+        System.out.println("Connecting to PostgreSQL host: " + settings.hostDescription());
+        return DriverManager.getConnection(settings.url(), settings.username(), settings.password());
     }
 
-    private static String normalizeDatabaseUrl(String rawUrl) {
+    static DatabaseSettings resolveSettings(Properties properties, Map<String, String> environment) {
+        String rawUrl = firstNonBlank(
+                environment.get("DATABASE_URL"),
+                properties.getProperty("db.url"),
+                "jdbc:postgresql://localhost:5432/postgres"
+        );
+
+        String url = normalizeDatabaseUrl(rawUrl);
+        String user = firstNonBlank(
+                environment.get("DATABASE_USERNAME"),
+                extractUsernameFromUrl(rawUrl),
+                properties.getProperty("db.username"),
+                "postgres"
+        );
+        String password = firstNonNull(
+                environment.get("DATABASE_PASSWORD"),
+                extractPasswordFromUrl(rawUrl),
+                properties.getProperty("db.password"),
+                ""
+        );
+
+        return new DatabaseSettings(url, user, password);
+    }
+
+    static String normalizeDatabaseUrl(String rawUrl) {
 
         if (rawUrl == null || rawUrl.isBlank()) {
             return null;
         }
 
-
         if (rawUrl.startsWith("jdbc:")) {
-            return rawUrl;
+            return addSupabaseSslMode(rawUrl);
         }
-
 
         if (rawUrl.startsWith("postgres://")
                 || rawUrl.startsWith("postgresql://")) {
@@ -82,12 +79,13 @@ public class DatabaseConfig {
                 String path = uri.getPath();
                 String query = uri.getQuery();
 
-                return "jdbc:postgresql://"
+                String jdbcUrl = "jdbc:postgresql://"
                         + host
                         + ":"
                         + port
                         + path
                         + (query != null ? "?" + query : "");
+                return addSupabaseSslMode(jdbcUrl);
 
             } catch (Exception e) {
                 throw new RuntimeException("Invalid DATABASE_URL", e);
@@ -103,9 +101,9 @@ public class DatabaseConfig {
             URI uri = URI.create(rawUrl);
 
             String userInfo = uri.getUserInfo();
-
-            if (userInfo != null && userInfo.contains(":")) {
-                return userInfo.split(":")[0];
+            int separator = userInfo == null ? -1 : userInfo.indexOf(':');
+            if (separator > 0) {
+                return userInfo.substring(0, separator);
             }
 
         } catch (Exception ignored) {
@@ -120,14 +118,62 @@ public class DatabaseConfig {
             URI uri = URI.create(rawUrl);
 
             String userInfo = uri.getUserInfo();
-
-            if (userInfo != null && userInfo.contains(":")) {
-                return userInfo.split(":")[1];
+            int separator = userInfo == null ? -1 : userInfo.indexOf(':');
+            if (separator > 0) {
+                return userInfo.substring(separator + 1);
             }
 
         } catch (Exception ignored) {
         }
 
         return null;
+    }
+
+    private static String addSupabaseSslMode(String jdbcUrl) {
+        try {
+            URI uri = URI.create(jdbcUrl.substring("jdbc:".length()));
+            String host = uri.getHost();
+            String query = uri.getQuery();
+            boolean isSupabase = host != null
+                    && (host.endsWith(".supabase.co") || host.endsWith(".supabase.com"));
+            boolean hasSslMode = query != null && query.toLowerCase().contains("sslmode=");
+
+            if (isSupabase && !hasSslMode) {
+                return jdbcUrl + (query == null ? "?" : "&") + "sslmode=require";
+            }
+        } catch (Exception ignored) {
+            // The PostgreSQL driver reports malformed JDBC URLs with a useful error.
+        }
+
+        return jdbcUrl;
+    }
+
+    private static String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (value != null && !value.isBlank()) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    private static String firstNonNull(String... values) {
+        for (String value : values) {
+            if (value != null) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    record DatabaseSettings(String url, String username, String password) {
+        String hostDescription() {
+            try {
+                URI uri = URI.create(url.substring("jdbc:".length()));
+                return uri.getHost() + ":" + uri.getPort();
+            } catch (Exception ignored) {
+                return "configured database";
+            }
+        }
     }
 }

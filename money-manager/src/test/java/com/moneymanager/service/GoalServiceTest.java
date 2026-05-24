@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GoalServiceTest {
 
-    // ── Configurable stub state ───────────────────────────────────────────────
     private List<Goal> storedGoals = new ArrayList<>();
     private Goal lastSaved;
     private Goal lastUpdated;
@@ -67,8 +66,6 @@ class GoalServiceTest {
         lastContributionNote = null;
     }
 
-    // ── addGoal() happy path ──────────────────────────────────────────────────
-
     @Test
     void addGoal_valid_savesGoal() {
         service.addGoal(1L, "New Laptop", new BigDecimal("1000"), null);
@@ -91,8 +88,6 @@ class GoalServiceTest {
         assertEquals("Car Fund", lastSaved.getName());
     }
 
-    // ── addGoal() validation: name ────────────────────────────────────────────
-
     @Test
     void addGoal_nullName_throws() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -105,8 +100,6 @@ class GoalServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.addGoal(1L, "   ", new BigDecimal("1000"), null));
     }
-
-    // ── addGoal() validation: target ─────────────────────────────────────────
 
     @Test
     void addGoal_zeroTarget_throws() {
@@ -126,8 +119,6 @@ class GoalServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.addGoal(1L, "Laptop", null, null));
     }
-
-    // ── updateGoal() ─────────────────────────────────────────────────────────
 
     @Test
     void updateGoal_valid_callsRepo() {
@@ -151,15 +142,11 @@ class GoalServiceTest {
         assertNull(lastUpdated);
     }
 
-    // ── deleteGoal() ─────────────────────────────────────────────────────────
-
     @Test
     void deleteGoal_callsRepo() {
         service.deleteGoal(12L);
         assertEquals(12L, lastDeletedGoal);
     }
-
-    // ── addContribution() happy path ──────────────────────────────────────────
 
     @Test
     void addContribution_valid_callsRepo() {
@@ -173,8 +160,6 @@ class GoalServiceTest {
     void addContribution_nullNote_accepted() {
         assertDoesNotThrow(() -> service.addContribution(7L, new BigDecimal("100"), null));
     }
-
-    // ── addContribution() validation ──────────────────────────────────────────
 
     @Test
     void addContribution_zeroAmount_throws() {
@@ -195,8 +180,6 @@ class GoalServiceTest {
                 () -> service.addContribution(7L, null, null));
     }
 
-    // ── getGoals() / progress calculation ────────────────────────────────────
-
     @Test
     void getGoals_returnsAllGoalDtos() {
         Goal g1 = buildGoal(1L, "Laptop", new BigDecimal("1000"), new BigDecimal("720"), null);
@@ -215,7 +198,6 @@ class GoalServiceTest {
         GoalDTO dto = service.getGoals(1L).get(0);
         assertEquals(new BigDecimal("1000"), dto.targetAmount());
         assertEquals(new BigDecimal("720"), dto.savedAmount());
-        // Verify the ratio externally (controller does the % calculation)
         double pct = dto.savedAmount().doubleValue() / dto.targetAmount().doubleValue() * 100;
         assertEquals(72.0, pct, 0.001);
     }
@@ -246,14 +228,10 @@ class GoalServiceTest {
         assertTrue(service.getGoals(1L).isEmpty());
     }
 
-    // ── getContributions() ────────────────────────────────────────────────────
-
     @Test
     void getContributions_returnsEmptyListWhenNone() {
         assertTrue(service.getContributions(1L).isEmpty());
     }
-
-    // ── helpers ───────────────────────────────────────────────────────────────
 
     private Goal buildGoal(long id, String name, BigDecimal target, BigDecimal saved, LocalDate deadline) {
         Goal g = new Goal();

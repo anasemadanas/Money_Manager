@@ -28,7 +28,6 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         LoggingConfig.init();
         DatabaseInitializer.init();
-        // ── Repositories ──────────────────────────────────────────────────────
         var userRepo     = new JdbcUserRepo();
         var txRepo       = new JdbcTransactionRepo();
         var budgetRepo   = new JdbcBudgetRepo();
@@ -37,7 +36,6 @@ public class App extends Application {
         var noteRepo     = new JdbcNoteRepo();
         var settingsRepo = new JdbcUserSettingsRepo();
 
-        // ── Services ──────────────────────────────────────────────────────────
         var authService          = new AuthService(userRepo);
         var txService            = new TransactionService(txRepo);
         var budgetService        = new BudgetService(budgetRepo, balanceRepo);
@@ -46,7 +44,6 @@ public class App extends Application {
         var dashboardService     = new DashboardService(txRepo, goalRepo, balanceRepo, settingsRepo);
         var monthlyIncomeService = new MonthlyIncomeService(settingsRepo, txRepo, balanceRepo);
 
-        // ── Login screen ──────────────────────────────────────────────────────
         FXMLLoader loader = new FXMLLoader(App.class.getResource("/fxml/login.fxml"));
         Scene scene = new Scene(loader.load(), 900, 600);
 

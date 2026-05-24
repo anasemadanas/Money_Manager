@@ -16,10 +16,6 @@ public class TransactionService {
         this.txRepo = txRepo;
     }
 
-    /**
-     * Return all transactions for a user with optional date-range and category filters.
-     * Pass null for any filter to skip it.
-     */
     public List<TransactionDTO> getFiltered(long userId, LocalDate from, LocalDate to, String category) {
         return txRepo.findByUserFiltered(userId, from, to, category)
                 .stream()
@@ -27,7 +23,6 @@ public class TransactionService {
                 .toList();
     }
 
-    /** Add a new transaction for the given user. */
     public TransactionDTO add(long userId, TransactionDTO dto) {
         validate(dto);
         var tx = new Transaction();
@@ -40,7 +35,6 @@ public class TransactionService {
         return toDto(txRepo.save(tx));
     }
 
-    /** Update an existing transaction (must belong to userId for safety). */
     public void update(long transactionId, long userId, TransactionDTO dto) {
         validate(dto);
         var tx = new Transaction();
@@ -54,12 +48,10 @@ public class TransactionService {
         txRepo.update(tx);
     }
 
-    /** Delete a transaction by its ID. */
     public void delete(long transactionId) {
         txRepo.delete(transactionId);
     }
 
-    /** Return all distinct category names for a user. */
     public List<String> getCategories(long userId) {
         return txRepo.findDistinctCategories(userId);
     }

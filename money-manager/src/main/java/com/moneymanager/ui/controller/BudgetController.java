@@ -28,7 +28,6 @@ import java.util.Optional;
 
 public class BudgetController {
 
-    // ── FXML fields ─────────────────────────────────────────────────────────
     @FXML private Button editButton;
     @FXML private Button deleteButton;
     @FXML private ComboBox<String>  monthCombo;
@@ -36,7 +35,6 @@ public class BudgetController {
     @FXML private ListView<BudgetDTO> budgetListView;
     @FXML private Label summaryLabel;
 
-    // Monthly balance card
     @FXML private Button setBalanceButton;
     @FXML private Label  balancePlaceholderLabel;
     @FXML private VBox   balanceProgressPane;
@@ -44,7 +42,6 @@ public class BudgetController {
     @FXML private Label  balanceRemainingLabel;
     @FXML private ProgressBar monthlyBalanceBar;
 
-    // ── State ────────────────────────────────────────────────────────────────
     private BudgetService budgetService;
     private User currentUser;
 
@@ -53,8 +50,6 @@ public class BudgetController {
         "July","August","September","October","November","December"
     };
     private static final NumberFormat CF = NumberFormat.getCurrencyInstance(Locale.US);
-
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     @FXML
     public void initialize() {
@@ -78,19 +73,15 @@ public class BudgetController {
         yearCombo.valueProperty().addListener((obs, o, n) -> loadData());
     }
 
-    /** Called by MainController after FXML load. */
     public void init(BudgetService budgetService, User user) {
         this.budgetService = budgetService;
         this.currentUser   = user;
         loadData();
     }
 
-    /** Called by MainController whenever a transaction changes so bars stay live. */
     public void refresh() {
         loadData();
     }
-
-    // ── FXML handlers ─────────────────────────────────────────────────────────
 
     @FXML
     private void handleAdd() {
@@ -182,8 +173,6 @@ public class BudgetController {
                 });
     }
 
-    // ── Data loading ──────────────────────────────────────────────────────────
-
     private void loadData() {
         if (budgetService == null) return;
         int month = getSelectedMonth();
@@ -254,8 +243,6 @@ public class BudgetController {
                 "%d budget(s)   |   Total cap: %s   |   Total spent: %s   |   %s",
                 budgets.size(), CF.format(totalCap), CF.format(totalSpent), overText));
     }
-
-    // ── Dialogs ───────────────────────────────────────────────────────────────
 
     private Optional<BudgetDTO> showAddDialog(String periodLabel) {
         Dialog<BudgetDTO> dialog = new Dialog<>();
@@ -343,7 +330,6 @@ public class BudgetController {
         return dialog.showAndWait().filter(d -> d != null);
     }
 
-    /** Set/edit the total monthly budget amount. */
     private Optional<BigDecimal> showSetBalanceDialog(String periodLabel, BigDecimal current) {
         Dialog<BigDecimal> dialog = new Dialog<>();
         dialog.setTitle("Monthly Budget — " + periodLabel);
@@ -385,8 +371,6 @@ public class BudgetController {
         return dialog.showAndWait().filter(d -> d != null);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
     private int getSelectedMonth() {
         int idx = monthCombo.getSelectionModel().getSelectedIndex();
         return idx < 0 ? LocalDate.now().getMonthValue() : idx + 1;
@@ -410,8 +394,6 @@ public class BudgetController {
         try { return new BigDecimal(s).compareTo(BigDecimal.ZERO) > 0; }
         catch (NumberFormatException e) { return false; }
     }
-
-    // ── Custom ListView cell ──────────────────────────────────────────────────
 
     private static final class BudgetCell extends ListCell<BudgetDTO> {
         @Override
