@@ -7,22 +7,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class JdbcUserSettingsRepo implements IUserSettingsRepo {
-    static {
-        String ddl = """
-                CREATE TABLE IF NOT EXISTS user_settings (
-                    user_id        BIGINT        PRIMARY KEY
-                                                 REFERENCES users(user_id) ON DELETE CASCADE,
-                    monthly_income NUMERIC(12,2)
-                )
-                """;
-        try (var conn = DatabaseConfig.getConnection();
-             var ps   = conn.prepareStatement(ddl)) {
-            ps.execute();
-        } catch (SQLException e) {
-            throw new DataAccessException("Failed to create user_settings table", e);
-        }
-    }
-
     @Override
     public Optional<BigDecimal> getMonthlyIncome(long userId) {
         var sql = "SELECT monthly_income FROM user_settings WHERE user_id = ?";

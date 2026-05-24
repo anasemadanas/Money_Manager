@@ -8,25 +8,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class JdbcMonthlyBalanceRepo implements IMonthlyBalanceRepo {
-    static {
-        String ddl = """
-                CREATE TABLE IF NOT EXISTS monthly_balance (
-                    balance_id   BIGSERIAL      PRIMARY KEY,
-                    user_id      BIGINT         NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-                    month        SMALLINT       NOT NULL CHECK (month BETWEEN 1 AND 12),
-                    year         SMALLINT       NOT NULL CHECK (year >= 2020),
-                    total_amount NUMERIC(12,2)  NOT NULL CHECK (total_amount > 0),
-                    UNIQUE (user_id, month, year)
-                )
-                """;
-        try (var conn = DatabaseConfig.getConnection();
-             var ps = conn.prepareStatement(ddl)) {
-            ps.execute();
-        } catch (SQLException e) {
-            throw new DataAccessException("Failed to create monthly_balance table", e);
-        }
-    }
-
     @Override
     public Optional<MonthlyBalance> findByUserMonthYear(long userId, int month, int year) {
         var sql = "SELECT balance_id, user_id, month, year, total_amount " +
