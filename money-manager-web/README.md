@@ -141,7 +141,7 @@ The app uses `PORT` when provided by the host, falling back to `8080` locally.
 
 ## Android App
 
-The `android-app` directory contains an Android WebView application that opens the deployed Money Manager website at:
+The companion Android WebView application is maintained as the sibling project [`../android-app`](../android-app/README.md). It opens the deployed Money Manager website at:
 
 ```text
 https://money-manager-t4ed.onrender.com
@@ -149,7 +149,7 @@ https://money-manager-t4ed.onrender.com
 
 It keeps account and finance data on the Spring Boot server, handles Android back navigation within the site, opens external URLs outside the app, and displays a retry screen when the deployment cannot be reached.
 
-Build a debug APK after installing Android SDK API 35 and JDK 17:
+From the repository root, build a debug APK after installing Android SDK API 35 and JDK 17:
 
 ```powershell
 cd android-app

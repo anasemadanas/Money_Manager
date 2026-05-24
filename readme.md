@@ -1,7 +1,7 @@
 # 💰 Money Manager Suite
 > Organize your finances. Track your money. Plan smarter.
 
-A modern, highly-scalable personal finance management suite built in **Java** utilizing a clean **3-Tier Architecture** and strict adherence to **SOLID principles**. The suite offers both a polished **Desktop Client** (built with JavaFX and SQLite) and a robust **Web Application** (built with Spring Boot, Thymeleaf, and PostgreSQL).
+A modern, highly-scalable personal finance management suite built in **Java** utilizing a clean **3-Tier Architecture** and strict adherence to **SOLID principles**. The suite offers a polished **Desktop Client** (built with JavaFX and SQLite), a robust **Web Application** (built with Spring Boot, Thymeleaf, and PostgreSQL), and an **Android Companion App** for mobile access.
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Money__Manager-black?style=for-the-badge&logo=github)](https://github.com/anasemadanas/Money_Manager)
 [![Last Commit](https://img.shields.io/github/last-commit/anasemadanas/Money_Manager?style=for-the-badge)](https://github.com/anasemadanas/Money_Manager)
@@ -35,7 +35,7 @@ A modern, highly-scalable personal finance management suite built in **Java** ut
 
 **Money Manager Suite** is an advanced financial tracking solution designed to give users complete control over their personal finances. By combining clean presentation layers with a powerful, modular backend service layer, the suite guarantees data consistency, security, and a high-performance experience across platforms.
 
-Whether you prefer a lightweight, local-first **Desktop Application** or a connected **Web Application**, this repository provides both.
+Whether you prefer a lightweight, local-first **Desktop Application**, a connected **Web Application**, or a mobile wrapper for the hosted service, this repository provides an appropriate client.
 
 ### Core Architecture Highlights
 - **SOLID Principles**: Strongly separated responsibilities, making features modular, reusable, and easy to test.
@@ -46,12 +46,13 @@ Whether you prefer a lightweight, local-first **Desktop Application** or a conne
 
 ## 📦 Suite Sub-Modules
 
-The workspace consists of two main applications that share the core business logic models, database structures, and service capabilities:
+The workspace consists of three applications: independent desktop and web implementations plus an Android companion for the hosted web service:
 
 | Sub-Module | Technology Stack | Primary Purpose | README Link |
 | :--- | :--- | :--- | :--- |
 | **🖥️ Money Manager Desktop** | Java 17, JavaFX 21, SQLite | A fast, offline-first local desktop client with interactive charts and alerts. | [Desktop README](money-manager/README.md) |
 | **🌐 Money Manager Web** | Java 26, Spring Boot 4.0.6, Thymeleaf, PostgreSQL | A responsive web app providing centralized database access and multi-device support. | [Web README](money-manager-web/README.md) |
+| **Money Manager Android** | Java 17, Android SDK 35, Gradle | A WebView companion app for accessing the deployed web service on Android. | [Android README](android-app/README.md) |
 
 ---
 
@@ -112,6 +113,9 @@ Money_Manager
 │  ├─ pom.xml              # Web Maven configuration
 │  ├─ src/                 # Spring Boot source files & Thymeleaf templates
 │  └─ run.bat              # Script to build & execute web app locally
+├─ android-app             # Android companion application
+│  ├─ build.gradle         # Android Gradle configuration
+│  └─ app/                 # Android application source and resources
 └─ docs/                   # Additional documentation & screenshots
 ```
 
@@ -123,6 +127,7 @@ Money_Manager
 - **Apache Maven**: Version 3.9+ (or use the included `mvnw` wrappers).
 - **PostgreSQL 16+**: Only needed for running the Web sub-module.
 - **SQLite**: Automatic local creation for the Desktop sub-module (no setup required).
+- **Android SDK API 35**: Only needed for building the Android companion app.
 
 ---
 
@@ -152,6 +157,14 @@ cd ../money-manager-web
 mvn clean spring-boot:run
 ```
 > 🌐 *For template designs, controller logic, and deployment scripts, read the [Web Module README](money-manager-web/README.md).*
+
+### 4. Build the Android Companion App
+From the web module used in the previous step, move to the Android project and build a debug APK with the included Gradle Wrapper:
+```powershell
+cd ..\android-app
+.\gradlew.bat assembleDebug
+```
+> *For app behavior and output details, read the [Android Module README](android-app/README.md).*
 
 ---
 
