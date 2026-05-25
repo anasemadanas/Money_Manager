@@ -618,7 +618,6 @@ Distributed under the MIT License.
 | GitHub   | [https://github.com/anasemadanas](https://github.com/anasemadanas)                     |
 | LinkedIn | [https://www.linkedin.com/in/eng-anasemad/](https://www.linkedin.com/in/eng-anasemad/) |
 | Email    | [Email](mailto:anasemadanas1@gmail.com)                                  |
-)
 
 # 📚 Source References
 
