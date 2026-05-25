@@ -1,14 +1,21 @@
 # Money Manager Android
 
-Money Manager Android is a small Android WebView companion application for the hosted Money Manager web service. It lives as a root-level project because it has its own Gradle build, SDK requirements, and release artifact, independent of the Spring Boot source tree.
+Money Manager Android is a standalone, offline personal finance app located in
+the repository root at `android-app`. It is native Android Java and does not
+connect to the web service.
 
-## Behavior
+## Offline Features
 
-- Opens `https://money-manager-t4ed.onrender.com`.
-- Stores finance data on the web server rather than locally.
-- Supports browser-style back navigation inside the app.
-- Sends external links to the installed browser.
-- Shows a retry screen when the hosted service cannot be reached.
+- Dashboard with current-month income, expenses, balance, recent entries, and budget progress.
+- Local transaction management for income and expenses.
+- Monthly category budgets with warning and limit progress states.
+- Savings goals with contribution tracking.
+- Financial notes.
+- Private SQLite storage on the device; the manifest requests no Internet permission.
+
+Money amounts are persisted as integer cents to avoid floating-point rounding
+errors. Removing the application clears its local database unless device backup
+behavior is changed later.
 
 ## Requirements
 

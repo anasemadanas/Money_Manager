@@ -4,11 +4,5 @@
     <color name="surface">#F3F6F8</color>
     <color name="text_primary">#102A2E</color>
     <color name="text_secondary">#647579</color>
-    <color name="header_secondary">#BFE4E1</color>
-    <color name="nav_unselected">#E9F3F2</color>
-    <color name="card_border">#E0E8EA</color>
-    <color name="income">#087F5B</color>
-    <color name="expense">#C63C45</color>
-    <color name="warning">#D48217</color>
     <color name="launcher_background">#072E34</color>
 </resources>

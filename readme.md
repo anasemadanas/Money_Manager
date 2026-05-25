@@ -1,7 +1,7 @@
 # 💰 Money Manager Suite
 > Organize your finances. Track your money. Plan smarter.
 
-A modern, highly-scalable personal finance management suite built in **Java** utilizing a clean **3-Tier Architecture** and strict adherence to **SOLID principles**. The suite offers a polished **Desktop Client** (built with JavaFX and SQLite), a robust **Web Application** (built with Spring Boot, Thymeleaf, and PostgreSQL), and an **Android Companion App** for mobile access.
+A modern, highly-scalable personal finance management suite built in **Java** utilizing a clean **3-Tier Architecture** and strict adherence to **SOLID principles**. The suite offers a polished **Desktop Client** (built with JavaFX and SQLite), a robust **Web Application** (built with Spring Boot, Thymeleaf, and PostgreSQL), and a native offline **Android App** for mobile access.
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Money__Manager-black?style=for-the-badge&logo=github)](https://github.com/anasemadanas/Money_Manager)
 [![Last Commit](https://img.shields.io/github/last-commit/anasemadanas/Money_Manager?style=for-the-badge)](https://github.com/anasemadanas/Money_Manager)
@@ -46,13 +46,13 @@ Whether you prefer a lightweight, local-first **Desktop Application**, a connect
 
 ## 📦 Suite Sub-Modules
 
-The workspace consists of three applications: independent desktop and web implementations plus an Android companion for the hosted web service:
+The workspace consists of three applications: independent desktop, web, and offline Android implementations:
 
 | Sub-Module | Technology Stack | Primary Purpose | README Link |
 | :--- | :--- | :--- | :--- |
 | **🖥️ Money Manager Desktop** | Java 17, JavaFX 21, SQLite | A fast, offline-first local desktop client with interactive charts and alerts. | [Desktop README](money-manager/README.md) |
 | **🌐 Money Manager Web** | Java 26, Spring Boot 4.0.6, Thymeleaf, PostgreSQL | A responsive web app providing centralized database access and multi-device support. | [Web README](money-manager-web/README.md) |
-| **Money Manager Android** | Java 17, Android SDK 35, Gradle | A WebView companion app for accessing the deployed web service on Android. | [Android README](android-app/README.md) |
+| **Money Manager Android** | Java 17, Android SDK 35, SQLite, Gradle | A native offline mobile ledger with on-device storage. | [Android README](android-app/README.md) |
 
 ---
 
@@ -113,7 +113,7 @@ Money_Manager
 │  ├─ pom.xml              # Web Maven configuration
 │  ├─ src/                 # Spring Boot source files & Thymeleaf templates
 │  └─ run.bat              # Script to build & execute web app locally
-├─ android-app             # Android companion application
+├─ android-app             # Native offline Android application
 │  ├─ build.gradle         # Android Gradle configuration
 │  └─ app/                 # Android application source and resources
 └─ docs/                   # Additional documentation & screenshots
@@ -127,7 +127,7 @@ Money_Manager
 - **Apache Maven**: Version 3.9+ (or use the included `mvnw` wrappers).
 - **PostgreSQL 16+**: Only needed for running the Web sub-module.
 - **SQLite**: Automatic local creation for the Desktop sub-module (no setup required).
-- **Android SDK API 35**: Only needed for building the Android companion app.
+- **Android SDK API 35**: Only needed for building the offline Android app.
 
 ---
 
@@ -158,7 +158,7 @@ mvn clean spring-boot:run
 ```
 > 🌐 *For template designs, controller logic, and deployment scripts, read the [Web Module README](money-manager-web/README.md).*
 
-### 4. Build the Android Companion App
+### 4. Build the Offline Android App
 From the web module used in the previous step, move to the Android project and build a debug APK with the included Gradle Wrapper:
 ```powershell
 cd ..\android-app
@@ -183,7 +183,7 @@ Contributions are welcome and highly appreciated! Please follow these guidelines
 ## 🔮 Future Enhancements
 
 - 📊 **Advanced Analytics**: Add monthly PDF report generators and CSV exports.
-- 📱 **Mobile Synchronizer**: Integrate a lightweight React Native or Flutter companion app.
+- 📱 **Mobile Synchronizer**: Add optional encrypted backup and synchronization for offline mobile data.
 - ☁️ **Hybrid Sync**: Enable optional cloud backup from the local SQLite desktop client to the Web Server PostgreSQL instance.
 - 🤖 **AI Financial Coach**: Implement localized LLM insights to evaluate budget efficiency and spending trends.
 

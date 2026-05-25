@@ -1,7 +1,23 @@
 <resources>
     <string name="app_name">Money Manager</string>
-    <string name="connection_title">Cannot reach Money Manager</string>
-    <string name="connection_error">Check your connection and try again. The server may also be starting up.</string>
-    <string name="retry">Try again</string>
-    <string name="unable_to_open_link">No app can open this link.</string>
+    <string name="offline_subtitle">Private offline ledger - stored only on this device</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="transactions">Transactions</string>
+    <string name="budgets">Budgets</string>
+    <string name="goals">Goals</string>
+    <string name="notes">Notes</string>
+    <string name="income">Income</string>
+    <string name="expenses">Expenses</string>
+    <string name="balance">Balance</string>
+    <string name="budget_snapshot">Monthly budgets</string>
+    <string name="recent_transactions">Recent transactions</string>
+    <string name="add_transaction">+ Add</string>
+    <string name="add_budget">+ Add</string>
+    <string name="add_goal">+ Add</string>
+    <string name="add_note">+ Add</string>
+    <string name="month_summary">%1$s summary</string>
+    <string name="empty_transactions">No transactions yet. Add income or an expense to begin.</string>
+    <string name="empty_budgets">No budgets configured. Add a category limit to track spending.</string>
+    <string name="empty_goals">No savings goals yet.</string>
+    <string name="empty_notes">No financial notes saved yet.</string>
 </resources>

@@ -1,67 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <WebView
-        android:id="@+id/web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_gravity="top"
-        android:max="100"
-        android:progressTint="@color/primary"
-        android:visibility="gone" />
+    android:layout_height="match_parent"
+    android:background="@color/surface"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/error_panel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_dark"
         android:orientation="vertical"
-        android:padding="32dp"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="68dp"
-            android:layout_height="68dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_wallet_mark" />
+        android:paddingStart="20dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="@string/connection_title"
-            android:textColor="@color/text_primary"
-            android:textSize="22sp"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/error_message"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/connection_error"
-            android:textColor="@color/text_secondary"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/retry_button"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="28dp"
-            android:backgroundTint="@color/primary"
-            android:text="@string/retry"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="4dp"
+            android:text="@string/offline_subtitle"
+            android:textColor="@color/header_secondary"
+            android:textSize="13sp" />
     </LinearLayout>
-</FrameLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/nav_dashboard"
+                style="@style/NavButton"
+                android:text="@string/dashboard" />
+
+            <Button
+                android:id="@+id/nav_transactions"
+                style="@style/NavButton"
+                android:text="@string/transactions" />
+
+            <Button
+                android:id="@+id/nav_budgets"
+                style="@style/NavButton"
+                android:text="@string/budgets" />
+
+            <Button
+                android:id="@+id/nav_goals"
+                style="@style/NavButton"
+                android:text="@string/goals" />
+
+            <Button
+                android:id="@+id/nav_notes"
+                style="@style/NavButton"
+                android:text="@string/notes" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:id="@+id/screen_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/month_title"
+                    style="@style/SectionTitle"
+                    android:text="@string/dashboard" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        style="@style/SummaryCard"
+                        android:layout_width="0dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            style="@style/SummaryLabel"
+                            android:text="@string/income" />
+
+                        <TextView
+                            android:id="@+id/income_value"
+                            style="@style/SummaryValue"
+                            android:textColor="@color/income" />
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="1dp" />
+
+                    <LinearLayout
+                        style="@style/SummaryCard"
+                        android:layout_width="0dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            style="@style/SummaryLabel"
+                            android:text="@string/expenses" />
+
+                        <TextView
+                            android:id="@+id/expense_value"
+                            style="@style/SummaryValue"
+                            android:textColor="@color/expense" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/SummaryCard"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        style="@style/SummaryLabel"
+                        android:text="@string/balance" />
+
+                    <TextView
+                        android:id="@+id/balance_value"
+                        style="@style/SummaryValue" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/SectionTitle"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/budget_snapshot" />
+
+                <LinearLayout
+                    android:id="@+id/dashboard_budgets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <TextView
+                    style="@style/SectionTitle"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/recent_transactions" />
+
+                <LinearLayout
+                    android:id="@+id/recent_transactions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/screen_transactions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <include layout="@layout/header_transactions" />
+
+                <LinearLayout
+                    android:id="@+id/transaction_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/screen_budgets"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <include layout="@layout/header_budgets" />
+
+                <LinearLayout
+                    android:id="@+id/budget_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/screen_goals"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <include layout="@layout/header_goals" />
+
+                <LinearLayout
+                    android:id="@+id/goal_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/screen_notes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <include layout="@layout/header_notes" />
+
+                <LinearLayout
+                    android:id="@+id/note_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</LinearLayout>
