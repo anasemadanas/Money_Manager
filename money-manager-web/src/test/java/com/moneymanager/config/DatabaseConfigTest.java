@@ -43,6 +43,18 @@ class DatabaseConfigTest {
     }
 
     @Test
+    void readsRenderInternalDatabaseUrlWithEmbeddedCredentials() {
+        DatabaseConfig.DatabaseSettings settings = DatabaseConfig.resolveSettings(
+                localProperties(),
+                Map.of("DATABASE_URL", "postgresql://render-user:render-password@dpg-example-a/render-db")
+        );
+
+        assertEquals("jdbc:postgresql://dpg-example-a:5432/render-db", settings.url());
+        assertEquals("render-user", settings.username());
+        assertEquals("render-password", settings.password());
+    }
+
+    @Test
     void retainsAnExplicitSupabaseSslMode() {
         assertEquals(
                 "jdbc:postgresql://db.project.supabase.co:5432/postgres?sslmode=verify-full",

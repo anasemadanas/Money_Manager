@@ -63,19 +63,17 @@ db.username=postgres
 db.password=123456
 ```
 
-For Supabase, copy the **Session pooler** connection details from the project's Connect panel. Session mode on port `5432` is suitable for this long-running Spring Boot server and also works on IPv4 hosts such as Render.
+For a Render Postgres database used by a Render web service, copy the **Internal Database URL** from the database Connections page. The internal URL keeps database traffic on Render's private network and includes the database username and password.
 
-Set these environment variables locally for testing, or on the hosting platform for deployment:
+Set this environment variable on the Render web service:
 
 ```text
-DATABASE_URL=postgres://postgres.PROJECT_REF@aws-0-REGION.pooler.supabase.com:5432/postgres
-DATABASE_USERNAME=postgres.PROJECT_REF
-DATABASE_PASSWORD=your_database_password
+DATABASE_URL=postgresql://DB_USER:DB_PASSWORD@INTERNAL_HOST/DB_NAME
 ```
 
-The app adds `sslmode=require` automatically for Supabase hosts unless an explicit SSL mode is already in the URL. The username and password can instead be embedded in `DATABASE_URL`, but keep secrets in environment variables and URL-encode special characters if you do that.
+The app reads credentials embedded in Render's generated database URL. It also supports `DATABASE_USERNAME` and `DATABASE_PASSWORD` when credentials are supplied separately. Do not store the generated URL in source control because it contains the database password.
 
-This application connects to Supabase through server-side PostgreSQL/JDBC. It does not expose a Supabase public client key in the browser or use the Data API.
+Supabase remains supported: use its Session pooler URL for an IPv4 Render service and set `DATABASE_USERNAME` and `DATABASE_PASSWORD` separately, as needed. Supabase hosts automatically receive `sslmode=require` unless the URL already specifies an SSL mode.
 
 ## Run Locally
 
@@ -94,12 +92,10 @@ $env:LOCAL_DATABASE_PASSWORD='your_local_password'
 .\run-local.bat
 ```
 
-To run the web app locally while connected to online Supabase:
+To run the web app locally while connected to hosted PostgreSQL:
 
 ```powershell
-$env:DATABASE_URL='postgres://postgres.PROJECT_REF@aws-0-REGION.pooler.supabase.com:5432/postgres'
-$env:DATABASE_USERNAME='postgres.PROJECT_REF'
-$env:DATABASE_PASSWORD='your_database_password'
+$env:DATABASE_URL='postgresql://DB_USER:DB_PASSWORD@EXTERNAL_HOST/DB_NAME'
 .\run-web.bat
 ```
 
@@ -134,9 +130,9 @@ This repo includes a `Dockerfile` and `render.yaml` for Render deployment.
 1. Push this repository to GitHub.
 2. Create a new Render Blueprint to apply `render.yaml`, or configure an existing Web Service manually.
 3. Use the included Dockerfile.
-4. Set `DATABASE_URL`, `DATABASE_USERNAME`, and `DATABASE_PASSWORD` in Render environment variables using the Supabase Session pooler details shown above.
-5. For an existing service, add the variables on its **Environment** page and choose **Save and deploy**. Render prompts for `sync: false` Blueprint secrets only during initial Blueprint creation; later Blueprint syncs do not populate them. See the [Render Blueprint reference](https://render.com/docs/blueprint-spec#prompting-for-secret-values).
-6. Deploy and confirm startup logs show the Supabase pooler host rather than `localhost:5432`.
+4. Set `DATABASE_URL` to your Render Postgres **Internal Database URL** on the web service Environment page.
+5. For an existing service, add the variable and choose **Save and deploy**. Render prompts for `sync: false` Blueprint secrets only during initial Blueprint creation; later Blueprint syncs do not populate them. See the [Render Blueprint reference](https://render.com/docs/blueprint-spec#prompting-for-secret-values).
+6. Deploy and confirm startup logs show the Render internal database host rather than `localhost:5432`.
 
 The app uses `PORT` when provided by the host, falling back to `8080` locally.
 

@@ -12,12 +12,7 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
 
-      # Enter these values during initial Blueprint setup, or in Environment for an existing service.
+      # Paste the Render Postgres Internal Database URL during Blueprint setup,
+      # or add it in Environment for an existing service.
       - key: DATABASE_URL
-        sync: false
-
-      - key: DATABASE_USERNAME
-        sync: false
-
-      - key: DATABASE_PASSWORD
         sync: false
