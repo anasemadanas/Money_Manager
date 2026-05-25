@@ -12,6 +12,7 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
 
+      # Enter these values during initial Blueprint setup, or in Environment for an existing service.
       - key: DATABASE_URL
         sync: false
 

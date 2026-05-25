@@ -53,7 +53,7 @@ money-manager-web
 
 ## Database Configuration
 
-The app reads database settings from environment variables first, then falls back to `src/main/resources/db.properties`.
+The app reads database settings from environment variables first, then falls back to `src/main/resources/db.properties` for local development. On Render, or with the `prod` Spring profile enabled, `DATABASE_URL` is required so a deployed service cannot accidentally try local PostgreSQL.
 
 For local development:
 
@@ -132,10 +132,11 @@ mvnw.cmd test
 This repo includes a `Dockerfile` and `render.yaml` for Render deployment.
 
 1. Push this repository to GitHub.
-2. Create a new Render Blueprint or Web Service.
+2. Create a new Render Blueprint to apply `render.yaml`, or configure an existing Web Service manually.
 3. Use the included Dockerfile.
 4. Set `DATABASE_URL`, `DATABASE_USERNAME`, and `DATABASE_PASSWORD` in Render environment variables using the Supabase Session pooler details shown above.
-5. Deploy and open the generated Render URL.
+5. For an existing service, add the variables on its **Environment** page and choose **Save and deploy**. Render prompts for `sync: false` Blueprint secrets only during initial Blueprint creation; later Blueprint syncs do not populate them. See the [Render Blueprint reference](https://render.com/docs/blueprint-spec#prompting-for-secret-values).
+6. Deploy and confirm startup logs show the Supabase pooler host rather than `localhost:5432`.
 
 The app uses `PORT` when provided by the host, falling back to `8080` locally.
 

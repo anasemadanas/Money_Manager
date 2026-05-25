@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatabaseConfigTest {
 
@@ -48,6 +50,36 @@ class DatabaseConfigTest {
                         "postgresql://db.project.supabase.co:5432/postgres?sslmode=verify-full"
                 )
         );
+    }
+
+    @Test
+    void rejectsLocalFallbackWhenRunningOnRenderWithoutDatabaseUrl() {
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                () -> DatabaseConfig.resolveSettings(localProperties(), Map.of("RENDER", "true"))
+        );
+
+        assertTrue(exception.getMessage().contains("DATABASE_URL is required in production"));
+    }
+
+    @Test
+    void rejectsLocalFallbackForProdProfileWithoutDatabaseUrl() {
+        assertThrows(
+                IllegalStateException.class,
+                () -> DatabaseConfig.resolveSettings(
+                        localProperties(),
+                        Map.of("SPRING_PROFILES_ACTIVE", "prod")
+                )
+        );
+    }
+
+    @Test
+    void retainsLocalFallbackOutsideProduction() {
+        DatabaseConfig.DatabaseSettings settings = DatabaseConfig.resolveSettings(localProperties(), Map.of());
+
+        assertEquals("jdbc:postgresql://localhost:5432/moneymanager", settings.url());
+        assertEquals("postgres", settings.username());
+        assertEquals("local-password", settings.password());
     }
 
     private static Properties localProperties() {

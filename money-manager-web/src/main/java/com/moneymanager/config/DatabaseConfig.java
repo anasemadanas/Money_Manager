@@ -35,8 +35,17 @@ public class DatabaseConfig {
     }
 
     static DatabaseSettings resolveSettings(Properties properties, Map<String, String> environment) {
+        String environmentUrl = firstNonBlank(environment.get("DATABASE_URL"));
+
+        if (environmentUrl == null && isProductionRuntime(environment)) {
+            throw new IllegalStateException(
+                    "DATABASE_URL is required in production. Set it in the Render service environment, "
+                            + "plus DATABASE_USERNAME and DATABASE_PASSWORD unless the URL includes credentials."
+            );
+        }
+
         String rawUrl = firstNonBlank(
-                environment.get("DATABASE_URL"),
+                environmentUrl,
                 properties.getProperty("db.url"),
                 "jdbc:postgresql://localhost:5432/postgres"
         );
@@ -56,6 +65,23 @@ public class DatabaseConfig {
         );
 
         return new DatabaseSettings(url, user, password);
+    }
+
+    private static boolean isProductionRuntime(Map<String, String> environment) {
+        if ("true".equalsIgnoreCase(environment.get("RENDER"))) {
+            return true;
+        }
+
+        String activeProfiles = environment.get("SPRING_PROFILES_ACTIVE");
+        if (activeProfiles != null) {
+            for (String profile : activeProfiles.split(",")) {
+                if ("prod".equalsIgnoreCase(profile.trim())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     static String normalizeDatabaseUrl(String rawUrl) {
