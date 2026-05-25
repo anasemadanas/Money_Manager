@@ -20,7 +20,9 @@ A modern, highly-scalable personal finance management suite built in **Java** ut
 - [🧾 Introduction](#-introduction)
 - [📦 Suite Sub-Modules](#-suite-sub-modules)
 - [✨ Core Features](#-core-features)
+- [🖼️ Screenshots](#-screenshots)
 - [🧱 System Architecture](#-system-architecture)
+- [📐 Design Diagrams](#-design-diagrams)
 - [📂 Project Layout](#-project-layout)
 - [⚙️ Global Requirements](#-global-requirements)
 - [🚀 Getting Started](#-getting-started)
@@ -68,6 +70,18 @@ The workspace consists of three applications: independent desktop, web, and offl
 
 ---
 
+## 🖼️ Screenshots
+
+| Login | Dashboard |
+| :---: | :---: |
+| ![Login screen](screenshots/login.png) | ![Dashboard screen](screenshots/dashboard.png) |
+| **Transactions** | **Budgets** |
+| ![Transactions screen](screenshots/transaction.png) | ![Budgets screen](screenshots/budget.png) |
+| **Savings Goals** | **Notes** |
+| ![Savings goals screen](screenshots/goal.png) | ![Notes screen](screenshots/note.png) |
+
+---
+
 ## 🧱 System Architecture
 
 The following diagram illustrates how the modular layers are organized across both projects:
@@ -98,6 +112,24 @@ The following diagram illustrates how the modular layers are organized across bo
 
 ---
 
+## 📐 Design Diagrams
+
+| Application Overview | Use Case Diagram |
+| :---: | :---: |
+| ![Money Manager application diagram](screenshots/MoneyManager.svg) | ![Use case diagram](screenshots/use-case.svg) |
+| **Class Diagram** | **Database Schema** |
+| ![Class diagram](screenshots/ClassDiagram.svg) | ![Database schema diagram](screenshots/DatabaseSchema.svg) |
+| **ER Diagram** | **EER Diagram** |
+| ![Entity relationship diagram](screenshots/ERDiagram.svg) | ![Enhanced entity relationship diagram](screenshots/EERDiagram.svg) |
+| **Login to Dashboard Sequence** | **Add Expense Sequence** |
+| ![Login to dashboard sequence diagram](screenshots/SequenceLoginToDashboard.svg) | ![Add expense sequence diagram](screenshots/SequenceAddExpense.svg) |
+
+### Add Expense Activity Flow
+
+![Add expense activity diagram](screenshots/activity-add-expense-transaction.svg)
+
+---
+
 ## 📂 Project Layout
 
 ```bash
@@ -116,7 +148,8 @@ Money_Manager
 ├─ android-app             # Native offline Android application
 │  ├─ build.gradle         # Android Gradle configuration
 │  └─ app/                 # Android application source and resources
-└─ docs/                   # Additional documentation & screenshots
+├─ docs/                   # SRS documents and PlantUML sources
+└─ screenshots/            # UI screenshots and exported SVG diagrams
 ```
 
 ---
