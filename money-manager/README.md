@@ -619,10 +619,6 @@ Distributed under the MIT License.
 | LinkedIn | [https://www.linkedin.com/in/eng-anasemad/](https://www.linkedin.com/in/eng-anasemad/) |
 | Email    | [Email](mailto:anasemadanas1@gmail.com)                                  |
 
-# 📚 Source References
-
-This unified document was created by merging and organizing content from the uploaded project files. fileciteturn0file0L1-L260 fileciteturn0file1L1-L700
-
 ---
 [↩️ Back to Table of Contents](#-Table-of-Contents)
 ---
