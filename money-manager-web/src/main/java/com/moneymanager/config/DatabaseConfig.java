@@ -52,14 +52,14 @@ public class DatabaseConfig {
 
         String url = normalizeDatabaseUrl(rawUrl);
         String user = firstNonBlank(
-                environment.get("DATABASE_USERNAME"),
                 extractUsernameFromUrl(rawUrl),
+                environment.get("DATABASE_USERNAME"),
                 properties.getProperty("db.username"),
                 "postgres"
         );
         String password = firstNonNull(
-                environment.get("DATABASE_PASSWORD"),
                 extractPasswordFromUrl(rawUrl),
+                environment.get("DATABASE_PASSWORD"),
                 properties.getProperty("db.password"),
                 ""
         );

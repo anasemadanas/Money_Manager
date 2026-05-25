@@ -46,7 +46,11 @@ class DatabaseConfigTest {
     void readsRenderInternalDatabaseUrlWithEmbeddedCredentials() {
         DatabaseConfig.DatabaseSettings settings = DatabaseConfig.resolveSettings(
                 localProperties(),
-                Map.of("DATABASE_URL", "postgresql://render-user:render-password@dpg-example-a/render-db")
+                Map.of(
+                        "DATABASE_URL", "postgresql://render-user:render-password@dpg-example-a/render-db",
+                        "DATABASE_USERNAME", "stale-supabase-user",
+                        "DATABASE_PASSWORD", "stale-supabase-password"
+                )
         );
 
         assertEquals("jdbc:postgresql://dpg-example-a:5432/render-db", settings.url());

@@ -71,7 +71,7 @@ Set this environment variable on the Render web service:
 DATABASE_URL=postgresql://DB_USER:DB_PASSWORD@INTERNAL_HOST/DB_NAME
 ```
 
-The app reads credentials embedded in Render's generated database URL. It also supports `DATABASE_USERNAME` and `DATABASE_PASSWORD` when credentials are supplied separately. Do not store the generated URL in source control because it contains the database password.
+The app reads credentials embedded in Render's generated database URL, which take precedence over separate credential variables. It also supports `DATABASE_USERNAME` and `DATABASE_PASSWORD` when the URL does not contain credentials. Do not store the generated URL in source control because it contains the database password.
 
 Supabase remains supported: use its Session pooler URL for an IPv4 Render service and set `DATABASE_USERNAME` and `DATABASE_PASSWORD` separately, as needed. Supabase hosts automatically receive `sslmode=require` unless the URL already specifies an SSL mode.
 
