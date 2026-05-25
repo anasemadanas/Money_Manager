@@ -617,7 +617,7 @@ Distributed under the MIT License.
 | -------- | -------------------------------------------------------------------------------------- |
 | GitHub   | [https://github.com/anasemadanas](https://github.com/anasemadanas)                     |
 | LinkedIn | [https://www.linkedin.com/in/eng-anasemad/](https://www.linkedin.com/in/eng-anasemad/) |
-| Email    | [anaspython3@gmail.com](mailto:anasemadanas1@gmail.com)                                  |
+| Email    | [Email](mailto:anasemadanas1@gmail.com)                                  |
 )
 
 # 📚 Source References
