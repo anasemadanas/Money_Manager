@@ -34,12 +34,13 @@ public class JdbcBudgetRepo implements IBudgetRepo {
     }
 
     @Override
-    public void updateCap(long budgetId, BigDecimal newCap) {
-        var sql = "UPDATE budgets SET amount_cap = ? WHERE budget_id = ?";
+    public void updateCap(long budgetId, long userId, BigDecimal newCap) {
+        var sql = "UPDATE budgets SET amount_cap = ? WHERE budget_id = ? AND user_id = ?";
         try (var conn = DatabaseConfig.getConnection();
              var ps = conn.prepareStatement(sql)) {
             ps.setBigDecimal(1, newCap);
             ps.setLong(2, budgetId);
+            ps.setLong(3, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to update budget cap", e);
@@ -47,10 +48,11 @@ public class JdbcBudgetRepo implements IBudgetRepo {
     }
 
     @Override
-    public void delete(long budgetId) {
+    public void delete(long budgetId, long userId) {
         try (var conn = DatabaseConfig.getConnection();
-             var ps = conn.prepareStatement("DELETE FROM budgets WHERE budget_id = ?")) {
+             var ps = conn.prepareStatement("DELETE FROM budgets WHERE budget_id = ? AND user_id = ?")) {
             ps.setLong(1, budgetId);
+            ps.setLong(2, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to delete budget", e);

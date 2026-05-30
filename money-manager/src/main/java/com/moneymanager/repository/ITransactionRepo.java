@@ -13,7 +13,7 @@ public interface ITransactionRepo {
 
     void update(Transaction tx);
 
-    void delete(long transactionId);
+    void delete(long transactionId, long userId);
 
     List<String> findDistinctCategories(long userId);
 }

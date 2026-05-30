@@ -4,8 +4,12 @@ import com.moneymanager.config.DatabaseConfig;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConnectionTest {
+    private static final Logger LOGGER = Logger.getLogger(ConnectionTest.class.getName());
+
     public static void main(String[] args) {
         try (Connection conn = DatabaseConfig.getConnection();
              Statement stmt = conn.createStatement();
@@ -16,7 +20,7 @@ public class ConnectionTest {
             }
         } catch (Exception e) {
             System.err.println("Connection FAILED: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Connection failed", e);
             System.exit(1);
         }
     }

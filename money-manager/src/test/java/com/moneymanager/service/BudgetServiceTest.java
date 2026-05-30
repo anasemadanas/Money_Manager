@@ -32,9 +32,9 @@ class BudgetServiceTest {
         @Override
         public Budget save(Budget budget) { lastSaved = budget; budget.setBudgetId(10L); return budget; }
         @Override
-        public void updateCap(long budgetId, BigDecimal newCap) {}
+        public void updateCap(long budgetId, long userId, BigDecimal newCap) {}
         @Override
-        public void delete(long budgetId) { lastDeletedBudget = budgetId; }
+        public void delete(long budgetId, long userId) { lastDeletedBudget = budgetId; }
         @Override
         public List<BudgetDTO> findWithSpending(long userId, int month, int year) { return budgetDtos; }
         @Override
@@ -137,17 +137,17 @@ class BudgetServiceTest {
 
     @Test
     void updateCap_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> service.updateCap(1L, new BigDecimal("300")));
+        assertDoesNotThrow(() -> service.updateCap(1L, 1L, new BigDecimal("300")));
     }
 
     @Test
     void updateCap_zeroCap_throws() {
-        assertThrows(IllegalArgumentException.class, () -> service.updateCap(1L, BigDecimal.ZERO));
+        assertThrows(IllegalArgumentException.class, () -> service.updateCap(1L, 1L, BigDecimal.ZERO));
     }
 
     @Test
     void delete_callsRepo() {
-        service.delete(7L);
+        service.delete(7L, 1L);
         assertEquals(7L, lastDeletedBudget);
     }
 

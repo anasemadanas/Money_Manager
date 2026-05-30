@@ -2,6 +2,7 @@ package com.moneymanager.service;
 
 import com.moneymanager.dto.TransactionDTO;
 import com.moneymanager.model.Transaction;
+import com.moneymanager.model.TransactionType;
 import com.moneymanager.repository.ITransactionRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ class TransactionServiceTest {
     private Transaction lastSaved;
     private Transaction lastUpdated;
     private long lastDeleted;
+    private long lastDeletedUser;
 
     private final ITransactionRepo stub = new ITransactionRepo() {
         @Override
@@ -32,7 +34,10 @@ class TransactionServiceTest {
         @Override
         public void update(Transaction tx) { lastUpdated = tx; }
         @Override
-        public void delete(long transactionId) { lastDeleted = transactionId; }
+        public void delete(long transactionId, long userId) {
+            lastDeleted = transactionId;
+            lastDeletedUser = userId;
+        }
         @Override
         public List<String> findDistinctCategories(long userId) { return List.of(); }
     };
@@ -46,10 +51,11 @@ class TransactionServiceTest {
         lastSaved = null;
         lastUpdated = null;
         lastDeleted = -1;
+        lastDeletedUser = -1;
     }
 
     private TransactionDTO validDto() {
-        return new TransactionDTO(0, "Coffee", new BigDecimal("4.50"), "Food", "EXPENSE", today);
+        return new TransactionDTO(0, "Coffee", new BigDecimal("4.50"), "Food", TransactionType.EXPENSE, today);
     }
 
     @Test
@@ -63,55 +69,48 @@ class TransactionServiceTest {
 
     @Test
     void add_validIncome_accepted() {
-        TransactionDTO dto = new TransactionDTO(0, "Salary", new BigDecimal("3000"), "Other", "INCOME", today);
+        TransactionDTO dto = new TransactionDTO(0, "Salary", new BigDecimal("3000"), "Other", TransactionType.INCOME, today);
         assertDoesNotThrow(() -> service.add(1L, dto));
-        assertEquals("INCOME", lastSaved.getTxType());
+        assertEquals(TransactionType.INCOME, lastSaved.getTxType());
     }
 
     @Test
     void add_nullName_throws() {
-        TransactionDTO dto = new TransactionDTO(0, null, new BigDecimal("10"), "Food", "EXPENSE", today);
+        TransactionDTO dto = new TransactionDTO(0, null, new BigDecimal("10"), "Food", TransactionType.EXPENSE, today);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
         assertTrue(ex.getMessage().contains("Name is required"));
     }
 
     @Test
     void add_blankName_throws() {
-        TransactionDTO dto = new TransactionDTO(0, "   ", new BigDecimal("10"), "Food", "EXPENSE", today);
+        TransactionDTO dto = new TransactionDTO(0, "   ", new BigDecimal("10"), "Food", TransactionType.EXPENSE, today);
         assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
     }
 
     @Test
     void add_zeroAmount_throws() {
-        TransactionDTO dto = new TransactionDTO(0, "Rent", BigDecimal.ZERO, "Bills", "EXPENSE", today);
+        TransactionDTO dto = new TransactionDTO(0, "Rent", BigDecimal.ZERO, "Bills", TransactionType.EXPENSE, today);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
         assertTrue(ex.getMessage().contains("greater than zero"));
     }
 
     @Test
     void add_negativeAmount_throws() {
-        TransactionDTO dto = new TransactionDTO(0, "Rent", new BigDecimal("-50"), "Bills", "EXPENSE", today);
+        TransactionDTO dto = new TransactionDTO(0, "Rent", new BigDecimal("-50"), "Bills", TransactionType.EXPENSE, today);
         assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
     }
 
     @Test
     void add_nullAmount_throws() {
-        TransactionDTO dto = new TransactionDTO(0, "Rent", null, "Bills", "EXPENSE", today);
+        TransactionDTO dto = new TransactionDTO(0, "Rent", null, "Bills", TransactionType.EXPENSE, today);
         assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
     }
 
     @Test
     void add_blankCategory_throws() {
-        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "", "EXPENSE", today);
+        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "", TransactionType.EXPENSE, today);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
         assertTrue(ex.getMessage().contains("Category is required"));
-    }
-
-    @Test
-    void add_invalidTxType_throws() {
-        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", "TRANSFER", today);
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
-        assertTrue(ex.getMessage().contains("INCOME or EXPENSE"));
     }
 
     @Test
@@ -122,7 +121,7 @@ class TransactionServiceTest {
 
     @Test
     void add_nullDate_throws() {
-        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", "EXPENSE", null);
+        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", TransactionType.EXPENSE, null);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
         assertTrue(ex.getMessage().contains("Date is required"));
     }
@@ -130,14 +129,14 @@ class TransactionServiceTest {
     @Test
     void add_futureDate_throws() {
         LocalDate future = today.plusDays(1);
-        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", "EXPENSE", future);
+        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", TransactionType.EXPENSE, future);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> service.add(1L, dto));
         assertTrue(ex.getMessage().contains("future"));
     }
 
     @Test
     void add_todayDate_accepted() {
-        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", "EXPENSE", today);
+        TransactionDTO dto = new TransactionDTO(0, "Coffee", new BigDecimal("4"), "Food", TransactionType.EXPENSE, today);
         assertDoesNotThrow(() -> service.add(1L, dto));
     }
 
@@ -151,14 +150,15 @@ class TransactionServiceTest {
 
     @Test
     void update_invalidDto_throwsBeforeRepoCall() {
-        TransactionDTO bad = new TransactionDTO(5, "", new BigDecimal("10"), "Food", "EXPENSE", today);
+        TransactionDTO bad = new TransactionDTO(5, "", new BigDecimal("10"), "Food", TransactionType.EXPENSE, today);
         assertThrows(IllegalArgumentException.class, () -> service.update(5L, 1L, bad));
         assertNull(lastUpdated);
     }
 
     @Test
     void delete_callsRepo() {
-        service.delete(42L);
+        service.delete(42L, 1L);
         assertEquals(42L, lastDeleted);
+        assertEquals(1L, lastDeletedUser);
     }
 }

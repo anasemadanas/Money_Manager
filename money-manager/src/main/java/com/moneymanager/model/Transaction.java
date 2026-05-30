@@ -11,7 +11,7 @@ public class Transaction {
     private String name;
     private BigDecimal amount;
     private String category;
-    private String txType;
+    private TransactionType txType;
     private LocalDate txDate;
     private OffsetDateTime createdAt;
 
@@ -32,8 +32,8 @@ public class Transaction {
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
 
-    public String getTxType() { return txType; }
-    public void setTxType(String txType) { this.txType = txType; }
+    public TransactionType getTxType() { return txType; }
+    public void setTxType(TransactionType txType) { this.txType = txType; }
 
     public LocalDate getTxDate() { return txDate; }
     public void setTxDate(LocalDate txDate) { this.txDate = txDate; }

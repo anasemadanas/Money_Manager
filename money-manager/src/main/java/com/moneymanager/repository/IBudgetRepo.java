@@ -10,9 +10,9 @@ public interface IBudgetRepo {
 
     Budget save(Budget budget);
 
-    void updateCap(long budgetId, BigDecimal newCap);
+    void updateCap(long budgetId, long userId, BigDecimal newCap);
 
-    void delete(long budgetId);
+    void delete(long budgetId, long userId);
 
     List<BudgetDTO> findWithSpending(long userId, int month, int year);
 

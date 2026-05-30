@@ -27,7 +27,7 @@ public class NoteService {
         return noteRepo.save(note);
     }
 
-    public void deleteNote(long noteId) {
-        noteRepo.delete(noteId);
+    public void deleteNote(long noteId, long userId) {
+        noteRepo.delete(noteId, userId);
     }
 }

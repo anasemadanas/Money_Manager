@@ -14,11 +14,11 @@ public interface IGoalRepo {
 
     void update(Goal goal);
 
-    void delete(long goalId);
+    void delete(long goalId, long userId);
 
-    void addContribution(long goalId, BigDecimal amount, String note);
+    void addContribution(long goalId, long userId, BigDecimal amount, String note);
 
-    List<Contribution> getContributions(long goalId);
+    List<Contribution> getContributions(long goalId, long userId);
 
     BigDecimal getTotalSavedAmount(long userId);
 }

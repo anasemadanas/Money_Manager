@@ -1,628 +1,421 @@
-# 💰 Money Manager App — Final Unified Documentation
+# Money Manager App - Final Unified Documentation
 
-> A modern personal finance management desktop application built using Java 17, JavaFX, and a strict 3‑Tier Architecture following SOLID principles.
+> A modern personal finance management desktop application built with Java 21, JavaFX, SQLite, JDBC, and a clean 3-tier architecture.
 
-[![Java](https://img.shields.io/badge/Java-17%20LTS-007396?logo=openjdk\&logoColor=white)](https://openjdk.org)
-[![Maven](https://img.shields.io/badge/Build-Apache%20Maven%203.9%2B-C71A36?logo=apachemaven\&logoColor=white)](https://maven.apache.org)
-[![JavaFX](https://img.shields.io/badge/UI-JavaFX%2021-1F7A8C?logo=openjdk\&logoColor=white)](https://openjfx.io)
+[![Java](https://img.shields.io/badge/Java-21-007396?logo=openjdk&logoColor=white)](https://openjdk.org)
+[![Maven](https://img.shields.io/badge/Build-Apache%20Maven%203.9%2B-C71A36?logo=apachemaven&logoColor=white)](https://maven.apache.org)
+[![JavaFX](https://img.shields.io/badge/UI-JavaFX%2021-1F7A8C?logo=openjdk&logoColor=white)](https://openjfx.io)
+[![Database](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org)
 [![Architecture](https://img.shields.io/badge/Architecture-3--Tier-blue)](https://en.wikipedia.org/wiki/Multitier_architecture)
-[![SOLID](https://img.shields.io/badge/Design-SOLID%20Principles-green)](https://en.wikipedia.org/wiki/SOLID)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Design](https://img.shields.io/badge/Design-SOLID%20Principles-green)](https://en.wikipedia.org/wiki/SOLID)
 
 ---
 
-# 📑 Table of Contents
+## Table of Contents
 
-* [🧾 Introduction](#-introduction)
-* [✨ Features](#-features)
-* [🖼️ Screenshots](#️-screenshots)
-* [🧱 Architecture & SOLID Design](#-architecture--solid-design)
-* [📂 Project Structure](#-project-structure)
-* [📦 Requirements](#-requirements)
-* [⚙️ Installation](#️-installation)
-* [▶️ Run the App](#️-run-the-app)
-* [🧪 Running Unit Tests](#-running-unit-tests)
-* [🔮 Future Enhancements](#-future-enhancements)
-* [📝 License](#-license)
-* [🔗 Contact](#-contact)
-
----
-
-# 🧾 Introduction
-
-The **Money Manager Desktop App** is a standalone personal finance management system that enables users to:
-
-* Track income and expenses
-* Manage budgets
-* Create savings goals
-* Store financial notes
-* Visualize spending analytics through charts and dashboards
-
-The application is designed with a strict **3‑Tier Architecture** and follows all **SOLID principles** to ensure maintainability, scalability, and clean separation of concerns.
-
-The project is built using:
-
-| Technology          | Purpose                                  |
-| ------------------- | ---------------------------------------- |
-| Java 17 LTS         | Core programming language                |
-| JavaFX 21           | Desktop GUI framework                    |
-| SQLite / PostgreSQL | Data persistence layer                   |
-| Maven               | Dependency management & build automation |
-| BCrypt              | Secure password hashing                  |
-| JUnit 5             | Unit testing                             |
-
-The application is designed as an offline‑first system while remaining flexible for future migration toward cloud and multi‑platform environments.
+- [Introduction](#introduction)
+- [Project Objectives](#project-objectives)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [System Architecture](#system-architecture)
+- [SOLID Design](#solid-design)
+- [Project Structure](#project-structure)
+- [Database Design](#database-design)
+- [Functional Requirements](#functional-requirements)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [Installation and Build](#installation-and-build)
+- [Running the Application](#running-the-application)
+- [Testing](#testing)
+- [Future Enhancements](#future-enhancements)
+- [Current Limitations](#current-limitations)
+- [Contributing](#contributing)
+- [Contact](#contact)
 
 ---
 
-# 🎯 Project Objectives
+## Introduction
 
-* Track expenses and income with full CRUD functionality
-* Categorize transactions efficiently
-* Manage monthly budgets with spending alerts
-* Visualize financial reports using charts and dashboards
-* Support financial goals and note tracking
-* Provide secure local data storage
-* Build a scalable architecture suitable for desktop, Android, and web expansion
+The Money Manager Desktop App is a standalone personal finance management system that helps users:
 
----
+- Track income and expenses
+- Manage monthly and category budgets
+- Create savings goals and record contributions
+- Store financial notes
+- View spending analytics through dashboard charts
+- Configure a monthly income amount that can be applied to the current month
 
-# ✨ Features
+The application is designed as an offline-first desktop system. It uses SQLite for local persistence and keeps the code separated into presentation, service, and repository layers.
 
-| Feature                   | Description                                              |
-| ------------------------- | -------------------------------------------------------- |
-| 🔐 Authentication System  | User login and registration with secure password hashing |
-| 💸 Transaction Manager    | Add, edit, delete, and filter transactions               |
-| 📊 Dashboard Analytics    | Pie charts and monthly trend reports                     |
-| 📅 Budget Planner         | Monthly budget tracking with warning indicators          |
-| 🎯 Savings Goals          | Set target savings goals and monitor progress            |
-| 📝 Financial Notes        | Store notes and reminders related to finances            |
-| 🛡️ Validation Layer      | Prevent invalid inputs and business rule violations      |
-| 📤 Reports Export         | PDF and Excel financial reports                          |
-| 🌍 Internationalization   | Multi‑language support using ResourceBundle              |
-| 💱 Multi‑Currency Support | ISO‑4217 currency formatting                             |
+## Project Objectives
 
----
+- Track expenses and income with create, update, delete, and filter workflows
+- Categorize transactions clearly
+- Manage monthly budgets with spending warnings
+- Visualize income, expenses, category spending, and monthly trends
+- Support savings goals, goal contributions, and note tracking
+- Provide secure local authentication with hashed passwords
+- Keep a maintainable architecture based on interfaces and service boundaries
 
-# 🧰 Technology Stack
+## Features
 
-| Layer                | Technology                               |
-| -------------------- | ---------------------------------------- |
-| Programming Language | Java 17 LTS                              |
-| GUI Framework        | JavaFX 21                                |
-| Database             | SQLite / PostgreSQL 16                   |
-| Build Tool           | Apache Maven 3.9+                        |
-| ORM / Data Access    | JDBC / JPA + Hibernate                   |
-| Dependency Injection | Constructor Injection / Spring Framework |
-| Connection Pooling   | HikariCP                                 |
-| Migration Tool       | Flyway                                   |
-| Security             | BCrypt Password Hashing                  |
-| Testing              | JUnit 5 + Mockito                        |
-| Coverage             | JaCoCo                                   |
-| Logging              | SLF4J + Logback                          |
-| Export Libraries     | Apache POI, iText                        |
+| Feature | Current Implementation |
+| --- | --- |
+| Authentication system | User registration, login, password reset, BCrypt password hashing |
+| Transaction manager | Add, edit, delete, and filter transactions by date/category |
+| Dashboard analytics | Summary cards, category PieChart, monthly trend BarChart |
+| Budget planner | Category budgets, monthly budget balance, progress indicators, warnings |
+| Savings goals | Create/edit/delete goals, add contributions, track progress |
+| Financial notes | Create and delete notes/reminders |
+| Validation layer | Service-level validation for inputs and business rules |
+| Monthly income | Saved monthly income can create a current-month income transaction and budget cap |
+| User-scoped data changes | Delete/update operations include `userId` where appropriate |
 
----
+## Technology Stack
 
-# 🏗️ System Architecture
+| Layer | Technology |
+| --- | --- |
+| Programming language | Java 21 |
+| GUI framework | JavaFX 21 |
+| UI layout | FXML + CSS |
+| Database | SQLite |
+| Data access | JDBC |
+| Build tool | Apache Maven |
+| Security | BCrypt password hashing |
+| Logging | `java.util.logging` |
+| Testing | JUnit 5 |
 
-The application follows a strict **3‑Tier Architecture**:
+This codebase does not currently use Spring, JPA/Hibernate, Flyway, HikariCP, PostgreSQL, Mockito, Testcontainers, JaCoCo, SLF4J/Logback, Apache POI, iText, PDF export, Excel export, i18n resources, or multi-currency conversion.
+
+## System Architecture
+
+The application follows a 3-tier architecture:
 
 ```text
-┌─────────────────────────────────────────┐
-│          PRESENTATION LAYER             │
-│ JavaFX • FXML • Controllers • CSS       │
-└───────────────────┬─────────────────────┘
-                    │
-┌───────────────────▼─────────────────────┐
-│        BUSINESS LOGIC LAYER             │
-│ Services • Validation • Calculations    │
-└───────────────────┬─────────────────────┘
-                    │
-┌───────────────────▼─────────────────────┐
-│          DATA ACCESS LAYER              │
-│ Repositories • JPA/JDBC • SQL           │
-└───────────────────┬─────────────────────┘
-                    │
-             SQLite / PostgreSQL
++-----------------------------------------+
+|           PRESENTATION LAYER            |
+| JavaFX, FXML, Controllers, CSS          |
++-------------------+---------------------+
+                    |
++-------------------v---------------------+
+|          BUSINESS LOGIC LAYER           |
+| Services, Validation, Calculations      |
++-------------------+---------------------+
+                    |
++-------------------v---------------------+
+|            DATA ACCESS LAYER            |
+| Repository Interfaces, JDBC, SQL        |
++-------------------+---------------------+
+                    |
+                 SQLite
 ```
 
-## A. Presentation Layer
+### Presentation Layer
 
-* Responsible for the graphical user interface
-* Uses JavaFX 21 with FXML and CSS
-* Contains no business logic
-* Communicates only with the service layer
+- Contains JavaFX controllers and FXML views
+- Handles user interaction and screen updates
+- Delegates business rules to services
 
-## B. Business Logic Layer
+### Business Logic Layer
 
-* Contains validations and financial calculations
-* Implements application business rules
-* Depends only on repository interfaces
+- Validates inputs
+- Applies financial rules
+- Coordinates repository operations
+- Depends on repository interfaces instead of concrete implementations
 
-## C. Data Access Layer
+### Data Access Layer
 
-* Handles database communication
-* Contains repository implementations
-* Responsible for SQL/JPA operations
+- Contains JDBC repository implementations
+- Executes SQL queries against SQLite
+- Hides database details behind interfaces such as `ITransactionRepo`, `IBudgetRepo`, and `IGoalRepo`
 
----
+## SOLID Design
 
-# 🧱 SOLID Principles
+| Principle | How the Project Applies It |
+| --- | --- |
+| Single Responsibility | Controllers, services, repositories, DTOs, and models have separate roles |
+| Open/Closed | Repository interfaces allow data access implementations to be replaced later |
+| Liskov Substitution | Services can work with any implementation of the repository interfaces |
+| Interface Segregation | Repositories are split by feature area instead of one large data interface |
+| Dependency Inversion | Services depend on interfaces such as `IUserRepo`, `ITransactionRepo`, and `IBudgetRepo` |
 
-| Principle             | Application                                               |
-| --------------------- | --------------------------------------------------------- |
-| Single Responsibility | Each class handles a single concern                       |
-| Open/Closed           | New features can be added without modifying existing code |
-| Liskov Substitution   | Repository implementations are interchangeable            |
-| Interface Segregation | Small focused repository interfaces                       |
-| Dependency Inversion  | Services depend on abstractions/interfaces                |
+`ApplicationContext` centralizes repository and service creation, keeping `App` focused on startup and JavaFX scene loading.
 
----
-
----
-
-# 📁 Folder Structure
+## Project Structure
 
 ```text
 money-manager/
-├── pom.xml
-├── src/main/java/com/teamstudent/moneymanager/
-│   ├── MoneyManagerApp.java
-│   ├── config/
-│   │   ├── AppConfig.java
-│   │   ├── DataSourceConfig.java
-│   │   └── BeanConfig.java
-│   ├── ui/
-│   │   ├── controller/
-│   │   │   ├── LoginController.java
-│   │   │   ├── DashboardController.java
-│   │   │   ├── TransactionController.java
-│   │   │   ├── BudgetController.java
-│   │   │   └── GoalController.java
-│   │   └── FxmlLoaderFactory.java
-│   ├── service/
-│   │   ├── TransactionService.java
-│   │   ├── BudgetService.java
-│   │   ├── GoalService.java
-│   │   ├── DashboardService.java
-│   │   └── UserService.java
-│   ├── repository/
-│   │   ├── IUserRepo.java
-│   │   ├── ITransactionRepo.java
-│   │   ├── IBudgetRepo.java
-│   │   ├── IGoalRepo.java
-│   │   └── jpa/
-│   │       ├── JpaUserRepo.java
-│   │       ├── JpaTransactionRepo.java
-│   │       ├── JpaBudgetRepo.java
-│   │       └── JpaGoalRepo.java
-│   ├── model/
-│   │   ├── User.java
-│   │   ├── Transaction.java
-│   │   ├── Budget.java
-│   │   └── Goal.java
-│   ├── dto/
-│   └── util/
-│       ├── Validators.java
-│       ├── CurrencyFormatter.java
-│       └── DateFormatter.java
-├── src/main/resources/
-│   ├── fxml/
-│   ├── css/
-│   ├── i18n/
-│   ├── db/migration/
-│   │   ├── V1__init.sql
-│   │   └── V2__indexes.sql
-│   ├── application.yml
-│   └── logback.xml
-└── src/test/java/com/teamstudent/moneymanager/
-    ├── service/
-    └── repository/
+|-- pom.xml
+|-- README.md
+|-- schema sqlite.sql
+|-- src/
+|   |-- main/
+|   |   |-- java/com/moneymanager/
+|   |   |   |-- App.java
+|   |   |   |-- Launcher.java
+|   |   |   |-- ConnectionTest.java
+|   |   |   |-- config/
+|   |   |   |   |-- ApplicationContext.java
+|   |   |   |   |-- DatabaseConfig.java
+|   |   |   |   |-- DatabaseInitializer.java
+|   |   |   |   |-- LoggingConfig.java
+|   |   |   |-- dto/
+|   |   |   |-- model/
+|   |   |   |-- repository/
+|   |   |   |-- service/
+|   |   |   |-- ui/
+|   |   |       |-- controller/
+|   |   |       |-- util/
+|   |   |-- resources/
+|   |       |-- css/
+|   |       |-- fxml/
+|   |       |-- db.properties
+|   |-- test/java/com/moneymanager/service/
 ```
 
----
+## Database Design
 
-# 🗃 Database Design
-
-The application uses **PostgreSQL 16** for relational persistence. Schema migrations are managed by **Flyway** on application startup. All entities are linked to the `users` entity via foreign keys with `ON DELETE CASCADE`.
-
-## Entity Relationship Overview
+The application uses SQLite as the local relational database. The default database URL is configured in:
 
 ```text
-┌──────────────┐       ┌───────────────────┐
-│    users     │──1:N──│   transactions    │
-│              │       └───────────────────┘
-│ user_id PK   │       ┌───────────────────┐
-│ username     │──1:N──│     budgets       │
-│ password_hash│       └───────────────────┘
-│ created_at   │       ┌───────────────────┐
-│              │──1:N──│      goals        │
-└──────────────┘       └───────────────────┘
+src/main/resources/db.properties
 ```
 
-## Tables
+Default value:
 
-### `users`
+```properties
+db.url=jdbc:sqlite:money-manager.db
+```
 
-| Column        | Type        | Constraints            |
-| ------------- | ----------- | ---------------------- |
-| user_id       | BIGSERIAL   | PRIMARY KEY            |
-| username      | VARCHAR(50) | NOT NULL UNIQUE        |
-| password_hash | TEXT        | NOT NULL (BCrypt)      |
-| created_at    | TIMESTAMPTZ | NOT NULL DEFAULT now() |
+Schema creation is handled by `DatabaseInitializer` on application startup.
 
-### `transactions`
+### Entity Relationship Overview
 
-| Column         | Type          | Constraints      |
-| -------------- | ------------- | ---------------- |
-| transaction_id | BIGSERIAL     | PRIMARY KEY      |
-| user_id        | BIGINT        | FOREIGN KEY      |
-| name           | VARCHAR(100)  | NOT NULL         |
-| amount         | NUMERIC(12,2) | CHECK amount > 0 |
-| category       | VARCHAR(50)   | NOT NULL         |
-| tx_type        | VARCHAR(10)   | INCOME / EXPENSE |
-| tx_date        | DATE          | NOT NULL         |
-| created_at     | TIMESTAMPTZ   | DEFAULT now()    |
+```text
+users 1--N transactions
+users 1--N budgets
+users 1--N notes
+users 1--N savings_goals
+savings_goals 1--N goal_contributions
+users 1--1 user_settings
+users 1--N monthly_balance
+```
 
-### `budgets`
+### Main Tables
 
-| Column     | Type          | Constraints          |
-| ---------- | ------------- | -------------------- |
-| budget_id  | BIGSERIAL     | PRIMARY KEY          |
-| user_id    | BIGINT        | FOREIGN KEY          |
-| category   | VARCHAR(50)   | NOT NULL             |
-| amount_cap | NUMERIC(12,2) | CHECK amount_cap > 0 |
-| month      | SMALLINT      | BETWEEN 1 AND 12     |
-| year       | SMALLINT      | >= 2020              |
+#### `users`
 
-### `goals`
+| Column | Type | Notes |
+| --- | --- | --- |
+| user_id | INTEGER | Primary key |
+| username | TEXT | Unique, required |
+| password_hash | TEXT | BCrypt hash |
+| security_question | TEXT | Used for password reset |
+| security_answer_hash | TEXT | Hashed answer |
+| created_at | TEXT | Created timestamp |
 
-| Column         | Type          | Constraints |
-| -------------- | ------------- | ----------- |
-| goal_id        | BIGSERIAL     | PRIMARY KEY |
-| user_id        | BIGINT        | FOREIGN KEY |
-| title          | VARCHAR(100)  | NOT NULL    |
-| target_amount  | NUMERIC(12,2) | NOT NULL    |
-| current_amount | NUMERIC(12,2) | DEFAULT 0   |
-| deadline       | DATE          | NOT NULL    |
+#### `transactions`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| transaction_id | INTEGER | Primary key |
+| user_id | INTEGER | Foreign key to `users` |
+| name | TEXT | Required |
+| amount | NUMERIC | Must be greater than 0 |
+| category | TEXT | Required |
+| tx_type | TEXT | `INCOME` or `EXPENSE` |
+| tx_date | TEXT | Transaction date |
+| created_at | TEXT | Created timestamp |
+
+#### `budgets`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| budget_id | INTEGER | Primary key |
+| user_id | INTEGER | Foreign key to `users` |
+| category | TEXT | Required |
+| amount_cap | NUMERIC | Must be greater than 0 |
+| month | INTEGER | 1 through 12 |
+| year | INTEGER | 2020 or later |
+
+#### `savings_goals`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| goal_id | INTEGER | Primary key |
+| user_id | INTEGER | Foreign key to `users` |
+| name | TEXT | Required |
+| target_amount | NUMERIC | Must be greater than 0 |
+| saved_amount | NUMERIC | Defaults to 0 |
+| deadline | TEXT | Optional |
+| created_at | TEXT | Created timestamp |
+
+#### `goal_contributions`
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| contribution_id | INTEGER | Primary key |
+| goal_id | INTEGER | Foreign key to `savings_goals` |
+| amount | NUMERIC | Must be greater than 0 |
+| note | TEXT | Optional |
+| contributed_at | TEXT | Created timestamp |
+
+#### Other Tables
+
+- `notes`
+- `monthly_balance`
+- `user_settings`
 
 ### Indexes
 
-* `idx_tx_user_date` — accelerates recent transaction queries
-* `idx_tx_user_cat` — accelerates category-based reports
-* `idx_bg_user_ym` — accelerates monthly budget lookups
-* `idx_goal_deadline` — accelerates goal deadline filtering
+- `idx_tx_user_date` for user/date transaction queries
+- `idx_tx_user_cat` for user/category transaction queries
+- `idx_bg_user_ym` for monthly budget lookups
+- `idx_goal_user` for user goal lookups
+- `idx_contrib_goal` for contribution lookups
 
----
+## Functional Requirements
 
-# 📌 Functional Requirements
+### FR-01 Transaction Management
 
-## FR‑01 Transaction Management
+- Add transactions with name, amount, category, type, and date
+- Edit existing transactions
+- Delete transactions with confirmation prompts
+- Filter transactions by category and date
+- Use `TransactionType` enum for income/expense values in Java code
 
-* Add new transactions with name, amount, category, type, and date
-* Edit existing transactions
-* Delete transactions with confirmation prompts
-* View and filter transactions by category or date
-* Support automatic transaction categorization
+### FR-02 Budget Management
 
-## FR‑02 Budget Management
+- Create monthly budgets per category
+- Display spending progress against each category cap
+- Display warning states around 80% and 100% usage
+- Set and edit a total monthly budget balance
 
-* Create monthly budgets per category
-* Display real‑time spending progress
-* Trigger warning alerts at 80% and danger alerts at 100%
-* Full CRUD operations for budgets
+### FR-03 Dashboard Analytics
 
-## FR‑03 Dashboard & Reports
+- Display income, expenses, net balance, goal savings, and available balance
+- Show expense category breakdown using JavaFX PieChart
+- Show monthly income/expense trends using JavaFX BarChart
 
-* Display total income, expenses, and net balance
-* Show visual charts using JavaFX PieChart and LineChart
-* Export reports to PDF and Excel formats
+### FR-04 Notes and Goals
 
-## FR‑04 Notes & Goals
+- Create financial notes and reminders
+- Create savings goals with optional deadlines
+- Add contributions to goals
+- Track saved amount and completion percentage
 
-* Create financial notes and reminders
-* Create savings goals with deadlines
-* Track goal completion percentage
-* Display notifications for approaching deadlines
+## Non-Functional Requirements
 
----
+| ID | Requirement |
+| --- | --- |
+| NFR-01 | Passwords are stored using BCrypt hashes |
+| NFR-02 | Data is stored locally in SQLite |
+| NFR-03 | Monetary values use `BigDecimal` |
+| NFR-04 | Services remain independent from JDBC implementation classes |
+| NFR-05 | Maven build and test commands are supported |
+| NFR-06 | JavaFX UI is separated into controllers, FXML, and CSS |
+| NFR-07 | User-scoped update/delete operations reduce cross-user data risk |
 
-# ⚙️ Non‑Functional Requirements
+## Installation and Build
 
-| ID     | Category        | Requirement                                          |
-| ------ | --------------- | ---------------------------------------------------- |
-| NFR‑01 | Performance     | Application startup under 4 seconds                  |
-| NFR‑02 | Reliability     | No data corruption or loss                           |
-| NFR‑03 | Security        | Password hashing using BCrypt                        |
-| NFR‑04 | Maintainability | Modular and SOLID‑compliant codebase                 |
-| NFR‑05 | Testing         | Unit test coverage above 80%                         |
-| NFR‑06 | Portability     | Supports Windows, Linux, and macOS                   |
-| NFR‑07 | Scalability     | Repository layer replaceable without service changes |
-| NFR‑08 | Data Integrity  | Foreign key constraints and ACID compliance          |
-| NFR‑09 | Localization    | Multi‑language support using ResourceBundle          |
-| NFR‑10 | Build           | Maven reproducible builds                            |
-
----
-
-# 📁 Folder Structure
-
-```text
-money-manager/
-├── pom.xml
-├── src/main/java/com/moneymanager/
-│   ├── App.java
-│   ├── config/
-│   ├── dto/
-│   ├── model/
-│   ├── repository/
-│   ├── service/
-│   ├── ui/
-│   └── util/
-├── src/main/resources/
-│   ├── fxml/
-│   ├── css/
-│   ├── i18n/
-│   ├── db/migration/
-│   └── application.yml
-└── src/test/java/
-    ├── service/
-    └── repository/
-```
-
----
-
-# 🗃️ Database Design
-
-The application uses **PostgreSQL 16** as the primary relational database management system. PostgreSQL was selected due to its reliability, ACID compliance, scalability, indexing capabilities, and compatibility with enterprise-grade Java applications.
-
-## Entity Relationship Overview
-
-```text
-┌──────────────┐       ┌───────────────────┐
-│    users     │──1:N──│   transactions    │
-│              │       └───────────────────┘
-│ user_id PK   │       ┌───────────────────┐
-│ username     │──1:N──│     budgets       │
-│ password_hash│       └───────────────────┘
-│ created_at   │       ┌───────────────────┐
-│              │──1:N──│      goals        │
-└──────────────┘       └───────────────────┘
-```
-
-## Example Tables
-
-### users
-
-| Column        | Type        |
-| ------------- | ----------- |
-| user_id       | BIGSERIAL   |
-| username      | VARCHAR(50) |
-| password_hash | TEXT        |
-| created_at    | TIMESTAMP   |
-
-### transactions
-
-| Column         | Type          |
-| -------------- | ------------- |
-| transaction_id | BIGSERIAL     |
-| user_id        | BIGINT        |
-| amount         | NUMERIC(12,2) |
-| category       | VARCHAR(50)   |
-| tx_type        | VARCHAR(10)   |
-| tx_date        | DATE          |
-
-### budgets
-
-| Column     | Type          |
-| ---------- | ------------- |
-| budget_id  | BIGSERIAL     |
-| user_id    | BIGINT        |
-| category   | VARCHAR(50)   |
-| amount_cap | NUMERIC(12,2) |
-| month      | SMALLINT      |
-| year       | SMALLINT      |
-
----
-
-# 📌 Functional Requirements
-
-## FR‑01 Transaction Management
-
-* Add transactions
-* Edit transactions
-* Delete transactions
-* Filter transactions by category/date/type
-* Categorize transactions automatically
-
-## FR‑02 Budget Management
-
-* Create monthly budgets
-* Monitor spending against budget limits
-* Display alerts at 80% and 100%
-* Full CRUD operations for budgets
-
-## FR‑03 Dashboard & Reports
-
-* Display total income and expenses
-* Visualize spending using charts
-* Export reports to PDF and Excel
-
-## FR‑04 Goals & Notes
-
-* Create savings goals
-* Track progress percentages
-* Store notes and reminders
-* Notify users about deadlines
-
----
-
-# ⚙️ Non‑Functional Requirements
-
-| ID     | Requirement                                  |
-| ------ | -------------------------------------------- |
-| NFR‑01 | Application launches within 4 seconds        |
-| NFR‑02 | GUI responses under 200 ms                   |
-| NFR‑03 | Passwords stored using BCrypt                |
-| NFR‑04 | Clean and maintainable codebase              |
-| NFR‑05 | Unit test coverage above 80%                 |
-| NFR‑06 | Compatible with Windows, Linux, and macOS    |
-| NFR‑07 | Scalable repository architecture             |
-| NFR‑08 | Database integrity enforced with constraints |
-| NFR‑09 | Maven build reproducibility                  |
-| NFR‑10 | Localization support                         |
-
----
-
-# ⚙️ Installation & Build
-
-## Clone Repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/anasemadanas/Money_Manager.git
 cd Money_Manager/money-manager
 ```
 
-## Compile Project
+### Compile Project
 
 ```bash
 mvn clean compile
 ```
 
----
-
-# ▶️ Running the Application
-
-## Launch via Maven
-
-```bash
-mvn javafx:run
-```
-
-## Package Executable JAR
+### Package JAR
 
 ```bash
 mvn clean package
 ```
 
-Run the generated JAR:
+## Running the Application
+
+### Launch via Maven
 
 ```bash
-java -jar target/money-manager-1.0.0.jar
+mvn javafx:run
 ```
 
----
+### Launch with Maven Wrapper on Windows
 
-### Indexes
+```bat
+mvnw.cmd javafx:run
+```
 
-* `idx_tx_user_date` — accelerates recent transaction queries
-* `idx_tx_user_cat` — accelerates category‑based reporting
-* `idx_bg_user_ym` — accelerates monthly budget lookup
+### Launch with Maven Wrapper on macOS/Linux
 
----
+```bash
+./mvnw javafx:run
+```
 
-# 🧪 Testing
+## Testing
 
-## Run Unit Tests
+Run unit tests:
 
 ```bash
 mvn test
 ```
 
-## Full Verification
+Run full Maven verification:
 
 ```bash
 mvn verify
 ```
 
-The application uses a modern Java testing stack:
+Current tests are JUnit 5 service tests.
 
-* JUnit 5 for unit testing
-* Mockito for dependency mocking
-* Testcontainers for PostgreSQL integration testing
-* JaCoCo for code coverage analysis
+## Future Enhancements
 
-Testing stack includes:
+| Enhancement | Details |
+| --- | --- |
+| Export reports | Add PDF/Excel export after selecting libraries |
+| Internationalization | Add ResourceBundle files and locale switching |
+| Multi-currency support | Add currency preferences and conversion handling |
+| Database migrations | Add a migration tool if schema changes become frequent |
+| Dark mode | Add theme switching in JavaFX CSS |
+| Database encryption | Consider SQLCipher or another local encryption strategy |
+| Web or mobile version | Possible future platform expansion |
 
-* JUnit 5
-* Mockito
-* Testcontainers
-* JaCoCo
+## Current Limitations
 
----
+- SQLite local database only
+- No PDF or Excel export yet
+- No Spring, JPA/Hibernate, Flyway, or HikariCP
+- No i18n resources yet
+- No multi-currency conversion yet
+- No license file is currently included in the repository
 
-# 🔮 Future Enhancements
-
-| Enhancement           | Details                                      |
-| --------------------- | -------------------------------------------- |
-| Android App           | Kotlin + Jetpack Compose                     |
-| Web Platform          | Spring Boot + React                          |
-| Cloud Synchronization | AWS / Supabase / Neon                        |
-| AI Insights           | Transaction prediction and anomaly detection |
-| Family Mode           | Multi-user access and role management        |
-| Dark Mode             | Advanced theme customization                 |
-| SQLCipher             | Database encryption                          |
-
----
-
-# 🔒 Constraints & Assumptions
-
-## Constraints
-
-* Minimum Java version: JDK 17
-* JavaFX 21 required
-* PostgreSQL required for enterprise mode
-* SQLite supported for local offline mode
-* Desktop-only release in v1.0
-
-## Assumptions
-
-* Users understand basic finance concepts
-* Maven 3.9+ installed
-* Monetary values use BigDecimal
-* Database migrations handled by Flyway
-
----
-
-# 🤝 Contributing
+## Contributing
 
 Contributions are welcome.
 
-Steps:
-
 1. Fork the repository
 2. Create a feature branch
-3. Add tests
-4. Commit changes
-5. Push branch
-6. Open a Pull Request
+3. Add or update tests
+4. Run `mvn test`
+5. Commit changes
+6. Open a pull request
 
-Please ensure:
+Please keep the 3-tier boundaries clean and avoid adding framework claims to the documentation unless the code actually uses those frameworks.
 
-* SOLID principles are respected
-* 3‑Tier boundaries remain clean
-* `mvn verify` passes successfully
+## Contact
 
----
-
-# 📄 License
-
-Distributed under the MIT License.
-
----
-
-# 🔗 Contact
-
-| Platform | Link                                                                                   |
-| -------- | -------------------------------------------------------------------------------------- |
-| GitHub   | [https://github.com/anasemadanas](https://github.com/anasemadanas)                     |
+| Platform | Link |
+| --- | --- |
+| GitHub | [https://github.com/anasemadanas](https://github.com/anasemadanas) |
 | LinkedIn | [https://www.linkedin.com/in/eng-anasemad/](https://www.linkedin.com/in/eng-anasemad/) |
-| Email    | [Email](mailto:anasemadanas1@gmail.com)                                  |
+| Email | [Email](mailto:anasemadanas1@gmail.com) |
 
 ---
-[↩️ Back to Table of Contents](#-Table-of-Contents)
----
+
 <p align="center">
-  <sub>Built with ❤️ using Java • Apache Maven • JavaFX • PostgreSQL • Designed with SOLID principles in mind</sub>
+  <sub>Built with Java 21, Apache Maven, JavaFX, SQLite, and SOLID-minded design.</sub>
 </p>
-

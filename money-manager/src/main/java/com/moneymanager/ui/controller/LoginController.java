@@ -23,6 +23,8 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginController {
 
@@ -51,6 +53,7 @@ public class LoginController {
 
     private enum Mode { LOGIN, REGISTER, RESET_PASSWORD }
     private Mode mode = Mode.LOGIN;
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
 
     @FXML
     private void initialize() {
@@ -99,7 +102,7 @@ public class LoginController {
                             () -> showError("Invalid username or password."));
         } catch (DataAccessException e) {
             showError("Database error. Check your connection.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not login", e);
         }
     }
 
@@ -120,7 +123,7 @@ public class LoginController {
             showError(e.getMessage());
         } catch (DataAccessException e) {
             showError("Database error. Check your connection.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not register user", e);
         }
     }
 
@@ -147,7 +150,7 @@ public class LoginController {
                 securityQuestionField.setText(authService.getSecurityQuestion(username).orElse(""));
             } catch (DataAccessException e) {
                 showError("Database error. Check your connection.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not load security question", e);
             }
         } else {
             securityQuestionField.setText("");
@@ -174,7 +177,7 @@ public class LoginController {
             showError(e.getMessage());
         } catch (DataAccessException e) {
             showError("Database error. Check your connection.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not reset password", e);
         }
     }
 
@@ -257,7 +260,7 @@ public class LoginController {
             stage.centerOnScreen();
         } catch (IOException e) {
             AlertHelper.showError(stage, "Error", "Could not load main view: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not load main view", e);
         }
     }
 
@@ -281,7 +284,7 @@ public class LoginController {
         try {
             securityQuestionField.setText(authService.getSecurityQuestion(username).orElse(""));
         } catch (DataAccessException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not load security question", e);
         }
     }
 

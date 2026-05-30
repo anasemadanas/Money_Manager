@@ -39,15 +39,15 @@ class GoalServiceTest {
         @Override
         public void update(Goal goal) { lastUpdated = goal; }
         @Override
-        public void delete(long goalId) { lastDeletedGoal = goalId; }
+        public void delete(long goalId, long userId) { lastDeletedGoal = goalId; }
         @Override
-        public void addContribution(long goalId, BigDecimal amount, String note) {
+        public void addContribution(long goalId, long userId, BigDecimal amount, String note) {
             lastContributionGoalId = goalId;
             lastContributionAmount = amount;
             lastContributionNote = note;
         }
         @Override
-        public List<Contribution> getContributions(long goalId) { return List.of(); }
+        public List<Contribution> getContributions(long goalId, long userId) { return List.of(); }
         @Override
         public BigDecimal getTotalSavedAmount(long userId) { return BigDecimal.ZERO; }
     };
@@ -122,35 +122,36 @@ class GoalServiceTest {
 
     @Test
     void updateGoal_valid_callsRepo() {
-        service.updateGoal(5L, "Updated Goal", new BigDecimal("1500"), null);
+        service.updateGoal(5L, 1L, "Updated Goal", new BigDecimal("1500"), null);
         assertNotNull(lastUpdated);
         assertEquals(5L, lastUpdated.getGoalId());
+        assertEquals(1L, lastUpdated.getUserId());
         assertEquals("Updated Goal", lastUpdated.getName());
     }
 
     @Test
     void updateGoal_invalidName_throwsBeforeRepo() {
         assertThrows(IllegalArgumentException.class,
-                () -> service.updateGoal(5L, "", new BigDecimal("1500"), null));
+                () -> service.updateGoal(5L, 1L, "", new BigDecimal("1500"), null));
         assertNull(lastUpdated);
     }
 
     @Test
     void updateGoal_invalidTarget_throwsBeforeRepo() {
         assertThrows(IllegalArgumentException.class,
-                () -> service.updateGoal(5L, "Goal", BigDecimal.ZERO, null));
+                () -> service.updateGoal(5L, 1L, "Goal", BigDecimal.ZERO, null));
         assertNull(lastUpdated);
     }
 
     @Test
     void deleteGoal_callsRepo() {
-        service.deleteGoal(12L);
+        service.deleteGoal(12L, 1L);
         assertEquals(12L, lastDeletedGoal);
     }
 
     @Test
     void addContribution_valid_callsRepo() {
-        service.addContribution(7L, new BigDecimal("250"), "Birthday money");
+        service.addContribution(7L, 1L, new BigDecimal("250"), "Birthday money");
         assertEquals(7L, lastContributionGoalId);
         assertEquals(new BigDecimal("250"), lastContributionAmount);
         assertEquals("Birthday money", lastContributionNote);
@@ -158,26 +159,26 @@ class GoalServiceTest {
 
     @Test
     void addContribution_nullNote_accepted() {
-        assertDoesNotThrow(() -> service.addContribution(7L, new BigDecimal("100"), null));
+        assertDoesNotThrow(() -> service.addContribution(7L, 1L, new BigDecimal("100"), null));
     }
 
     @Test
     void addContribution_zeroAmount_throws() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> service.addContribution(7L, BigDecimal.ZERO, null));
+                () -> service.addContribution(7L, 1L, BigDecimal.ZERO, null));
         assertTrue(ex.getMessage().contains("greater than zero"));
     }
 
     @Test
     void addContribution_negativeAmount_throws() {
         assertThrows(IllegalArgumentException.class,
-                () -> service.addContribution(7L, new BigDecimal("-50"), null));
+                () -> service.addContribution(7L, 1L, new BigDecimal("-50"), null));
     }
 
     @Test
     void addContribution_nullAmount_throws() {
         assertThrows(IllegalArgumentException.class,
-                () -> service.addContribution(7L, null, null));
+                () -> service.addContribution(7L, 1L, null, null));
     }
 
     @Test
@@ -230,7 +231,7 @@ class GoalServiceTest {
 
     @Test
     void getContributions_returnsEmptyListWhenNone() {
-        assertTrue(service.getContributions(1L).isEmpty());
+        assertTrue(service.getContributions(1L, 1L).isEmpty());
     }
 
     private Goal buildGoal(long id, String name, BigDecimal target, BigDecimal saved, LocalDate deadline) {

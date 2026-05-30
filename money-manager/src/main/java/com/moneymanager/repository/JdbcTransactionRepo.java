@@ -2,6 +2,7 @@ package com.moneymanager.repository;
 
 import com.moneymanager.config.DatabaseConfig;
 import com.moneymanager.model.Transaction;
+import com.moneymanager.model.TransactionType;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
             ps.setString(2, tx.getName());
             ps.setBigDecimal(3, tx.getAmount());
             ps.setString(4, tx.getCategory());
-            ps.setString(5, tx.getTxType());
+            ps.setString(5, tx.getTxType().name());
             ps.setString(6, tx.getTxDate().toString());
             try (var rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -85,7 +86,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
             ps.setString(1, tx.getName());
             ps.setBigDecimal(2, tx.getAmount());
             ps.setString(3, tx.getCategory());
-            ps.setString(4, tx.getTxType());
+            ps.setString(4, tx.getTxType().name());
             ps.setString(5, tx.getTxDate().toString());
             ps.setLong(6, tx.getTransactionId());
             ps.setLong(7, tx.getUserId());
@@ -96,10 +97,12 @@ public class JdbcTransactionRepo implements ITransactionRepo {
     }
 
     @Override
-    public void delete(long transactionId) {
+    public void delete(long transactionId, long userId) {
         try (var conn = DatabaseConfig.getConnection();
-             var ps = conn.prepareStatement("DELETE FROM transactions WHERE transaction_id = ?")) {
+             var ps = conn.prepareStatement(
+                     "DELETE FROM transactions WHERE transaction_id = ? AND user_id = ?")) {
             ps.setLong(1, transactionId);
+            ps.setLong(2, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to delete transaction", e);
@@ -129,7 +132,7 @@ public class JdbcTransactionRepo implements ITransactionRepo {
         tx.setName(rs.getString("name"));
         tx.setAmount(rs.getBigDecimal("amount"));
         tx.setCategory(rs.getString("category"));
-        tx.setTxType(rs.getString("tx_type"));
+        tx.setTxType(TransactionType.valueOf(rs.getString("tx_type")));
         tx.setTxDate(LocalDate.parse(rs.getString("tx_date")));
         tx.setCreatedAt(JdbcDates.getOffsetDateTime(rs, "created_at"));
         return tx;

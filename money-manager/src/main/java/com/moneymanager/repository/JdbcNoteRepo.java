@@ -53,10 +53,11 @@ public class JdbcNoteRepo implements INoteRepo {
     }
 
     @Override
-    public void delete(long noteId) {
+    public void delete(long noteId, long userId) {
         try (var conn = DatabaseConfig.getConnection();
-             var ps   = conn.prepareStatement("DELETE FROM notes WHERE note_id = ?")) {
+             var ps   = conn.prepareStatement("DELETE FROM notes WHERE note_id = ? AND user_id = ?")) {
             ps.setLong(1, noteId);
+            ps.setLong(2, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to delete note", e);

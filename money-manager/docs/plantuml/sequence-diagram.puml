@@ -1,0 +1,48 @@
+@startuml MoneyManagerSequence
+title Add Expense Transaction With Budget Checks
+
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+
+actor User
+participant "TransactionController" as TxController
+participant "BudgetService" as BudgetService
+participant "TransactionService" as TxService
+participant "ITransactionRepo" as TxRepo
+participant "IBudgetRepo" as BudgetRepo
+database "SQLite" as SQLite
+
+User -> TxController : Click Add Transaction
+TxController -> User : Show transaction form
+User -> TxController : Submit expense details
+
+alt transaction type is EXPENSE
+    TxController -> BudgetService : checkCategoryLimit(userId, category, amount, date, 0)
+    BudgetService -> BudgetRepo : getCategorySpending(userId, category, month, year, 0)
+    BudgetRepo -> SQLite : SELECT SUM(amount)
+    SQLite --> BudgetRepo : category spending
+    BudgetRepo --> BudgetService : current spending
+    BudgetService --> TxController : category validation result
+
+    TxController -> BudgetService : checkMonthlyBalanceLimit(userId, amount, date, 0)
+    BudgetService -> BudgetRepo : getTotalMonthlyExpenses(userId, month, year, 0)
+    BudgetRepo -> SQLite : SELECT SUM(amount)
+    SQLite --> BudgetRepo : monthly expenses
+    BudgetRepo --> BudgetService : total expenses
+    BudgetService --> TxController : monthly validation result
+end
+
+alt validation failed
+    TxController -> User : Show error alert
+else validation passed
+    TxController -> TxService : add(userId, transactionDto)
+    TxService -> TxService : validate(dto)
+    TxService -> TxRepo : save(transaction)
+    TxRepo -> SQLite : INSERT INTO transactions
+    SQLite --> TxRepo : generated transaction_id
+    TxRepo --> TxService : saved transaction
+    TxService --> TxController : transaction DTO
+    TxController -> User : Refresh table and dashboard
+end
+
+@enduml

@@ -25,6 +25,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BudgetController {
 
@@ -49,6 +51,7 @@ public class BudgetController {
         "January","February","March","April","May","June",
         "July","August","September","October","November","December"
     };
+    private static final Logger LOGGER = Logger.getLogger(BudgetController.class.getName());
     private static final NumberFormat CF = NumberFormat.getCurrencyInstance(Locale.US);
 
     @FXML
@@ -91,7 +94,7 @@ public class BudgetController {
             try {
                 budgetService.add(currentUser.getUserId(),
                         dto.category(), dto.amountCap(), month, year);
-                java.util.logging.Logger.getLogger("com.moneymanager")
+                Logger.getLogger("com.moneymanager")
                         .info("user=" + currentUser.getUsername()
                               + " action=budget_created details=amount="
                               + dto.amountCap().setScale(2, java.math.RoundingMode.HALF_UP)
@@ -102,7 +105,7 @@ public class BudgetController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not save budget.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not save budget", e);
             }
         });
     }
@@ -113,8 +116,8 @@ public class BudgetController {
         if (selected == null) return;
         showEditCapDialog(selected).ifPresent(newCap -> {
             try {
-                budgetService.updateCap(selected.budgetId(), newCap);
-                java.util.logging.Logger.getLogger("com.moneymanager")
+                budgetService.updateCap(selected.budgetId(), currentUser.getUserId(), newCap);
+                Logger.getLogger("com.moneymanager")
                         .info("user=" + currentUser.getUsername()
                               + " action=budget_updated details=amount="
                               + newCap.setScale(2, java.math.RoundingMode.HALF_UP)
@@ -125,7 +128,7 @@ public class BudgetController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not update budget.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not update budget", e);
             }
         });
     }
@@ -138,8 +141,8 @@ public class BudgetController {
                 "Delete the budget for \"" + selected.category() + "\"?\nThis cannot be undone."))
             return;
         try {
-            budgetService.delete(selected.budgetId());
-            java.util.logging.Logger.getLogger("com.moneymanager")
+            budgetService.delete(selected.budgetId(), currentUser.getUserId());
+            Logger.getLogger("com.moneymanager")
                     .info("user=" + currentUser.getUsername()
                           + " action=budget_deleted details=amount="
                           + selected.amountCap().setScale(2, java.math.RoundingMode.HALF_UP)
@@ -148,7 +151,7 @@ public class BudgetController {
             loadData();
         } catch (DataAccessException e) {
             AlertHelper.showError(getStage(), "Error", "Could not delete budget.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not delete budget", e);
         }
     }
 
@@ -168,7 +171,7 @@ public class BudgetController {
                         AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
                     } catch (DataAccessException e) {
                         AlertHelper.showError(getStage(), "Error", "Could not save monthly budget.");
-                        e.printStackTrace();
+                        LOGGER.log(Level.SEVERE, "Could not save monthly budget", e);
                     }
                 });
     }

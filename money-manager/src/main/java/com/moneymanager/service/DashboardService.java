@@ -3,6 +3,7 @@ package com.moneymanager.service;
 import com.moneymanager.dto.DashboardSnapshot;
 import com.moneymanager.dto.MonthlyTrend;
 import com.moneymanager.model.Transaction;
+import com.moneymanager.model.TransactionType;
 import com.moneymanager.repository.IGoalRepo;
 import com.moneymanager.repository.ITransactionRepo;
 import com.moneymanager.repository.IMonthlyBalanceRepo;
@@ -38,8 +39,8 @@ public class DashboardService {
         List<Transaction> monthTxs =
                 txRepo.findByUserFiltered(userId, monthStart, monthEnd, null);
 
-        BigDecimal income   = sumByType(monthTxs, "INCOME");
-        BigDecimal expenses = sumByType(monthTxs, "EXPENSE");
+        BigDecimal income   = sumByType(monthTxs, TransactionType.INCOME);
+        BigDecimal expenses = sumByType(monthTxs, TransactionType.EXPENSE);
 
         java.util.Optional<com.moneymanager.model.MonthlyBalance> budgetOpt = balanceRepo.findByUserMonthYear(userId, today.getMonthValue(), today.getYear());
         BigDecimal budgetedIncome = budgetOpt.map(com.moneymanager.model.MonthlyBalance::getTotalAmount)
@@ -75,7 +76,7 @@ public class DashboardService {
             YearMonth ym = YearMonth.from(tx.getTxDate());
             BigDecimal[] pair = map.get(ym);
             if (pair == null) continue;
-            if ("INCOME".equals(tx.getTxType()))  pair[0] = pair[0].add(tx.getAmount());
+            if (tx.getTxType() == TransactionType.INCOME)  pair[0] = pair[0].add(tx.getAmount());
             else                                   pair[1] = pair[1].add(tx.getAmount());
         }
 
@@ -88,16 +89,16 @@ public class DashboardService {
                 .toList();
     }
 
-    private static BigDecimal sumByType(List<Transaction> txs, String type) {
+    private static BigDecimal sumByType(List<Transaction> txs, TransactionType type) {
         return txs.stream()
-                .filter(t -> type.equals(t.getTxType()))
+                .filter(t -> t.getTxType() == type)
                 .map(Transaction::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private static Map<String, BigDecimal> categoryBreakdown(List<Transaction> txs) {
         return txs.stream()
-                .filter(t -> "EXPENSE".equals(t.getTxType()))
+                .filter(t -> t.getTxType() == TransactionType.EXPENSE)
                 .collect(Collectors.groupingBy(
                         Transaction::getCategory,
                         Collectors.reducing(BigDecimal.ZERO,

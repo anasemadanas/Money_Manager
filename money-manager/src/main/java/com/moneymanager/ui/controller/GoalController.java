@@ -31,6 +31,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GoalController {
 
@@ -49,6 +51,7 @@ public class GoalController {
 
     private static final DateTimeFormatter CONTRIB_FMT =
             DateTimeFormatter.ofPattern("dd MMM yyyy  HH:mm");
+    private static final Logger LOGGER = Logger.getLogger(GoalController.class.getName());
     private static final NumberFormat CF = NumberFormat.getCurrencyInstance(Locale.US);
 
     @FXML
@@ -101,7 +104,7 @@ public class GoalController {
             try {
                 goalService.addGoal(currentUser.getUserId(),
                         dto.name(), dto.targetAmount(), dto.deadline());
-                java.util.logging.Logger.getLogger("com.moneymanager")
+                Logger.getLogger("com.moneymanager")
                         .info("user=" + currentUser.getUsername()
                               + " action=goal_created details=name="
                               + dto.name()
@@ -112,7 +115,7 @@ public class GoalController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not save goal.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not save goal", e);
             }
         });
     }
@@ -124,9 +127,9 @@ public class GoalController {
 
         showGoalDialog("Edit Goal", selected).ifPresent(dto -> {
             try {
-                goalService.updateGoal(selected.goalId(),
+                goalService.updateGoal(selected.goalId(), currentUser.getUserId(),
                         dto.name(), dto.targetAmount(), dto.deadline());
-                java.util.logging.Logger.getLogger("com.moneymanager")
+                Logger.getLogger("com.moneymanager")
                         .info("user=" + currentUser.getUsername()
                               + " action=goal_updated details=name="
                               + dto.name()
@@ -137,7 +140,7 @@ public class GoalController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not update goal.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not update goal", e);
             }
         });
     }
@@ -152,8 +155,8 @@ public class GoalController {
                 "This cannot be undone.")) return;
 
         try {
-            goalService.deleteGoal(selected.goalId());
-            java.util.logging.Logger.getLogger("com.moneymanager")
+            goalService.deleteGoal(selected.goalId(), currentUser.getUserId());
+            Logger.getLogger("com.moneymanager")
                     .info("user=" + currentUser.getUsername()
                           + " action=goal_deleted details=name="
                           + selected.name()
@@ -162,7 +165,7 @@ public class GoalController {
             loadGoals();
         } catch (DataAccessException e) {
             AlertHelper.showError(getStage(), "Error", "Could not delete goal.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not delete goal", e);
         }
     }
 
@@ -177,13 +180,14 @@ public class GoalController {
         GoalDTO preSelected = goalListView.getSelectionModel().getSelectedItem();
         showContributionDialog(goals, preSelected).ifPresent(result -> {
             try {
-                goalService.addContribution(result.goalId(), result.amount(), result.note());
+                goalService.addContribution(
+                        result.goalId(), currentUser.getUserId(), result.amount(), result.note());
                 GoalDTO matchedGoal = goals.stream()
                         .filter(g -> g.goalId() == result.goalId())
                         .findFirst()
                         .orElse(null);
                 String goalName = (matchedGoal != null) ? matchedGoal.name() : "Unknown";
-                java.util.logging.Logger.getLogger("com.moneymanager")
+                Logger.getLogger("com.moneymanager")
                         .info("user=" + currentUser.getUsername()
                               + " action=goal_contribution_added details=amount="
                               + result.amount().setScale(2, java.math.RoundingMode.HALF_UP)
@@ -197,7 +201,7 @@ public class GoalController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not save contribution.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not save contribution", e);
             }
         });
     }
@@ -226,7 +230,7 @@ public class GoalController {
 
     private void loadContributions(GoalDTO goal) {
         contributionTitleLabel.setText("Contributions — " + goal.name());
-        List<ContributionDTO> list = goalService.getContributions(goal.goalId());
+        List<ContributionDTO> list = goalService.getContributions(goal.goalId(), currentUser.getUserId());
         contributionTable.setItems(FXCollections.observableArrayList(list));
     }
 

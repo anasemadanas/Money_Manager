@@ -1,6 +1,7 @@
 package com.moneymanager.ui.controller;
 
 import com.moneymanager.dto.TransactionDTO;
+import com.moneymanager.model.TransactionType;
 import com.moneymanager.model.User;
 import com.moneymanager.repository.DataAccessException;
 import com.moneymanager.service.BudgetService;
@@ -23,6 +24,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TransactionController {
 
@@ -45,6 +48,7 @@ public class TransactionController {
     private boolean suppressFilter = false;
     private Runnable onDataChanged;
 
+    private static final Logger LOGGER = Logger.getLogger(TransactionController.class.getName());
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
     @FXML
@@ -84,7 +88,7 @@ public class TransactionController {
     @FXML
     private void handleAdd() {
         showFormDialog("New Transaction", null).ifPresent(dto -> {
-            if ("EXPENSE".equals(dto.txType())) {
+            if (dto.txType() == TransactionType.EXPENSE) {
                 String catErr = budgetService.checkCategoryLimit(
                         currentUser.getUserId(), dto.category(), dto.amount(), dto.txDate(), 0L);
                 if (catErr != null) {
@@ -100,7 +104,7 @@ public class TransactionController {
             }
             try {
                 transactionService.add(currentUser.getUserId(), dto);
-                java.util.logging.Logger.getLogger("com.moneymanager")
+                Logger.getLogger("com.moneymanager")
                         .info("user=" + currentUser.getUsername()
                               + " action=transaction_added details=amount="
                               + dto.amount().setScale(2, java.math.RoundingMode.HALF_UP)
@@ -109,7 +113,7 @@ public class TransactionController {
                               + ", year=" + dto.txDate().getYear());
                 notifyDataChanged();
                 loadData();
-                if ("EXPENSE".equals(dto.txType())) {
+                if (dto.txType() == TransactionType.EXPENSE) {
                     String warning = budgetService.getCategoryWarning(
                             currentUser.getUserId(), dto.category(), dto.txDate());
                     if (warning != null)
@@ -119,7 +123,7 @@ public class TransactionController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not save transaction.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not save transaction", e);
             }
         });
     }
@@ -130,7 +134,7 @@ public class TransactionController {
         if (selected == null) return;
 
         showFormDialog("Edit Transaction", selected).ifPresent(dto -> {
-            if ("EXPENSE".equals(dto.txType())) {
+            if (dto.txType() == TransactionType.EXPENSE) {
                 String catErr = budgetService.checkCategoryLimit(
                         currentUser.getUserId(), dto.category(), dto.amount(),
                         dto.txDate(), selected.transactionId());
@@ -150,7 +154,7 @@ public class TransactionController {
                 transactionService.update(selected.transactionId(), currentUser.getUserId(), dto);
                 notifyDataChanged();
                 loadData();
-                if ("EXPENSE".equals(dto.txType())) {
+                if (dto.txType() == TransactionType.EXPENSE) {
                     String warning = budgetService.getCategoryWarning(
                             currentUser.getUserId(), dto.category(), dto.txDate());
                     if (warning != null)
@@ -160,7 +164,7 @@ public class TransactionController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not update transaction.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not update transaction", e);
             }
         });
     }
@@ -172,8 +176,8 @@ public class TransactionController {
         if (!AlertHelper.showConfirm(getStage(), "Delete Transaction",
                 "Delete \"" + selected.name() + "\"?\nThis cannot be undone.")) return;
         try {
-            transactionService.delete(selected.transactionId());
-            java.util.logging.Logger.getLogger("com.moneymanager")
+            transactionService.delete(selected.transactionId(), currentUser.getUserId());
+            Logger.getLogger("com.moneymanager")
                     .info("user=" + currentUser.getUsername()
                           + " action=transaction_deleted details=amount="
                           + selected.amount().setScale(2, java.math.RoundingMode.HALF_UP)
@@ -184,7 +188,7 @@ public class TransactionController {
             loadData();
         } catch (DataAccessException e) {
             AlertHelper.showError(getStage(), "Error", "Could not delete transaction.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not delete transaction", e);
         }
     }
 
@@ -223,14 +227,14 @@ public class TransactionController {
                 new SimpleStringProperty(c.getValue().category()));
 
         typeCol.setCellValueFactory(c ->
-                new SimpleStringProperty(c.getValue().txType()));
+                new SimpleStringProperty(c.getValue().txType().name()));
         typeCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) { setText(null); setStyle(""); return; }
                 setText(item);
-                setStyle("INCOME".equals(item)
+                setStyle(TransactionType.INCOME.name().equals(item)
                         ? "-fx-text-fill: #16a34a; -fx-font-weight: bold;"
                         : "-fx-text-fill: #dc2626; -fx-font-weight: bold;");
             }
@@ -250,7 +254,7 @@ public class TransactionController {
                 }
                 setText(item);
                 TransactionDTO tx = getTableView().getItems().get(getIndex());
-                setStyle("INCOME".equals(tx.txType())
+                setStyle(tx.txType() == TransactionType.INCOME
                         ? "-fx-text-fill: #16a34a; -fx-font-weight: bold;"
                         : "-fx-text-fill: #dc2626; -fx-font-weight: bold;");
             }
@@ -271,9 +275,9 @@ public class TransactionController {
     }
 
     private void updateSummary(List<TransactionDTO> rows) {
-        BigDecimal income = rows.stream().filter(t -> "INCOME".equals(t.txType()))
+        BigDecimal income = rows.stream().filter(t -> t.txType() == TransactionType.INCOME)
                 .map(TransactionDTO::amount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal expenses = rows.stream().filter(t -> "EXPENSE".equals(t.txType()))
+        BigDecimal expenses = rows.stream().filter(t -> t.txType() == TransactionType.EXPENSE)
                 .map(TransactionDTO::amount).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal net = income.subtract(expenses);
         summaryLabel.setText(String.format(
@@ -338,7 +342,7 @@ public class TransactionController {
             amountField.setText(prefill.amount().toPlainString());
             categoryCombo.setValue(prefill.category());
             datePicker.setValue(prefill.txDate());
-            if ("INCOME".equals(prefill.txType())) incomeRb.setSelected(true);
+            if (prefill.txType() == TransactionType.INCOME) incomeRb.setSelected(true);
             else expenseRb.setSelected(true);
         } else {
             expenseRb.setSelected(true);
@@ -364,7 +368,7 @@ public class TransactionController {
                 return new TransactionDTO(id, nameField.getText().trim(),
                         new BigDecimal(amountField.getText().trim()),
                         categoryCombo.getValue(),
-                        incomeRb.isSelected() ? "INCOME" : "EXPENSE",
+                        incomeRb.isSelected() ? TransactionType.INCOME : TransactionType.EXPENSE,
                         datePicker.getValue());
             } catch (NumberFormatException e) { return null; }
         });

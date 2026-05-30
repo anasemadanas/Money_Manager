@@ -1,5 +1,7 @@
 package com.moneymanager.dto;
 
+import com.moneymanager.model.TransactionType;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -8,6 +10,6 @@ public record TransactionDTO(
         String name,
         BigDecimal amount,
         String category,
-        String txType,
+        TransactionType txType,
         LocalDate txDate
 ) {}

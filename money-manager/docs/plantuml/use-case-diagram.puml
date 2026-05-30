@@ -1,0 +1,46 @@
+@startuml MoneyManagerUseCase
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "User" as User
+
+rectangle "Money Manager Desktop App" {
+    usecase "Register Account" as UC_Register
+    usecase "Login" as UC_Login
+    usecase "Reset Password" as UC_ResetPassword
+    usecase "View Dashboard" as UC_Dashboard
+    usecase "Manage Transactions" as UC_Transactions
+    usecase "Add Transaction" as UC_AddTransaction
+    usecase "Edit Transaction" as UC_EditTransaction
+    usecase "Delete Transaction" as UC_DeleteTransaction
+    usecase "Filter Transactions" as UC_FilterTransaction
+    usecase "Manage Budgets" as UC_Budgets
+    usecase "Set Monthly Budget" as UC_MonthlyBudget
+    usecase "Manage Savings Goals" as UC_Goals
+    usecase "Add Goal Contribution" as UC_Contribution
+    usecase "Manage Financial Notes" as UC_Notes
+    usecase "Set Monthly Income" as UC_MonthlyIncome
+}
+
+User --> UC_Register
+User --> UC_Login
+User --> UC_ResetPassword
+User --> UC_Dashboard
+User --> UC_Transactions
+User --> UC_Budgets
+User --> UC_Goals
+User --> UC_Notes
+User --> UC_MonthlyIncome
+
+UC_Transactions .> UC_AddTransaction : <<include>>
+UC_Transactions .> UC_EditTransaction : <<include>>
+UC_Transactions .> UC_DeleteTransaction : <<include>>
+UC_Transactions .> UC_FilterTransaction : <<include>>
+
+UC_Budgets .> UC_MonthlyBudget : <<include>>
+UC_Goals .> UC_Contribution : <<include>>
+UC_MonthlyIncome .> UC_Dashboard : <<updates>>
+UC_AddTransaction .> UC_Budgets : <<checks limits>>
+
+@enduml

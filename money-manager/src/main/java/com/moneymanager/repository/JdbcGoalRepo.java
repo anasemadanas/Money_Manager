@@ -63,7 +63,7 @@ public class JdbcGoalRepo implements IGoalRepo {
     public void update(Goal goal) {
         var sql = """
                 UPDATE savings_goals SET name=?, target_amount=?, deadline=?
-                WHERE goal_id=?
+                WHERE goal_id=? AND user_id=?
                 """;
         try (var conn = DatabaseConfig.getConnection();
              var ps = conn.prepareStatement(sql)) {
@@ -74,6 +74,7 @@ public class JdbcGoalRepo implements IGoalRepo {
             else
                 ps.setNull(3, Types.DATE);
             ps.setLong(4, goal.getGoalId());
+            ps.setLong(5, goal.getUserId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to update goal", e);
@@ -81,11 +82,12 @@ public class JdbcGoalRepo implements IGoalRepo {
     }
 
     @Override
-    public void delete(long goalId) {
+    public void delete(long goalId, long userId) {
         try (var conn = DatabaseConfig.getConnection();
              var ps = conn.prepareStatement(
-                     "DELETE FROM savings_goals WHERE goal_id = ?")) {
+                     "DELETE FROM savings_goals WHERE goal_id = ? AND user_id = ?")) {
             ps.setLong(1, goalId);
+            ps.setLong(2, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to delete goal", e);
@@ -93,21 +95,31 @@ public class JdbcGoalRepo implements IGoalRepo {
     }
 
     @Override
-    public void addContribution(long goalId, BigDecimal amount, String note) {
-        var insertSql = "INSERT INTO goal_contributions (goal_id, amount, note) VALUES (?, ?, ?)";
-        var updateSql = "UPDATE savings_goals SET saved_amount = saved_amount + ? WHERE goal_id = ?";
+    public void addContribution(long goalId, long userId, BigDecimal amount, String note) {
+        var insertSql = """
+                INSERT INTO goal_contributions (goal_id, amount, note)
+                SELECT goal_id, ?, ? FROM savings_goals
+                WHERE goal_id = ? AND user_id = ?
+                """;
+        var updateSql = """
+                UPDATE savings_goals
+                SET saved_amount = saved_amount + ?
+                WHERE goal_id = ? AND user_id = ?
+                """;
         try (var conn = DatabaseConfig.getConnection()) {
             conn.setAutoCommit(false);
             try {
                 try (var ps = conn.prepareStatement(insertSql)) {
-                    ps.setLong(1, goalId);
-                    ps.setBigDecimal(2, amount);
-                    ps.setString(3, (note != null && !note.isBlank()) ? note : null);
+                    ps.setBigDecimal(1, amount);
+                    ps.setString(2, (note != null && !note.isBlank()) ? note : null);
+                    ps.setLong(3, goalId);
+                    ps.setLong(4, userId);
                     ps.executeUpdate();
                 }
                 try (var ps = conn.prepareStatement(updateSql)) {
                     ps.setBigDecimal(1, amount);
                     ps.setLong(2, goalId);
+                    ps.setLong(3, userId);
                     ps.executeUpdate();
                 }
                 conn.commit();
@@ -123,14 +135,18 @@ public class JdbcGoalRepo implements IGoalRepo {
     }
 
     @Override
-    public List<Contribution> getContributions(long goalId) {
+    public List<Contribution> getContributions(long goalId, long userId) {
         var sql = """
-                SELECT contribution_id, goal_id, amount, note, contributed_at
-                FROM goal_contributions WHERE goal_id = ? ORDER BY contributed_at DESC
+                SELECT c.contribution_id, c.goal_id, c.amount, c.note, c.contributed_at
+                FROM goal_contributions c
+                JOIN savings_goals g ON g.goal_id = c.goal_id
+                WHERE c.goal_id = ? AND g.user_id = ?
+                ORDER BY c.contributed_at DESC
                 """;
         try (var conn = DatabaseConfig.getConnection();
              var ps = conn.prepareStatement(sql)) {
             ps.setLong(1, goalId);
+            ps.setLong(2, userId);
             try (var rs = ps.executeQuery()) {
                 var list = new ArrayList<Contribution>();
                 while (rs.next()) {

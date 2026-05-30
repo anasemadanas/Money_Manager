@@ -1,0 +1,121 @@
+@startuml MoneyManagerServiceClassDiagram
+title Service Layer Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+hide empty members
+
+package "service" {
+    class AuthService {
+        - userRepo: IUserRepo
+        + login(username, password): Optional<User>
+        + register(username, password, question, answer): User
+        + resetPassword(username, answer, newPassword): void
+        + getSecurityQuestion(username): Optional<String>
+    }
+
+    class TransactionService {
+        - txRepo: ITransactionRepo
+        + getFiltered(userId, from, to, category): List<TransactionDTO>
+        + add(userId, dto): TransactionDTO
+        + update(transactionId, userId, dto): void
+        + delete(transactionId, userId): void
+        + getCategories(userId): List<String>
+    }
+
+    class BudgetService {
+        - budgetRepo: IBudgetRepo
+        - balanceRepo: IMonthlyBalanceRepo
+        + getBudgets(userId, month, year): List<BudgetDTO>
+        + add(userId, category, amountCap, month, year): void
+        + updateCap(budgetId, userId, newCap): void
+        + delete(budgetId, userId): void
+        + setMonthlyBalance(userId, amount, month, year): void
+        + checkCategoryLimit(userId, category, amount, txDate, excludeTxId): String
+        + checkMonthlyBalanceLimit(userId, amount, txDate, excludeTxId): String
+    }
+
+    class GoalService {
+        - goalRepo: IGoalRepo
+        + getGoals(userId): List<GoalDTO>
+        + addGoal(userId, name, targetAmount, deadline): void
+        + updateGoal(goalId, userId, name, targetAmount, deadline): void
+        + deleteGoal(goalId, userId): void
+        + addContribution(goalId, userId, amount, note): void
+        + getContributions(goalId, userId): List<ContributionDTO>
+    }
+
+    class NoteService {
+        - noteRepo: INoteRepo
+        + getNotes(userId): List<Note>
+        + addNote(userId, title, content): Note
+        + deleteNote(noteId, userId): void
+    }
+
+    class DashboardService {
+        - txRepo: ITransactionRepo
+        - goalRepo: IGoalRepo
+        - balanceRepo: IMonthlyBalanceRepo
+        - settingsRepo: IUserSettingsRepo
+        + getSnapshot(userId): DashboardSnapshot
+    }
+
+    class MonthlyIncomeService {
+        - settingsRepo: IUserSettingsRepo
+        - txRepo: ITransactionRepo
+        - balanceRepo: IMonthlyBalanceRepo
+        + getMonthlyIncome(userId): Optional<BigDecimal>
+        + setMonthlyIncome(userId, amount): void
+        + applyForCurrentMonth(userId): void
+        + applyForMonth(userId, month, year): void
+    }
+}
+
+package "repository interfaces" {
+    interface IUserRepo
+    interface ITransactionRepo
+    interface IBudgetRepo
+    interface IGoalRepo
+    interface INoteRepo
+    interface IMonthlyBalanceRepo
+    interface IUserSettingsRepo
+}
+
+package "dto/model" {
+    class User
+    class TransactionDTO
+    class BudgetDTO
+    class GoalDTO
+    class ContributionDTO
+    class DashboardSnapshot
+    class Note
+    enum TransactionType {
+        INCOME
+        EXPENSE
+    }
+}
+
+AuthService --> IUserRepo
+TransactionService --> ITransactionRepo
+BudgetService --> IBudgetRepo
+BudgetService --> IMonthlyBalanceRepo
+GoalService --> IGoalRepo
+NoteService --> INoteRepo
+DashboardService --> ITransactionRepo
+DashboardService --> IGoalRepo
+DashboardService --> IMonthlyBalanceRepo
+DashboardService --> IUserSettingsRepo
+MonthlyIncomeService --> IUserSettingsRepo
+MonthlyIncomeService --> ITransactionRepo
+MonthlyIncomeService --> IMonthlyBalanceRepo
+
+AuthService ..> User
+TransactionService ..> TransactionDTO
+TransactionService ..> TransactionType
+BudgetService ..> BudgetDTO
+GoalService ..> GoalDTO
+GoalService ..> ContributionDTO
+NoteService ..> Note
+DashboardService ..> DashboardSnapshot
+
+@enduml

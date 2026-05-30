@@ -41,13 +41,13 @@ public class BudgetService {
         budgetRepo.save(b);
     }
 
-    public void updateCap(long budgetId, BigDecimal newCap) {
+    public void updateCap(long budgetId, long userId, BigDecimal newCap) {
         validateCap(newCap);
-        budgetRepo.updateCap(budgetId, newCap);
+        budgetRepo.updateCap(budgetId, userId, newCap);
     }
 
-    public void delete(long budgetId) {
-        budgetRepo.delete(budgetId);
+    public void delete(long budgetId, long userId) {
+        budgetRepo.delete(budgetId, userId);
     }
 
     public Optional<BigDecimal> getMonthlyBalance(long userId, int month, int year) {

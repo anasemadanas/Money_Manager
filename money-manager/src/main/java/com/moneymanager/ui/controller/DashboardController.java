@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DashboardController {
 
@@ -51,6 +53,7 @@ public class DashboardController {
 
     private Runnable onLogout;
 
+    private static final Logger LOGGER = Logger.getLogger(DashboardController.class.getName());
     private static final NumberFormat CF = NumberFormat.getCurrencyInstance(Locale.US);
 
     @FXML
@@ -97,7 +100,7 @@ public class DashboardController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not save monthly income.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not save monthly income", e);
             }
         });
     }
@@ -133,7 +136,7 @@ public class DashboardController {
 
         } catch (DataAccessException e) {
             monthLabel.setText("Error loading dashboard");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not load dashboard", e);
         }
     }
 

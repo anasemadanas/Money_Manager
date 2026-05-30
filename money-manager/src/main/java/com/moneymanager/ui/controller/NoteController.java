@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NoteController {
 
@@ -35,6 +37,7 @@ public class NoteController {
 
     private static final DateTimeFormatter DT_FMT =
             DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+    private static final Logger LOGGER = Logger.getLogger(NoteController.class.getName());
 
     @FXML
     public void initialize() {
@@ -64,7 +67,7 @@ public class NoteController {
             try {
                 Note saved = noteService.addNote(
                         currentUser.getUserId(), note.getTitle(), note.getContent());
-                java.util.logging.Logger.getLogger("com.moneymanager")
+                Logger.getLogger("com.moneymanager")
                         .info("user=" + currentUser.getUsername()
                               + " action=note_created details=title="
                               + saved.getTitle());
@@ -73,7 +76,7 @@ public class NoteController {
                 AlertHelper.showError(getStage(), "Validation Error", e.getMessage());
             } catch (DataAccessException e) {
                 AlertHelper.showError(getStage(), "Error", "Could not save note.");
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Could not save note", e);
             }
         });
     }
@@ -87,8 +90,8 @@ public class NoteController {
                 "Delete \"" + selected.getTitle() + "\"?\nThis cannot be undone.")) return;
 
         try {
-            noteService.deleteNote(selected.getNoteId());
-            java.util.logging.Logger.getLogger("com.moneymanager")
+            noteService.deleteNote(selected.getNoteId(), currentUser.getUserId());
+            Logger.getLogger("com.moneymanager")
                     .info("user=" + currentUser.getUsername()
                           + " action=note_deleted details=title="
                           + selected.getTitle());
@@ -96,7 +99,7 @@ public class NoteController {
             clearDetail();
         } catch (DataAccessException e) {
             AlertHelper.showError(getStage(), "Error", "Could not delete note.");
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not delete note", e);
         }
     }
 

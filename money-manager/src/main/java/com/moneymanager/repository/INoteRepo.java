@@ -10,5 +10,5 @@ public interface INoteRepo {
 
     List<Note> findByUser(long userId);
 
-    void delete(long noteId);
+    void delete(long noteId, long userId);
 }

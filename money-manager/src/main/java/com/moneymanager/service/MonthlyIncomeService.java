@@ -1,6 +1,7 @@
 package com.moneymanager.service;
 
 import com.moneymanager.model.Transaction;
+import com.moneymanager.model.TransactionType;
 import com.moneymanager.repository.IMonthlyBalanceRepo;
 import com.moneymanager.repository.ITransactionRepo;
 import com.moneymanager.repository.IUserSettingsRepo;
@@ -34,16 +35,36 @@ public class MonthlyIncomeService {
     }
 
     public void applyForCurrentMonth(long userId) {
+        LocalDate today = LocalDate.now();
+        applyForMonth(userId, today.getMonthValue(), today.getYear());
     }
 
     public void applyForMonth(long userId, int month, int year) {
+        BigDecimal amount = settingsRepo.getMonthlyIncome(userId).orElse(null);
+        if (amount == null) return;
+
+        LocalDate txDate = LocalDate.of(year, month, 1);
+        if (!hasMonthlyIncomeTransaction(userId, month, year)) {
+            var tx = new Transaction();
+            tx.setUserId(userId);
+            tx.setName("Monthly Income");
+            tx.setAmount(amount);
+            tx.setCategory("Income");
+            tx.setTxType(TransactionType.INCOME);
+            tx.setTxDate(txDate);
+            txRepo.save(tx);
+        }
+
+        if (balanceRepo.findByUserMonthYear(userId, month, year).isEmpty()) {
+            balanceRepo.saveOrUpdate(userId, amount, month, year);
+        }
     }
 
     private boolean hasMonthlyIncomeTransaction(long userId, int month, int year) {
         LocalDate from = LocalDate.of(year, month, 1);
         LocalDate to   = from.withDayOfMonth(from.lengthOfMonth());
         return txRepo.findByUserFiltered(userId, from, to, null).stream()
-                .anyMatch(tx -> "INCOME".equals(tx.getTxType())
+                .anyMatch(tx -> tx.getTxType() == TransactionType.INCOME
                              && "Monthly Income".equals(tx.getName()));
     }
 }

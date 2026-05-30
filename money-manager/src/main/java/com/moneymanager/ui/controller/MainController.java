@@ -15,6 +15,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class MainController {
 
     @FXML private Label usernameLabel;
@@ -33,6 +36,7 @@ public class MainController {
     private NoteService noteService;
     private DashboardService dashboardService;
     private MonthlyIncomeService monthlyIncomeService;
+    private static final Logger LOGGER = Logger.getLogger(MainController.class.getName());
 
     public void init(User user, AuthService authService, TransactionService txService,
                      BudgetService budgetService, GoalService goalService,
@@ -97,7 +101,7 @@ public class MainController {
             stage.centerOnScreen();
         } catch (java.io.IOException e) {
             AlertHelper.showError((Stage) usernameLabel.getScene().getWindow(), "Error", "Could not load login view: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not load login view", e);
         }
     }
 }

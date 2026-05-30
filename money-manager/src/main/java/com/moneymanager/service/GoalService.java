@@ -32,29 +32,30 @@ public class GoalService {
         goalRepo.save(goal);
     }
 
-    public void updateGoal(long goalId, String name, BigDecimal targetAmount, LocalDate deadline) {
+    public void updateGoal(long goalId, long userId, String name, BigDecimal targetAmount, LocalDate deadline) {
         validateName(name);
         validateTarget(targetAmount);
         var goal = new Goal();
         goal.setGoalId(goalId);
+        goal.setUserId(userId);
         goal.setName(name.trim());
         goal.setTargetAmount(targetAmount);
         goal.setDeadline(deadline);
         goalRepo.update(goal);
     }
 
-    public void deleteGoal(long goalId) {
-        goalRepo.delete(goalId);
+    public void deleteGoal(long goalId, long userId) {
+        goalRepo.delete(goalId, userId);
     }
 
-    public void addContribution(long goalId, BigDecimal amount, String note) {
+    public void addContribution(long goalId, long userId, BigDecimal amount, String note) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Contribution amount must be greater than zero.");
-        goalRepo.addContribution(goalId, amount, note);
+        goalRepo.addContribution(goalId, userId, amount, note);
     }
 
-    public List<ContributionDTO> getContributions(long goalId) {
-        return goalRepo.getContributions(goalId).stream()
+    public List<ContributionDTO> getContributions(long goalId, long userId) {
+        return goalRepo.getContributions(goalId, userId).stream()
                 .map(c -> new ContributionDTO(
                         c.getContributionId(), c.getGoalId(),
                         c.getAmount(), c.getNote(), c.getContributedAt()))

@@ -2,6 +2,7 @@ package com.moneymanager.service;
 
 import com.moneymanager.dto.TransactionDTO;
 import com.moneymanager.model.Transaction;
+import com.moneymanager.model.TransactionType;
 import com.moneymanager.repository.ITransactionRepo;
 
 import java.math.BigDecimal;
@@ -48,8 +49,8 @@ public class TransactionService {
         txRepo.update(tx);
     }
 
-    public void delete(long transactionId) {
-        txRepo.delete(transactionId);
+    public void delete(long transactionId, long userId) {
+        txRepo.delete(transactionId, userId);
     }
 
     public List<String> getCategories(long userId) {
@@ -66,7 +67,8 @@ public class TransactionService {
         if (dto.category() == null || dto.category().isBlank()) {
             throw new IllegalArgumentException("Category is required.");
         }
-        if (dto.txType() == null || (!dto.txType().equals("INCOME") && !dto.txType().equals("EXPENSE"))) {
+        if (dto.txType() == null
+                || (dto.txType() != TransactionType.INCOME && dto.txType() != TransactionType.EXPENSE)) {
             throw new IllegalArgumentException("Type must be INCOME or EXPENSE.");
         }
         if (dto.txDate() == null) {
