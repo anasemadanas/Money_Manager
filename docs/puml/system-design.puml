@@ -1,0 +1,30 @@
+@startuml
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+title Money Manager - System Design
+
+actor User as user
+
+package "Desktop Application" {
+  component "JavaFX Application" as JavaFX
+  component "UI Controllers" as UI
+  component "Business Services" as Services
+  component "Repository Layer" as Repos
+  component "Database Config" as Config
+}
+
+database "SQLite Database\nmoney-manager.db" as SQLite
+
+user -> JavaFX : Launch app
+JavaFX -> UI : Initialize controllers
+UI -> Services : Request business operations
+Services -> Repos : Query and persist domain data
+Repos -> Config : Get DB connection
+Repos -> SQLite : Execute SQL
+SQLite --> Repos : Return results
+Repos --> Services : Return entities/results
+Services --> UI : Return DTOs/snapshots
+UI --> user : Render views / show messages
+
+@enduml

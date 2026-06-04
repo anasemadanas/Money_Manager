@@ -1,0 +1,33 @@
+@startuml
+title Activity Diagram - User Journey: Login and Add Expense Transaction
+start
+:Open Money Manager application;
+:Enter username and password;
+:Click Login;
+if (Credentials valid?) then (yes)
+  :Load dashboard;
+  :Review account summary and goals;
+  :Navigate to Transactions tab;
+  :Click Add Transaction;
+  :Enter transaction details;
+  if (Type == EXPENSE) then (yes)
+    :Validate category budget limit;
+    if (Over category limit?) then (yes)
+      :Show error message;
+      stop
+    endif
+    :Validate monthly budget cap;
+    if (Over monthly cap?) then (yes)
+      :Show warning or block save;
+      stop
+    endif
+  endif
+  :Save transaction;
+  :Update dashboard metrics and charts;
+  :Show confirmation to user;
+  stop
+else (no)
+  :Show invalid credentials error;
+  stop
+endif
+@enduml

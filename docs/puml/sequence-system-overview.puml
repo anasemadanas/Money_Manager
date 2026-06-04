@@ -1,0 +1,47 @@
+@startuml SequenceSystemOverview
+title Sequence Diagram - System Overview: Login and Save Expense
+autonumber
+actor User as user
+boundary "Login UI\n(LoginController)" as loginCtrl
+control "AuthService" as authSvc
+entity "IUserRepo\n(JdbcUserRepo)" as userRepo
+database "SQLite Database" as db
+boundary "Transactions UI\n(TransactionController)" as txCtrl
+control "TransactionService" as txSvc
+entity "IBudgetRepo\n(JdbcBudgetRepo)" as budgetRepo
+entity "IMonthlyBalanceRepo\n(JdbcMonthlyBalanceRepo)" as balanceRepo
+entity "ITransactionRepo\n(JdbcTransactionRepo)" as transactionRepo
+
+user -> loginCtrl : submitCredentials(username, password)
+loginCtrl -> authSvc : authenticate(username, password)
+authSvc -> userRepo : findByUsername(username)
+userRepo -> db : SELECT user WHERE username=?
+db --> userRepo : user row
+userRepo --> authSvc : User
+authSvc --> loginCtrl : AuthResult
+loginCtrl --> user : show dashboard
+
+user -> txCtrl : addTransaction(transactionForm)
+txCtrl -> txSvc : createTransaction(form)
+txSvc -> budgetRepo : findBudgetByCategory(userId, category)
+budgetRepo -> db : SELECT budget...
+db --> budgetRepo : budget row
+budgetRepo --> txSvc : Budget
+
+alt expense over limit
+  txSvc -> txCtrl : rejectTransaction(error)
+  txCtrl --> user : display error
+else valid expense
+  txSvc -> transactionRepo : save(transaction)
+  transactionRepo -> db : INSERT transaction...
+  db --> transactionRepo : success
+  transactionRepo --> txSvc : savedTransaction
+  txSvc -> balanceRepo : updateMonthlyBalance(userId, month)
+  balanceRepo -> db : UPSERT monthly_balance...
+  db --> balanceRepo : success
+  balanceRepo --> txSvc : balanceUpdate
+  txSvc --> txCtrl : transactionSaved
+  txCtrl --> user : show success and refresh dashboard
+end
+
+@enduml
